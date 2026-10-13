@@ -83,6 +83,14 @@ function main() {
             collisions++;
           }
         }
+    } else if (scene.type === "money_flow") {
+      // Each edge arrow drawing counts as visual activity for the density rule.
+      const dur = m.durationInFrames / fps;
+      scene.visual.edges.forEach((e, i) => {
+        const t = at(e.sync);
+        if (t !== null) events.push(t);
+        else events.push(t0 + Math.min(Math.max(0, dur - 0.5), 2.5 + i * 1.2)); // sequential edge draws
+      });
     } else if (scene.type === "stat_chart") scene.visual.datapoints.forEach((d) => add(d.sync));
     else if (scene.type === "list_card" || scene.type === "recap_card") scene.visual.items.forEach((it) => add((it as { sync?: { phrase: string } }).sync));
     else if (scene.type === "compare") [...scene.visual.left.items, ...scene.visual.right.items].forEach((it) => add((it as { sync?: { phrase: string } }).sync));
@@ -146,6 +154,26 @@ function main() {
     }
     const em = scene.narration.match(ENUM);
     if (em && !SHOWN.has(scene.type)) warns.push(`"${scene.id}" narrates a list ("${em[0].slice(0, 32)}…") but doesn't show it — use list_card / compare / stat_chart`);
+
+    if (scene.type === "money_flow") {
+      // Crowding nudges (schema hard-caps at 8 nodes / 10 edges).
+      const nN = scene.visual.nodes.length;
+      const nE = scene.visual.edges.length;
+      if (nN > 6) warns.push(`money_flow "${scene.id}" has ${nN} nodes (>6) — crowded; split the diagram`);
+      if (nE > 7) warns.push(`money_flow "${scene.id}" has ${nE} edges (>7) — crowded; split the diagram`);
+      // Narrated $-amounts / percentages should be visible on a node or edge.
+      const shown = new Set(
+        [...scene.visual.nodes.map((n) => n.amount), ...scene.visual.edges.map((e) => e.amount)]
+          .filter((a): a is string => !!a)
+          .map((a) => a.replace(/\s+/g, "").toLowerCase()),
+      );
+      const narrated = scene.narration.match(/\$\s?\d[\d,]*(?:\.\d+)?|\d+(?:\.\d+)?\s?%/g) ?? [];
+      for (const num of narrated) {
+        const norm = num.replace(/\s+/g, "").toLowerCase();
+        if (![...shown].some((a) => a.includes(norm) || norm.includes(a)))
+          warns.push(`money_flow "${scene.id}" narrates "${num}" but no node/edge amount shows it`);
+      }
+    }
   }
 
   events.sort((a, b) => a - b);

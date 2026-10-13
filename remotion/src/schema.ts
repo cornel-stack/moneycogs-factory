@@ -225,8 +225,10 @@ export const ListCardVisual = z.object({
 
 export const StatChartVisual = z.object({
   label: z.string().min(1),
-  // line/bars/area = trends; pie = share; number = one big kinetic figure.
-  mode: z.enum(["line", "bars", "area", "pie", "number"]).default("line"),
+  // line/bars/area = trends; pie = share; number = one big kinetic figure;
+  // waterfall = a start bar stepping down through deductions to a remainder;
+  // counter = one odometer number counting to a target (Phase 1C).
+  mode: z.enum(["line", "bars", "area", "pie", "number", "waterfall", "counter"]).default("line"),
   // Number formatting applied to every value (animated count-up).
   prefix: z.string().optional(), // e.g. "$"
   suffix: z.string().optional(), // e.g. "B", "%", "×"
@@ -241,6 +243,56 @@ export const StatChartVisual = z.object({
     )
     .min(1),
 });
+
+// ---------- money_flow (Phase 1C) — the signature animated money diagram ----------
+/** An edge/arrow color: cog-green (good flow), coin-gold (a cut/fee), danger-red. */
+const FlowColor = z.enum(["green", "gold", "danger"]).default("gold");
+
+/** A diagram node: a cast member, a money prop, or a labeled text box. */
+const FlowNode = z.object({
+  id: z.string().min(1),
+  label: wordLimit(4),
+  kind: z.enum(["character", "prop", "text"]),
+  // cast id (character) or PROP_KINDS id (prop); ignored for text nodes.
+  ref: z.string().optional(),
+  amount: z.string().optional(), // optional display string shown under the node
+});
+
+/** A money-flow arrow from one node to another, carrying a display amount. */
+const FlowEdge = z.object({
+  from: z.string().min(1),
+  to: z.string().min(1),
+  amount: z.string().min(1), // display string, e.g. "$1.80" or "2.9%"
+  color: FlowColor,
+  sync: Sync.optional(), // start the arrow on this spoken phrase
+});
+
+export const MoneyFlowVisual = z
+  .object({
+    title: wordLimit(6).optional(),
+    nodes: z.array(FlowNode).min(2).max(8),
+    edges: z.array(FlowEdge).min(1).max(10),
+    // optional override; otherwise auto-picked (hub / chain / split).
+    layout: z.enum(["hub", "chain", "split"]).optional(),
+  })
+  .superRefine((v, ctx) => {
+    const ids = new Set(v.nodes.map((n) => n.id));
+    if (ids.size !== v.nodes.length) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "node ids must be unique", path: ["nodes"] });
+    }
+    v.nodes.forEach((n, i) => {
+      if (n.kind === "character" && !(n.ref && (CAST_IDS as readonly string[]).includes(n.ref))) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: `node "${n.id}": a character node needs a valid cast "ref"`, path: ["nodes", i, "ref"] });
+      }
+      if (n.kind === "prop" && !(n.ref && (PROP_KINDS as readonly string[]).includes(n.ref))) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: `node "${n.id}": a prop node needs a valid PropKind "ref"`, path: ["nodes", i, "ref"] });
+      }
+    });
+    v.edges.forEach((e, i) => {
+      if (!ids.has(e.from)) ctx.addIssue({ code: z.ZodIssueCode.custom, message: `edge ${i}: unknown "from" node "${e.from}"`, path: ["edges", i, "from"] });
+      if (!ids.has(e.to)) ctx.addIssue({ code: z.ZodIssueCode.custom, message: `edge ${i}: unknown "to" node "${e.to}"`, path: ["edges", i, "to"] });
+    });
+  });
 
 const RecapItem = z.union([
   z.string().transform((label) => ({ label, sync: undefined })),
@@ -295,6 +347,7 @@ export const Scene = z.discriminatedUnion("type", [
   z.object({ ...SceneBase, type: z.literal("quote_card"), visual: QuoteCardVisual }),
   z.object({ ...SceneBase, type: z.literal("list_card"), visual: ListCardVisual }),
   z.object({ ...SceneBase, type: z.literal("stat_chart"), visual: StatChartVisual }),
+  z.object({ ...SceneBase, type: z.literal("money_flow"), visual: MoneyFlowVisual }),
   z.object({ ...SceneBase, type: z.literal("recap_card"), visual: RecapCardVisual }),
   z.object({ ...SceneBase, type: z.literal("compare"), visual: CompareVisual }),
   z.object({ ...SceneBase, type: z.literal("table"), visual: TableVisual }),
@@ -466,6 +519,9 @@ export function collectScenePhrases(scene: Scene): string[] {
       break;
     case "stat_chart":
       scene.visual.datapoints.forEach((d) => push(d.sync));
+      break;
+    case "money_flow":
+      scene.visual.edges.forEach((e) => push(e.sync));
       break;
     case "compare":
       scene.visual.left.items.forEach((i) => push(i.sync));

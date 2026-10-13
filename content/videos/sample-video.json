@@ -206,6 +206,58 @@
       }
     },
     {
+      "id": "flow",
+      "type": "money_flow",
+      "narration": "When you spend a hundred dollars on your card, the money splits several ways. The shop keeps most of it. Your bank takes a small cut. The card network takes a slice too. And if you slip, a late fee lands on you.",
+      "visual": {
+        "title": "Where $100 goes",
+        "layout": "hub",
+        "nodes": [
+          { "id": "you", "kind": "character", "ref": "penny", "label": "you", "amount": "$100" },
+          { "id": "shop", "kind": "character", "ref": "rosa", "label": "the shop", "amount": "$97.10" },
+          { "id": "bank", "kind": "character", "ref": "ledger", "label": "your bank", "amount": "$1.80" },
+          { "id": "network", "kind": "text", "label": "Card network", "amount": "$1.10" },
+          { "id": "late", "kind": "text", "label": "Late fee" }
+        ],
+        "edges": [
+          { "from": "you", "to": "shop", "amount": "$97.10", "color": "green", "sync": { "phrase": "the shop keeps" } },
+          { "from": "you", "to": "bank", "amount": "$1.80", "color": "gold", "sync": { "phrase": "your bank takes" } },
+          { "from": "you", "to": "network", "amount": "$1.10", "color": "gold", "sync": { "phrase": "the card network" } },
+          { "from": "you", "to": "late", "amount": "$35", "color": "danger", "sync": { "phrase": "a late fee" } }
+        ]
+      }
+    },
+    {
+      "id": "waterfall",
+      "type": "stat_chart",
+      "narration": "Follow that hundred dollars down. The bank fee peels off nearly two dollars. The network fee takes a bit more. What the shop actually keeps is just over ninety seven.",
+      "visual": {
+        "label": "Where the $100 goes",
+        "mode": "waterfall",
+        "prefix": "$",
+        "decimals": 2,
+        "datapoints": [
+          { "label": "Purchase", "value": 100 },
+          { "label": "Bank fee", "value": 1.8, "sync": { "phrase": "bank fee" } },
+          { "label": "Network fee", "value": 1.1, "sync": { "phrase": "network fee" } },
+          { "label": "Shop keeps", "value": 97.1, "sync": { "phrase": "shop actually keeps" } }
+        ]
+      }
+    },
+    {
+      "id": "yearcost",
+      "type": "stat_chart",
+      "narration": "Add it up across a year, and the average household quietly pays around twelve hundred and forty seven dollars in card fees and interest.",
+      "visual": {
+        "label": "A year of card fees",
+        "mode": "counter",
+        "prefix": "$",
+        "datapoints": [
+          { "label": "yearly fees", "value": 1247, "sync": { "phrase": "twelve hundred" } }
+        ]
+      }
+    },
+    {
       "id": "recap",
       "type": "recap_card",
       "narration": "So remember how the money machine runs. Swipe fees pay the bank. Interest is the real profit. And paying in full shuts it off.",

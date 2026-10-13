@@ -41,8 +41,24 @@ being rebuilt.
     now uses the `bank-interior` stage + 6 new props (credit-card, coin-stack,
     percent-tag, vault, receipt, trap); tsc/validate/lint green and the fixture
     renders cast + props correctly colored (no black blobs).
-  - **1C (next)** — cash-flow diagrams, funnels/arrows wired into new scene types
-    the mechanism format needs.
+  - **1C (✅ DONE)** — the signature **`money_flow`** scene type + two stat_chart
+    variants. `money_flow` (`scenes/MoneyFlow.tsx`, layout in
+    `drawing/flowLayout.ts`): nodes (cast / props / text boxes) establish on the
+    opening beat, then each edge draws as a hand-drawn arrow **in sync with its
+    spoken phrase**, with gold coins travelling along it and an amount tag popping
+    at the midpoint (danger-red for `color:"danger"`). Auto-layout hub / chain /
+    split (overridable); limits 8 nodes / 10 edges (validation) and 6 / 7 (lint
+    crowding warn). New chart modes **`waterfall`** (start bar steps down through
+    red deductions to a green remainder) and **`counter`** (gold odometer number
+    to a target). Both + `money_flow` have vertical variants in
+    `short/VerticalScene.tsx`. Lint counts edge draws for density and warns on a
+    narrated $/% that no node/edge shows. Golden snapshots
+    (`pipeline/golden_test.ts` → `content/_goldens/`) cover the flow layout,
+    waterfall bands + counter, and validate every `schema.md` JSON example. The
+    sample fixture gains hub-flow + waterfall + counter scenes; rendered with real
+    (offline Kokoro) TTS to `design/scenes/` — 3 horizontal MP4s + 1 vertical hub
+    short with burned captions. tsc / validate / lint / goldens green.
+  - **1D (next)** — remaining diagram types the mechanism format needs.
 - **Phase 2 — content system.** Rewrite `template.md` / `schema.md` for mechanism
   explainers; generalize the `part`/`principle` roles and framing; build the topic
   queue (replacing the removed launch-plan/xlsx machinery) and the daily

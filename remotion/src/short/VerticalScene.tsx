@@ -15,6 +15,10 @@ import { syncStartFrame } from "../drawing/layout";
 import { buildPlan } from "../drawing/plan";
 import type { BoardElement } from "../drawing/types";
 import { listIcon, circleBadge, quoteMark } from "../drawing/icons";
+import { AnimatedNumber } from "../components/AnimatedNumber";
+import { waterfallBars } from "../drawing/charts";
+import { FlowDiagram } from "../scenes/MoneyFlow";
+import type { Box as FlowBox } from "../drawing/flowLayout";
 import type { Scene, WordTiming, CharacterElement } from "../schema";
 import { VerticalBackdrop } from "./VerticalBackdrop";
 import {
@@ -39,6 +43,7 @@ type ListV = Extract<Scene, { type: "list_card" }>["visual"];
 type RecapV = Extract<Scene, { type: "recap_card" }>["visual"];
 type QuoteV = Extract<Scene, { type: "quote_card" }>["visual"];
 type StatV = Extract<Scene, { type: "stat_chart" }>["visual"];
+type FlowV = Extract<Scene, { type: "money_flow" }>["visual"];
 
 /** Burned karaoke captions in the bottom rail — the core engagement driver. */
 const SceneCaptions: React.FC<{ words: WordTiming[] }> = ({ words }) => {
@@ -551,10 +556,87 @@ const VQuoteCard: React.FC<{ visual: QuoteV; words: WordTiming[] }> = ({ visual,
 // ---------------------------------------------------------------------------
 // stat_chart — the "aha" number + two hand-drawn trajectory curves.
 // ---------------------------------------------------------------------------
+const VTitle: React.FC<{ text: string }> = ({ text }) => {
+  const frame = useCurrentFrame();
+  return (
+    <div style={{ position: "absolute", top: TEXT.titleY, width: "100%", textAlign: "center", fontFamily: FONTS.heading, fontWeight: 700, fontSize: 92, color: COLORS.ink, opacity: interpolate(frame, [4, 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+      {text}
+    </div>
+  );
+};
+
 const VStatChart: React.FC<{ visual: StatV; words: WordTiming[] }> = ({ visual, words }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const brand = useBrand();
+
+  // ---- vertical COUNTER — one big odometer number ----
+  if (visual.mode === "counter") {
+    const target = visual.datapoints[0]!;
+    const start = target.sync ? syncStartFrame(words, target.sync, fps, 20) : 20;
+    const pop = spring({ frame: frame - start, fps, config: { damping: 14, stiffness: 150, mass: 0.8 } });
+    return (
+      <AbsoluteFill>
+        <VerticalBackdrop showGroundLine={false} />
+        <VTitle text={visual.label} />
+        <div style={{ position: "absolute", top: 760, width: "100%", textAlign: "center" }}>
+          <div style={{ display: "inline-block", fontFamily: FONTS.heading, fontWeight: 700, fontSize: 200, color: COLORS.marker, background: COLORS.ink, borderRadius: 24, padding: "16px 44px", letterSpacing: 6, transform: `scale(${Math.max(0.01, Math.min(1.06, pop))})` }}>
+            <AnimatedNumber value={target.value} startFrame={start} prefix={visual.prefix} suffix={visual.suffix} decimals={visual.decimals} />
+          </div>
+          <div style={{ marginTop: 34, fontFamily: FONTS.heading, fontWeight: 700, fontSize: 86, color: COLORS.ink }}>{target.label}</div>
+        </div>
+        <SceneCaptions words={words} />
+      </AbsoluteFill>
+    );
+  }
+
+  // ---- vertical WATERFALL — bars across, stepping down ----
+  if (visual.mode === "waterfall") {
+    const pts = visual.datapoints;
+    const wx0 = 110, wx1 = VW - 110, wy0 = 620, wy1 = 1320;
+    const startVal = Math.abs(pts[0]!.value);
+    const top = startVal * 1.08 || 1;
+    const yAt = (v: number) => wy1 - (v / top) * (wy1 - wy0);
+    const bw = Math.min(150, ((wx1 - wx0) / pts.length) * 0.6);
+    const cx = (i: number) => (pts.length === 1 ? (wx0 + wx1) / 2 : wx0 + bw / 2 + (i * (wx1 - wx0 - bw)) / (pts.length - 1));
+    const lastIdx = pts.length - 1;
+    const bandColor = { start: COLORS.inkSoft, deduction: COLORS.danger, remainder: COLORS.flame } as const;
+    const bars = waterfallBars(pts.map((p) => p.value)).map((b) => {
+      const p = pts[b.index]!;
+      const start = p.sync ? syncStartFrame(words, p.sync, fps, 10 + b.index * 12) : 10 + b.index * 12;
+      return { p, i: b.index, topV: b.topV, botV: b.botV, color: bandColor[b.kind], start };
+    });
+    return (
+      <AbsoluteFill>
+        <VerticalBackdrop showGroundLine={false} />
+        <VTitle text={visual.label} />
+        <svg width={VW} height={VH} viewBox={`0 0 ${VW} ${VH}`} style={{ position: "absolute", inset: 0 }}>
+          <path d={`M ${wx0 - 20} ${wy1} L ${wx1 + 20} ${wy1}`} stroke={COLORS.ink} strokeWidth={5} fill="none" />
+          {bars.map((b) => {
+            const grow = interpolate(frame, [b.start, b.start + 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const yTop = yAt(b.topV);
+            const h = Math.max(0, (yAt(b.botV) - yTop) * grow);
+            return <rect key={b.i} x={cx(b.i) - bw / 2} y={yTop} width={bw} height={h} rx={8} fill={b.color} />;
+          })}
+        </svg>
+        {bars.map((b) => {
+          const sign = b.i !== 0 && b.i !== lastIdx ? "−" : "";
+          return (
+            <div key={`v${b.i}`} style={{ position: "absolute", left: cx(b.i) - 130, top: yAt(b.topV) - 64, width: 260, textAlign: "center", fontFamily: FONTS.heading, fontWeight: 700, fontSize: 48, color: b.color, opacity: interpolate(frame, [b.start, b.start + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+              {sign}
+              <AnimatedNumber value={Math.abs(b.p.value)} startFrame={b.start} prefix={visual.prefix} suffix={visual.suffix} decimals={visual.decimals} />
+            </div>
+          );
+        })}
+        {bars.map((b) => (
+          <div key={`l${b.i}`} style={{ position: "absolute", left: cx(b.i) - 120, top: wy1 + 14, width: 240, textAlign: "center", fontFamily: FONTS.label, fontSize: 40, color: COLORS.inkSoft }}>
+            {b.p.label}
+          </div>
+        ))}
+        <SceneCaptions words={words} />
+      </AbsoluteFill>
+    );
+  }
 
   // Hero = the largest-magnitude datapoint; display big.
   const hero = visual.datapoints.reduce((a, b) => (Math.abs(b.value) > Math.abs(a.value) ? b : a), visual.datapoints[0]!);
@@ -637,6 +719,26 @@ const VStatChart: React.FC<{ visual: StatV; words: WordTiming[] }> = ({ visual, 
 };
 
 // ---------------------------------------------------------------------------
+// money_flow — stacked top→bottom (chain/split) or a compact hub.
+// ---------------------------------------------------------------------------
+const VMoneyFlow: React.FC<{ visual: FlowV; words: WordTiming[] }> = ({ visual, words }) => {
+  const frame = useCurrentFrame();
+  const region: FlowBox = { x: 70, y: 360, w: VW - 140, h: ART_BOTTOM - 420 };
+  return (
+    <AbsoluteFill style={{ overflow: "hidden" }}>
+      <VerticalBackdrop showGroundLine={false} />
+      {visual.title && (
+        <div style={{ position: "absolute", top: 200, width: "100%", textAlign: "center", fontFamily: FONTS.heading, fontWeight: 700, fontSize: 78, color: COLORS.ink, opacity: interpolate(frame, [4, 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+          {visual.title}
+        </div>
+      )}
+      <FlowDiagram nodes={visual.nodes} edges={visual.edges} layout={visual.layout} region={region} orient="v" words={words} labelScale={1.1} />
+      <SceneCaptions words={words} />
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
 // Dispatcher
 // ---------------------------------------------------------------------------
 export const VerticalScene: React.FC<{ scene: Scene; words: WordTiming[]; isHook?: boolean }> = ({ scene, words, isHook }) => {
@@ -653,6 +755,8 @@ export const VerticalScene: React.FC<{ scene: Scene; words: WordTiming[]; isHook
       return <VQuoteCard visual={scene.visual} words={words} />;
     case "stat_chart":
       return <VStatChart visual={scene.visual} words={words} />;
+    case "money_flow":
+      return <VMoneyFlow visual={scene.visual} words={words} />;
     case "compare":
     case "table":
       // Shorts don't use compare/table (derive_shorts only picks char/list); longform only.

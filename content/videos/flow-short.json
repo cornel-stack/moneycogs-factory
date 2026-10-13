@@ -1,0 +1,41 @@
+{
+  "id": "flow-short",
+  "title": "Where your $100 card swipe really goes",
+  "brand": "moneycogs",
+  "format": "short",
+  "description": "A 30-second money-flow breakdown of where a $100 card purchase actually goes — the shop, your bank, the card network, and the late-fee trap.",
+  "tags": ["credit cards", "money flow", "interchange fee", "personal finance"],
+  "short_hook": "Where does your $100 card swipe go?",
+  "pinned_comment": "Pay in full and the fees never touch you. What surprised you most?",
+  "thumbnail": {
+    "headline": "Where $100 goes",
+    "cast": "penny",
+    "pose": "thinking",
+    "expression": "curious",
+    "props": ["credit-card", "coin-stack"]
+  },
+  "scenes": [
+    {
+      "id": "flow",
+      "type": "money_flow",
+      "narration": "When you spend a hundred dollars on your card, the money splits several ways. The shop keeps most of it. Your bank takes a small cut. The card network takes a slice too. And if you slip, a late fee lands on you.",
+      "visual": {
+        "title": "Where $100 goes",
+        "layout": "hub",
+        "nodes": [
+          { "id": "you", "kind": "character", "ref": "penny", "label": "you", "amount": "$100" },
+          { "id": "shop", "kind": "character", "ref": "rosa", "label": "the shop", "amount": "$97.10" },
+          { "id": "bank", "kind": "character", "ref": "ledger", "label": "your bank", "amount": "$1.80" },
+          { "id": "network", "kind": "text", "label": "Card network", "amount": "$1.10" },
+          { "id": "late", "kind": "text", "label": "Late fee" }
+        ],
+        "edges": [
+          { "from": "you", "to": "shop", "amount": "$97.10", "color": "green", "sync": { "phrase": "the shop keeps" } },
+          { "from": "you", "to": "bank", "amount": "$1.80", "color": "gold", "sync": { "phrase": "your bank takes" } },
+          { "from": "you", "to": "network", "amount": "$1.10", "color": "gold", "sync": { "phrase": "the card network" } },
+          { "from": "you", "to": "late", "amount": "$35", "color": "danger", "sync": { "phrase": "a late fee" } }
+        ]
+      }
+    }
+  ]
+}

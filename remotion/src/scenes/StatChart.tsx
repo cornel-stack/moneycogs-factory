@@ -6,11 +6,12 @@ import { QuietBackdrop } from "../components/QuietBackdrop";
 import { DrawingBoard } from "../components/DrawingBoard";
 import { AnimatedNumber } from "../components/AnimatedNumber";
 import { syncStartFrame } from "../drawing/layout";
+import { waterfallBars } from "../drawing/charts";
 import type { BoardElement, Shape } from "../drawing/types";
 import type { WordTiming } from "../schema";
 
 type Point = { label: string; value: number; sync?: { phrase: string } };
-type Mode = "line" | "bars" | "area" | "pie" | "number";
+type Mode = "line" | "bars" | "area" | "pie" | "number" | "waterfall" | "counter";
 
 const full = (strokes: string[]): Shape => ({ viewBox: { w: VIDEO.width, h: VIDEO.height }, strokes });
 
@@ -65,6 +66,104 @@ export const StatChart: React.FC<{
             {hero.label}
           </div>
         </div>
+      </AbsoluteFill>
+    );
+  }
+
+  // ---- mode: COUNTER — one odometer number counting to a target ----------
+  if (mode === "counter") {
+    const target = pts[0]!;
+    const start = startOf(0);
+    const pop = spring({ frame: frame - start, fps, config: { damping: 14, stiffness: 150, mass: 0.8 } });
+    const digits = String(Math.round(Math.abs(target.value))).replace(/\d/g, "0").length + (prefix?.length ?? 0) + (suffix?.length ?? 0) + 2;
+    return (
+      <AbsoluteFill style={{ backgroundColor: brand.paper }}>
+        <QuietBackdrop />
+        {title}
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              ...numFont,
+              fontSize: 260,
+              color: COLORS.marker,
+              background: COLORS.ink,
+              borderRadius: 28,
+              padding: "20px 56px",
+              letterSpacing: 8,
+              minWidth: digits * 120,
+              textAlign: "center",
+              transform: `scale(${Math.max(0.01, Math.min(1.06, pop))})`,
+              boxShadow: "inset 0 0 0 10px rgba(255,255,255,0.06)",
+            }}
+          >
+            <AnimatedNumber value={target.value} startFrame={start} prefix={prefix} suffix={suffix} decimals={decimals} />
+          </div>
+          <div style={{ fontFamily: FONTS.heading, fontSize: 84, color: COLORS.ink, marginTop: 24, opacity: interpolate(frame, [start + 8, start + 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+            {target.label}
+          </div>
+        </div>
+      </AbsoluteFill>
+    );
+  }
+
+  // ---- mode: WATERFALL — start bar steps down to a remainder -------------
+  if (mode === "waterfall") {
+    const wx0 = LAYOUT.safeMargin + 80;
+    const wx1 = VIDEO.width - LAYOUT.safeMargin - 40;
+    const wy0 = LAYOUT.safeMargin + 180;
+    const wy1 = VIDEO.height - LAYOUT.safeMargin - 110;
+    const startVal = Math.abs(pts[0]!.value);
+    const top = startVal * 1.08 || 1;
+    const yAt = (v: number) => wy1 - (v / top) * (wy1 - wy0);
+    const bw = Math.min(170, ((wx1 - wx0) / pts.length) * 0.6);
+    const cx = (i: number) => (pts.length === 1 ? (wx0 + wx1) / 2 : wx0 + bw / 2 + (i * (wx1 - wx0 - bw)) / (pts.length - 1));
+    const lastIdx = pts.length - 1;
+
+    // running total → each bar's [topVal, botVal] band + its color (shared math)
+    const bandColor = { start: COLORS.inkSoft, deduction: COLORS.danger, remainder: COLORS.flame } as const;
+    const bars = waterfallBars(pts.map((p) => p.value)).map((b) => ({ p: pts[b.index]!, i: b.index, topV: b.topV, botV: b.botV, color: bandColor[b.kind] }));
+
+    return (
+      <AbsoluteFill style={{ backgroundColor: brand.paper }}>
+        <QuietBackdrop />
+        {title}
+        <svg width={VIDEO.width} height={VIDEO.height} viewBox={`0 0 ${VIDEO.width} ${VIDEO.height}`} style={{ position: "absolute", inset: 0 }}>
+          <path d={`M ${wx0 - 30} ${wy1} L ${wx1 + 20} ${wy1}`} stroke={COLORS.ink} strokeWidth={5} fill="none" />
+          {bars.map((b) => {
+            const x = cx(b.i);
+            const yTop = yAt(b.topV);
+            const yBot = yAt(b.botV);
+            const grow = interpolate(frame, [startOf(b.i), startOf(b.i) + 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+            const h = Math.max(0, (yBot - yTop) * grow);
+            // connector from previous bar's bottom to this bar's top (dashed)
+            const prev = b.i > 0 ? bars[b.i - 1]! : null;
+            const conn = prev && frame >= startOf(b.i) ? `M ${cx(prev.i) + bw / 2} ${yAt(prev.i === 0 ? prev.botV : prev.botV)} L ${x - bw / 2} ${yAt(b.topV)}` : null;
+            return (
+              <g key={b.i}>
+                {conn && <path d={conn} stroke={COLORS.inkSoft} strokeWidth={3} strokeDasharray="8 8" fill="none" opacity={0.6} />}
+                <rect x={x - bw / 2} y={yTop} width={bw} height={h} rx={8} fill={b.color} />
+              </g>
+            );
+          })}
+        </svg>
+        {/* amount labels (count-up) above each bar */}
+        {bars.map((b) => {
+          const x = cx(b.i);
+          const yTop = yAt(b.topV);
+          const sign = b.i !== 0 && b.i !== lastIdx ? "−" : "";
+          return (
+            <div key={`v${b.i}`} style={{ position: "absolute", left: x - 150, top: yTop - 66, width: 300, textAlign: "center", ...numFont, fontSize: 54, color: b.color, opacity: interpolate(frame, [startOf(b.i), startOf(b.i) + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+              {sign}
+              <AnimatedNumber value={Math.abs(b.p.value)} startFrame={startOf(b.i)} prefix={prefix} suffix={suffix} decimals={decimals} />
+            </div>
+          );
+        })}
+        {/* x labels */}
+        {bars.map((b) => (
+          <div key={`l${b.i}`} style={{ position: "absolute", left: cx(b.i) - 140, top: wy1 + 16, width: 280, textAlign: "center", fontFamily: FONTS.label, fontSize: LAYOUT.labelSize * 0.8, color: COLORS.inkSoft, opacity: interpolate(frame, [startOf(b.i), startOf(b.i) + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+            {b.p.label}
+          </div>
+        ))}
       </AbsoluteFill>
     );
   }

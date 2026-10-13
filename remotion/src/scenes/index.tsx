@@ -5,6 +5,7 @@ import { QuoteCard } from "./QuoteCard";
 import { CharacterScene } from "./CharacterScene";
 import { ListCard } from "./ListCard";
 import { StatChart } from "./StatChart";
+import { MoneyFlow } from "./MoneyFlow";
 import { RecapCard } from "./RecapCard";
 import { CompareCard } from "./CompareCard";
 import { TableCard } from "./TableCard";
@@ -26,6 +27,8 @@ export const SceneRenderer: React.FC<{ scene: Scene; words: WordTiming[] }> = ({
       return <ListCard visual={scene.visual} words={words} />;
     case "stat_chart":
       return <StatChart visual={scene.visual} words={words} />;
+    case "money_flow":
+      return <MoneyFlow visual={scene.visual} words={words} />;
     case "recap_card":
       return <RecapCard visual={scene.visual} words={words} />;
     case "compare":

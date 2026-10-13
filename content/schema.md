@@ -188,7 +188,87 @@ reaches each point. Great for "100 → 142 → 78 → 115" swing stories.
 { "label": "Mr. Market's price ($)", "mode": "line",
   "datapoints": [ { "label": "Q1", "value": 100, "sync": { "phrase": "one hundred" } } ] }
 ```
-- `label` string · `mode` `line|bars` (default line) · datapoints `{ label ≤3 words, value:number, sync? }`.
+- `label` string · `mode` `line|bars|area|pie|number|waterfall|counter` (default line) ·
+  `prefix?`/`suffix?` (e.g. `"$"`, `"%"`) · `decimals?` 0–2 ·
+  datapoints `{ label ≤3 words, value:number, sync? }`.
+
+#### `mode: "waterfall"` (Phase 1C)
+A starting bar steps DOWN through labeled deductions (danger-red) to a final
+remainder bar (green). Convention: **datapoint 0 = the starting total**, the
+**middle datapoints = deductions** (each subtracts its value), the **last
+datapoint = the remainder** (drawn from the baseline). Steps draw left→right and
+each is `sync`-able like bars.
+```json
+{
+  "label": "Where the $100 goes",
+  "mode": "waterfall",
+  "prefix": "$",
+  "decimals": 2,
+  "datapoints": [
+    { "label": "Purchase", "value": 100 },
+    { "label": "Bank fee", "value": 1.8, "sync": { "phrase": "bank fee" } },
+    { "label": "Network fee", "value": 1.1, "sync": { "phrase": "network fee" } },
+    { "label": "Shop keeps", "value": 97.1, "sync": { "phrase": "shop actually keeps" } }
+  ]
+}
+```
+
+#### `mode: "counter"` (Phase 1C)
+One large odometer-style number counts to a target (gold digits on an ink plate)
+in sync with its phrase, with the label beneath and an optional `prefix`/`suffix`.
+Uses the FIRST datapoint as the target.
+```json
+{
+  "label": "A year of card fees",
+  "mode": "counter",
+  "prefix": "$",
+  "datapoints": [ { "label": "yearly fees", "value": 1247, "sync": { "phrase": "twelve hundred" } } ]
+}
+```
+
+### `money_flow` — the signature animated diagram (Phase 1C)
+Nodes (cast / props / labeled text boxes) draw on the opening beat; then each
+edge draws as a hand-drawn arrow **in sync with its spoken phrase**, with 2–3
+gold coins travelling along it and an amount tag popping at the midpoint
+(danger-red tag for `color:"danger"`). The completed diagram holds for the rest
+of the scene. Layout auto-picks **hub** (a node with ≥3 connections), **chain**
+(a linear path) or **split** (one source → 2–4 targets); override with `layout`.
+
+Fields:
+- `title?` ≤6 words.
+- `nodes[]` (2–8): `{ id, label ≤4 words, kind: "character"|"prop"|"text", ref?, amount? }`.
+  `ref` is a **cast id** for `character` nodes and a **PropKind** for `prop`
+  nodes (ignored for `text`). `amount?` is a display string shown under the node.
+- `edges[]` (1–10): `{ from, to, amount, color?: "green"|"gold"|"danger" (default gold), sync? }`.
+  `amount` is a display string (e.g. `"$1.80"` or `"2.9%"`); `from`/`to` are node ids.
+- Hard limits: >8 nodes or >10 edges is a validation error; >6 nodes or >7 edges
+  is a lint crowding WARNING. `sync` phrases must appear verbatim in THIS scene's
+  narration (build fails otherwise, like every other sync draw).
+
+```json
+{
+  "id": "flow",
+  "type": "money_flow",
+  "narration": "When you spend a hundred dollars on your card, the money splits several ways. The shop keeps most of it. Your bank takes a small cut. The card network takes a slice too. And if you slip, a late fee lands on you.",
+  "visual": {
+    "title": "Where $100 goes",
+    "layout": "hub",
+    "nodes": [
+      { "id": "you", "kind": "character", "ref": "penny", "label": "you", "amount": "$100" },
+      { "id": "shop", "kind": "character", "ref": "rosa", "label": "the shop", "amount": "$97.10" },
+      { "id": "bank", "kind": "character", "ref": "ledger", "label": "your bank", "amount": "$1.80" },
+      { "id": "network", "kind": "text", "label": "Card network", "amount": "$1.10" },
+      { "id": "late", "kind": "text", "label": "Late fee" }
+    ],
+    "edges": [
+      { "from": "you", "to": "shop", "amount": "$97.10", "color": "green", "sync": { "phrase": "the shop keeps" } },
+      { "from": "you", "to": "bank", "amount": "$1.80", "color": "gold", "sync": { "phrase": "your bank takes" } },
+      { "from": "you", "to": "network", "amount": "$1.10", "color": "gold", "sync": { "phrase": "the card network" } },
+      { "from": "you", "to": "late", "amount": "$35", "color": "danger", "sync": { "phrase": "a late fee" } }
+    ]
+  }
+}
+```
 
 ### `recap_card`
 Numbered circles drawn in sequence, each ticked, with a short label.

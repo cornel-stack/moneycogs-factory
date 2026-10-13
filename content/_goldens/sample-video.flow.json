@@ -1,0 +1,135 @@
+{
+  "flow": {
+    "type": "money_flow",
+    "layout": "hub",
+    "nodes": [
+      {
+        "id": "you",
+        "kind": "character",
+        "cx": 892.8,
+        "cy": 595,
+        "w": 190,
+        "h": 300
+      },
+      {
+        "id": "shop",
+        "kind": "character",
+        "cx": 1407.6,
+        "cy": 407.3,
+        "w": 190,
+        "h": 300
+      },
+      {
+        "id": "bank",
+        "kind": "character",
+        "cx": 1381.6,
+        "cy": 795.4,
+        "w": 190,
+        "h": 300
+      },
+      {
+        "id": "network",
+        "kind": "text",
+        "cx": 491.5,
+        "cy": 829.2,
+        "w": 260,
+        "h": 120
+      },
+      {
+        "id": "late",
+        "kind": "text",
+        "cx": 310.8,
+        "cy": 449,
+        "w": 260,
+        "h": 120
+      }
+    ],
+    "edges": [
+      {
+        "from": "you",
+        "to": "shop",
+        "color": "green",
+        "mx": 1151.5,
+        "my": 525.2,
+        "strokes": [
+          "M 974.9 565.1 Q 1159.4 546.8 1312.3 442.0",
+          "M 1298.7 464.2 L 1312.3 442.0 L 1286.7 446.7"
+        ]
+      },
+      {
+        "from": "you",
+        "to": "bank",
+        "color": "gold",
+        "mx": 1122,
+        "my": 713.8,
+        "strokes": [
+          "M 973.7 628.2 Q 1113.3 735.1 1287.8 756.9",
+          "M 1262.9 764.5 L 1287.8 756.9 L 1265.5 743.5"
+        ]
+      },
+      {
+        "from": "you",
+        "to": "network",
+        "color": "gold",
+        "mx": 672.7,
+        "my": 696.8,
+        "strokes": [
+          "M 817.3 639.1 Q 661.1 677.0 551.3 794.3",
+          "M 559.8 769.8 L 551.3 794.3 L 575.2 784.2"
+        ]
+      },
+      {
+        "from": "you",
+        "to": "late",
+        "color": "danger",
+        "mx": 598.6,
+        "my": 497.5,
+        "strokes": [
+          "M 808.0 573.7 Q 604.2 475.2 378.0 465.8",
+          "M 402.1 456.2 L 378.0 465.8 L 401.2 477.4"
+        ]
+      }
+    ]
+  },
+  "waterfall": {
+    "type": "waterfall",
+    "prefix": "$",
+    "bars": [
+      {
+        "index": 0,
+        "kind": "start",
+        "topV": 100,
+        "botV": 0,
+        "label": "Purchase"
+      },
+      {
+        "index": 1,
+        "kind": "deduction",
+        "topV": 100,
+        "botV": 98.2,
+        "label": "Bank fee"
+      },
+      {
+        "index": 2,
+        "kind": "deduction",
+        "topV": 98.2,
+        "botV": 97.1,
+        "label": "Network fee"
+      },
+      {
+        "index": 3,
+        "kind": "remainder",
+        "topV": 97.1,
+        "botV": 0,
+        "label": "Shop keeps"
+      }
+    ]
+  },
+  "yearcost": {
+    "type": "counter",
+    "prefix": "$",
+    "suffix": null,
+    "target": 1247,
+    "label": "yearly fees"
+  }
+}
