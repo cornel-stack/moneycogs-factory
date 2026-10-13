@@ -9,8 +9,8 @@ import { CastGestureSheet } from "./CastGestureSheet";
 import { CastSideSheet } from "./CastSideSheet";
 import { CastCheckSheet } from "./CastCheckSheet";
 import { CastSideExprCheck } from "./CastSideExprCheck";
-import { PropSheet } from "./PropSheet";
-import { StageSheet } from "./StageSheet";
+import { PropSheet, PROP_SHEET_H } from "./PropSheet";
+import { StageSheet, STAGE_SHEET_H } from "./StageSheet";
 import { TravelTest } from "./TravelTest";
 import { WardrobeCompare } from "./WardrobeCompare";
 import { PeepsCalib } from "./PeepsCalib";
@@ -81,9 +81,9 @@ export const RemotionRoot: React.FC = () => {
       <Still id="CastSideSheet" component={CastSideSheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="CastCheckSheet" component={CastCheckSheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="CastSideExprCheck" component={CastSideExprCheck} width={VIDEO.width} height={VIDEO.height} />
-      <Still id="PropSheet" component={PropSheet} width={VIDEO.width} height={VIDEO.height} />
+      <Still id="PropSheet" component={PropSheet} width={1920} height={PROP_SHEET_H} />
       <Still id="Coggy" component={CoggySheet} width={VIDEO.width} height={VIDEO.height} />
-      <Still id="StageSheet" component={StageSheet} width={VIDEO.width} height={VIDEO.height} />
+      <Still id="StageSheet" component={StageSheet} width={1920} height={STAGE_SHEET_H} />
       <Composition id="TravelTest" component={TravelTest} width={VIDEO.width} height={VIDEO.height} fps={VIDEO.fps} durationInFrames={130} />
       <Still id="WardrobeCompare" component={WardrobeCompare} width={VIDEO.width} height={VIDEO.height} />
       <Still id="PeepsCalib" component={PeepsCalib} width={1080} height={1080} />

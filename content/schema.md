@@ -202,7 +202,41 @@ Numbered circles drawn in sequence, each ticked, with a short label.
 - **CastId**: `alex` (everyman, flame sneakers), `sage` (mentor; glasses+beard+bowtie), `max` (volatile; stocky+tie), `maya` (A-line + ponytail+hairband), `pip` (small/round + flame beanie).
 - **Pose**: `standing`, `sitting`, `pointing`, `thinking`, `celebrating`, `panicking`, `walking`, `shrugging`, `facepalm`, `handshake`, `presenting`.
 - **Expression**: `neutral`, `happy`, `worried`, `shocked`, `angry`, `tired`, `curious`.
-- **PropKind**: `door`, `desk`, `easel`, `lightbulb`, `moneybag`, `book`, `arrow`, `speech`, `house`, `bridge`.
+- **PropKind** (names must match `PROP_KINDS` in `remotion/src/schema.ts` exactly):
+  - _general / metaphor:_ `door`, `desk`, `easel`, `lightbulb`, `moneybag`, `book`, `arrow`, `speech`, `house`, `bridge`, `mountain`, `path`, `staircase`, `scale`, `hourglass`, `clock`, `calendar`, `trophy`, `target`, `seedling`, `sapling`, `tree`, `brain`, `heart`, `gears`, `ladder`, `wall`, `gift`, `phone`, `bed`, `dumbbell`, `shoe`, `coffee`, `snowball`, `coins`, `dollar`, `bargraph`, `piechart`, `trendup`, `percent`, `dominoes`, `checkmark`, `brick`.
+  - _money props (Phase 1B):_
+    - `coin` — single gold coin with a `$` (matches Coggy's coin face).
+    - `coin-stack` — a tall stack of gold coins.
+    - `bill` — a green banknote with a `$` disc.
+    - `cash-stack` — a bundle of green notes with a gold band.
+    - `money-bag` — a brown sack with a `$`.
+    - `wallet` — a brown bifold wallet with a green bill peeking out.
+    - `piggy-bank` — a pink piggy bank with a coin dropping into the slot.
+    - `safe` — a grey strongbox with a gold combination dial.
+    - `vault` — a grey wall with a big round gold vault door.
+    - `atm` — a grey cash machine with a green screen + keypad.
+    - `credit-card` — a green card with a gold chip and number rows.
+    - `receipt` — a cream till receipt with wavy text + a torn bottom.
+    - `invoice` — a cream bill with a red "DUE" stamp.
+    - `contract-scroll` — a cream scroll whose fine print shrinks toward the bottom.
+    - `calculator` — a grey calculator with a green display + button grid.
+    - `percent-tag` — a gold tag with an ink `%`.
+    - `price-tag` — a cream swing-tag on a string.
+    - `interest-clock` — a cream clock face with `$`-tipped hands.
+    - `balance-scale` — gold pans on an ink balance arm.
+    - `funnel` — a grey funnel with gold coins falling in.
+    - `gauge-meter` — a cream dial with a needle on a green→red arc.
+    - `shopping-cart` — a grey shopping cart.
+    - `trap` — a mousetrap (brown base, grey spring) baited with a gold coin.
+    - `dice` — two white dice with ink pips.
+    - `slot-machine` — a red slot machine with a gold lever + coin tray.
+- **StageName** (background environments; names must match `STAGE_NAMES`): `plain`, `outdoor`, `room`, `desk-office`, `street`, `stage-spotlight`, and the Phase 1B money stages:
+  - `bank-interior` — teller counter, round vault door, hanging sign.
+  - `storefront` — striped awning, shop window, a shelf of goods.
+  - `kitchen-table` — table edge, a mug, a curtained window (home-finance scenes).
+  - `boardroom` — long conference table, framed wall chart, tall window.
+  - `street-market` — two awninged stalls with hanging price signs.
+  Stages wash in softly (not hand-drawn) and are drawn in LIGHT muted tones so cast + props stay the focus.
 - **EffectKind**: `thought_bubble`, `question_marks`, `exclamation`, `idea_flash`, `sweat_drop`, `anger_marks`, `zzz`, `sparkles`, `motion_lines`, `money`, `shake`, `nod`, `headshake`.
 
 ## Verb → pose + effect cheat-sheet
@@ -228,6 +262,31 @@ When the narration says… reach for:
 | presents / points to a chart | `presenting` + `happy` | — |
 | sits / reads / works | `sitting` + `seat:"desk"` (+ `holding`) | `nod`, `zzz` |
 | carries / offers an object | `holding: { prop, hand }` | `money`, `sparkles` |
+
+### Money verbs → prop (Phase 1B)
+
+When the narration is about a money mechanism, reach for:
+
+| Narration beat | prop(s) | pose / effect |
+|----------------|---------|---------------|
+| pays / spends / hands over cash | `coin` or `bill` handed off (`holding`) | `presenting` + `money` |
+| swipes / taps a card | `credit-card` (`holding`) | `standing` + `money` |
+| saves / puts money aside | `piggy-bank` (+ `coin`) | `standing` + `happy` |
+| invests / grows / returns | `trendup` / `bargraph` (chart-up), `coin-stack` | `presenting` + `sparkles` |
+| earns interest / compounds over time | `interest-clock`, `coin-stack` | `standing` + `money` |
+| borrows / takes a loan / signs | `contract-scroll` (fine print) | `sitting` + `worried` |
+| owes / overdue bill | `invoice` (red DUE), `receipt` | `standing` + `worried`, `sweat_drop` |
+| taxed / fees skimmed | `percent-tag` + Felix (`cast:"felix"`) stamping a `folder`/`invoice` | `presenting` + `anger_marks` |
+| the catch / debt trap | `trap` (coin bait) | `standing` + `shocked`, `exclamation` |
+| gambles / bets / odds | `dice`, `slot-machine` | `standing` + `worried` |
+| banks it / locks it away | `vault` / `safe`, `atm` | `standing` + `happy` |
+| weighs a trade-off / risk vs reward | `balance-scale`, `gauge-meter` | `thinking` + `curious` |
+| shops / prices a purchase | `shopping-cart`, `price-tag`, `percent-tag` | `standing` + `curious` |
+| money drains away / fees add up | `funnel` (coins in) | `standing` + `worried`, `sweat_drop` |
+
+Money stages set the scene: `bank-interior` for banks/loans, `storefront` /
+`street-market` for merchants + spending, `kitchen-table` for household finance,
+`boardroom` for corporate/investor beats.
 
 Cast capability cheat-sheet: `cast` picks who; `facing` which way; `view`
 front/side; `seat` chair/desk/none (seated poses); `holding` a gripped prop;

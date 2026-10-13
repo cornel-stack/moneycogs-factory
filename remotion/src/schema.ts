@@ -37,6 +37,10 @@ export const PROP_KINDS = [
   "coins", "dollar", "bargraph", "piechart", "trendup", "percent",
   // habit-specific illustrations (Phase 17)
   "dominoes", "checkmark", "brick",
+  // money props (Phase 1B)
+  "coin", "coin-stack", "bill", "cash-stack", "money-bag", "wallet", "piggy-bank", "safe", "vault", "atm",
+  "credit-card", "receipt", "invoice", "contract-scroll", "calculator", "percent-tag", "price-tag", "interest-clock",
+  "balance-scale", "funnel", "gauge-meter", "shopping-cart", "trap", "dice", "slot-machine",
 ] as const;
 
 export const EXPRESSIONS = [
@@ -184,7 +188,11 @@ export const CharacterElement = z.object({
   sync: Sync.optional(),
 });
 
-export const STAGE_NAMES = ["plain", "outdoor", "room", "desk-office", "street", "stage-spotlight"] as const;
+export const STAGE_NAMES = [
+  "plain", "outdoor", "room", "desk-office", "street", "stage-spotlight",
+  // money stages (Phase 1B)
+  "bank-interior", "storefront", "kitchen-table", "boardroom", "street-market",
+] as const;
 
 export const CharacterSceneVisual = z.object({
   title: wordLimit(6).optional(),

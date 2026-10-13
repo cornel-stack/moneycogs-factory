@@ -11,7 +11,7 @@
     "cast": "ledger",
     "pose": "presenting",
     "expression": "happy",
-    "props": ["coins", "percent"],
+    "props": ["coin-stack", "percent-tag"],
     "pointer": "spotlight"
   },
   "scenes": [
@@ -46,9 +46,14 @@
             "effects": [{ "kind": "thought_bubble", "sync": { "phrase": "never see" } }]
           },
           {
-            "kind": "coins",
-            "at": { "col": 8, "row": 1, "w": 3, "h": 4 },
-            "color": "accent",
+            "kind": "credit-card",
+            "at": { "col": 6, "row": 1, "w": 3, "h": 3 },
+            "label": "tap your card",
+            "sync": { "phrase": "tap your card" }
+          },
+          {
+            "kind": "coin-stack",
+            "at": { "col": 9, "row": 1, "w": 2, "h": 4 },
             "label": "four dollars",
             "sync": { "phrase": "four dollars" }
           }
@@ -76,7 +81,7 @@
       "narration": "That slice the bank takes is called the interchange fee. It is roughly two percent of everything you spend, quietly skimmed off every single swipe.",
       "visual": {
         "title": "The bank's cut",
-        "stage": "desk-office",
+        "stage": "bank-interior",
         "elements": [
           {
             "kind": "figure",
@@ -86,14 +91,13 @@
             "facing": "left",
             "pose": "presenting",
             "expression": "happy",
-            "holding": { "prop": "moneybag", "hand": "left" },
+            "holding": { "prop": "money-bag", "hand": "left" },
             "label": "the bank",
             "effects": [{ "kind": "money", "sync": { "phrase": "every single swipe" } }]
           },
           {
-            "kind": "percent",
-            "at": { "col": 1, "row": 1, "w": 2, "h": 3 },
-            "color": "accent",
+            "kind": "percent-tag",
+            "at": { "col": 4, "row": 1, "w": 2, "h": 3 },
             "label": "two percent",
             "sync": { "phrase": "two percent" }
           }
@@ -143,9 +147,9 @@
             "effects": [{ "kind": "sweat_drop", "sync": { "phrase": "the trap" } }]
           },
           {
-            "kind": "snowball",
-            "at": { "col": 8, "row": 1, "w": 3, "h": 4 },
-            "label": "it compounds",
+            "kind": "trap",
+            "at": { "col": 8, "row": 2, "w": 3, "h": 3 },
+            "label": "the debt trap",
             "sync": { "phrase": "compounds" }
           }
         ]
@@ -175,21 +179,26 @@
         "stage": "desk-office",
         "elements": [
           {
+            "kind": "vault",
+            "at": { "col": 0, "row": 1, "w": 3, "h": 4 },
+            "label": "locked away",
+            "sync": { "phrase": "never touch you" }
+          },
+          {
             "kind": "figure",
             "id": "winner",
             "cast": "penny",
-            "at": { "col": 4, "row": 0, "w": 5, "h": 6 },
+            "at": { "col": 3, "row": 0, "w": 5, "h": 6 },
             "pose": "sitting",
             "seat": "desk",
-            "holding": { "prop": "dollar", "hand": "left" },
+            "holding": { "prop": "bill", "hand": "left" },
             "expression": "happy",
             "label": "pay in full",
             "effects": [{ "kind": "nod", "sync": { "phrase": "one move" } }]
           },
           {
-            "kind": "checkmark",
-            "at": { "col": 9, "row": 1, "w": 2, "h": 3 },
-            "color": "accent",
+            "kind": "receipt",
+            "at": { "col": 9, "row": 1, "w": 2, "h": 4 },
             "label": "paid in full",
             "sync": { "phrase": "full balance" }
           }

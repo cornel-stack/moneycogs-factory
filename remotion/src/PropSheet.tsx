@@ -3,13 +3,26 @@ import { AbsoluteFill } from "remotion";
 import { COLORS, FONTS } from "./theme";
 import { propShape, type PropKind } from "./drawing/props";
 
-const KINDS: PropKind[] = [
-  "mountain", "path", "staircase", "scale", "hourglass", "clock", "calendar", "trophy",
-  "target", "seedling", "sapling", "tree", "brain", "heart", "gears", "ladder",
-  "wall", "gift", "phone", "bed", "dumbbell", "shoe", "coffee", "snowball",
-  "house", "book", "moneybag", "lightbulb", "desk", "door", "easel", "speech",
-  "coins", "dollar", "bargraph", "piechart", "trendup", "percent", "dominoes", "checkmark", "brick",
+// Money props (Phase 1B) shown first/large, then the rest of the library.
+const MONEY: PropKind[] = [
+  "coin", "coin-stack", "bill", "cash-stack", "money-bag", "wallet", "piggy-bank", "safe", "vault", "atm",
+  "credit-card", "receipt", "invoice", "contract-scroll", "calculator", "percent-tag", "price-tag", "interest-clock",
+  "balance-scale", "funnel", "gauge-meter", "shopping-cart", "trap", "dice", "slot-machine",
 ];
+const LIBRARY: PropKind[] = [
+  "coins", "dollar", "bargraph", "piechart", "trendup", "percent", "scale", "clock", "calendar", "gears",
+  "house", "book", "moneybag", "phone", "gift", "target", "trophy", "lightbulb", "speech", "arrow",
+  "dominoes", "checkmark", "brick", "mountain", "tree",
+];
+const KINDS: PropKind[] = [...MONEY, ...LIBRARY];
+
+const COLS = 5;
+const CELL_W = 1920 / COLS;
+const BOX = 206; // ≥200px prop art
+const ROW_H = 300;
+const TOP = 150;
+const ROWS = Math.ceil(KINDS.length / COLS);
+export const PROP_SHEET_H = TOP + ROWS * ROW_H + 30;
 
 const Cell: React.FC<{ kind: PropKind; cx: number; cy: number; box: number }> = ({ kind, cx, cy, box }) => {
   const s = propShape(kind, { state: "on", variant: kind === "door" ? "open" : undefined });
@@ -30,21 +43,27 @@ const Cell: React.FC<{ kind: PropKind; cx: number; cy: number; box: number }> = 
 };
 
 export const PropSheet: React.FC = () => {
-  const cols = 8;
-  const cw = 1920 / cols;
-  const rows = Math.ceil(KINDS.length / cols);
-  const ch = (1080 - 60) / rows;
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.paper }}>
-      <svg width={1920} height={1080} viewBox="0 0 1920 1080">
-        <text x={40} y={44} fontFamily={FONTS.heading} fontSize={40} fill={COLORS.ink}>Prop & metaphor library</text>
+      <svg width={1920} height={PROP_SHEET_H} viewBox={`0 0 1920 ${PROP_SHEET_H}`}>
+        <text x={60} y={74} fontFamily={FONTS.heading} fontSize={54} fill={COLORS.ink}>
+          MoneyCogs Prop Library
+        </text>
+        <text x={60} y={116} fontFamily={FONTS.label} fontSize={28} fill={COLORS.inkSoft}>
+          money props (Phase 1B) first, then the general library
+        </text>
         {KINDS.map((k, i) => {
-          const cx = (i % cols) * cw + cw / 2;
-          const cy = 70 + Math.floor(i / cols) * ch + ch / 2 - 14;
+          const col = i % COLS;
+          const row = Math.floor(i / COLS);
+          const cx = col * CELL_W + CELL_W / 2;
+          const cyTop = TOP + row * ROW_H;
+          const isMoney = i < MONEY.length;
           return (
             <React.Fragment key={k}>
-              <Cell kind={k} cx={cx} cy={cy} box={ch * 0.72} />
-              <text x={cx} y={70 + Math.floor(i / cols) * ch + ch - 10} textAnchor="middle" fontFamily={FONTS.label} fontSize={22} fill={COLORS.flame}>{k}</text>
+              <Cell kind={k} cx={cx} cy={cyTop + BOX / 2} box={BOX} />
+              <text x={cx} y={cyTop + ROW_H - 34} textAnchor="middle" fontFamily={FONTS.label} fontSize={30} fill={isMoney ? COLORS.flame : COLORS.inkSoft}>
+                {k}
+              </text>
             </React.Fragment>
           );
         })}

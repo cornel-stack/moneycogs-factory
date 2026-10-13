@@ -22,6 +22,35 @@ const poly = (...pts: number[]): Stroke => {
 const F = (d: string, color: string, opacity?: number): FillRegion => ({ d, color, opacity });
 const FLAME = "#E8501E";
 
+// ---------- MoneyCogs money palette (Phase 1B) ----------
+// Ink is for OUTLINES and small darks only; every shape below gets an explicit
+// fill color — never default a fill to ink (the 1A cast bug).
+const GOLD = "#F5B700"; // coin gold
+const GOLD_L = "#FFD24D"; // lit gold highlight
+const GOLD_D = "#C98A00"; // gold shade
+const GREEN = "#0E7B4F"; // cog green
+const GREEN_L = "#5FAE86"; // banknote face
+const GREEN_SCR = "#14A06A"; // lit display green
+const RED = "#D64545"; // danger red
+const BOARD = "#FBFAF6"; // board paper
+const GREY = "#B8B8B8"; // light metal
+const GREY_D = "#8A8A8A"; // mid metal
+const GREY_DD = "#5E5E5E"; // dark metal / opening
+const BROWN = "#8A5A2B"; // leather / wood
+const BROWN_D = "#5C3A21"; // dark leather
+const CREAM = "#EFE7D2"; // paper / cream tag
+const CREAM_D = "#E0D6BC"; // cream shade (scroll roll)
+const PINK = "#E8A0B4"; // piggy bank
+const PINK_D = "#E68AA0"; // piggy snout
+const WHITE = "#FFFFFF";
+const INKFILL = "#1C1C1C"; // explicit dark fill for pips / slots / small darks
+
+/** A "$" glyph centered at (cx,cy); `s` scales it (~15 units tall at s=1). */
+const dollarSign = (cx: number, cy: number, s: number): Stroke =>
+  `M ${cx + 7 * s} ${cy - 9 * s} C ${cx - 7 * s} ${cy - 13 * s} ${cx - 9 * s} ${cy - 2 * s} ${cx} ${cy} ` +
+  `C ${cx + 9 * s} ${cy + 2 * s} ${cx + 7 * s} ${cy + 13 * s} ${cx - 7 * s} ${cy + 9 * s} ` +
+  `M ${cx} ${cy - 15 * s} L ${cx} ${cy + 15 * s}`;
+
 export type PropKind =
   // originals
   | "door" | "desk" | "easel" | "lightbulb" | "moneybag" | "book" | "arrow" | "speech" | "house" | "bridge"
@@ -32,7 +61,11 @@ export type PropKind =
   // money / data graphics (Phase 16)
   | "coins" | "dollar" | "bargraph" | "piechart" | "trendup" | "percent"
   // habit-specific illustrations (Phase 17)
-  | "dominoes" | "checkmark" | "brick";
+  | "dominoes" | "checkmark" | "brick"
+  // money props (Phase 1B)
+  | "coin" | "coin-stack" | "bill" | "cash-stack" | "money-bag" | "wallet" | "piggy-bank" | "safe" | "vault" | "atm"
+  | "credit-card" | "receipt" | "invoice" | "contract-scroll" | "calculator" | "percent-tag" | "price-tag" | "interest-clock"
+  | "balance-scale" | "funnel" | "gauge-meter" | "shopping-cart" | "trap" | "dice" | "slot-machine";
 
 // ---------- originals (now with colored fills) ----------
 const door = (open: boolean): Shape =>
@@ -367,6 +400,239 @@ const brick = (): Shape => {
   };
 };
 
+// ---------- MoneyCogs money props (Phase 1B) ----------
+const coin = (): Shape => {
+  const c = circle(50, 50, 42), inner = circle(50, 50, 33);
+  return { viewBox: { w: 100, h: 100 }, strokes: [c, inner, dollarSign(50, 50, 1)], fills: [F(c, GOLD), F(inner, GOLD_L)] };
+};
+
+const coinStack = (): Shape => {
+  const cx = 60, rx = 40, ry = 13, ys = [100, 80, 60, 40, 20];
+  return {
+    viewBox: { w: 120, h: 120 },
+    strokes: [...ys.map((y) => ell(cx, y, rx, ry)), line(cx - rx, 20, cx - rx, 100), line(cx + rx, 20, cx + rx, 100), dollarSign(cx, 62, 0.9)],
+    fills: ys.map((y) => F(ell(cx, y, rx, ry), GOLD)),
+  };
+};
+
+const bill = (): Shape => {
+  const b = rect(8, 18, 144, 60), inner = rect(18, 28, 124, 40), disc = circle(80, 48, 15);
+  return {
+    viewBox: { w: 160, h: 96 },
+    strokes: [b, inner, disc, dollarSign(80, 48, 0.9), circle(26, 34, 5), circle(134, 62, 5)],
+    fills: [F(b, GREEN_L), F(disc, BOARD)],
+  };
+};
+
+const cashStack = (): Shape => {
+  const n1 = rect(10, 70, 150, 28), n2 = rect(16, 48, 150, 28), n3 = rect(22, 26, 150, 28), band = rect(74, 20, 34, 86);
+  return {
+    viewBox: { w: 180, h: 110 },
+    strokes: [n1, n2, n3, band, line(30, 40, 90, 40)],
+    fills: [F(n1, GREEN_L), F(n2, GREEN_L), F(n3, GREEN_L), F(band, GOLD)],
+  };
+};
+
+const moneyBag = (): Shape => {
+  const body = `M 34 54 C 18 92 30 132 60 132 C 90 132 102 92 86 54 Z`, tie = `M 48 54 L 44 36 L 76 36 L 72 54 Z`;
+  return {
+    viewBox: { w: 120, h: 140 },
+    strokes: [body, `M 42 54 L 78 54`, tie, dollarSign(60, 92, 1.1)],
+    fills: [F(body, BROWN), F(tie, BROWN_D)],
+  };
+};
+
+const wallet = (): Shape => {
+  const body = rect(14, 40, 132, 70), flap = `M 14 40 L 146 40 L 146 58 Q 120 50 92 58 L 14 58 Z`, billEdge = rect(96, 30, 40, 24), snap = circle(130, 74, 6);
+  return {
+    viewBox: { w: 160, h: 120 },
+    strokes: [billEdge, body, flap, snap, line(14, 78, 146, 78)],
+    fills: [F(billEdge, GREEN_L), F(body, BROWN), F(flap, BROWN_D), F(snap, GOLD)],
+  };
+};
+
+const piggyBank = (): Shape => {
+  const body = ell(80, 70, 54, 40), ear = poly(104, 38, 120, 24, 122, 46), snout = ell(128, 70, 14, 12);
+  const leg1 = rect(54, 100, 14, 18), leg2 = rect(96, 100, 14, 18), slot = rect(70, 32, 22, 5), coinB = circle(81, 20, 10), eye = circle(100, 60, 4);
+  return {
+    viewBox: { w: 170, h: 130 },
+    strokes: [leg1, leg2, body, ear, snout, slot, circle(128, 70, 2.5), eye, `M 30 72 Q 22 78 28 86`, coinB, dollarSign(81, 20, 0.5)],
+    fills: [F(body, PINK), F(ear, PINK), F(snout, PINK_D), F(leg1, PINK), F(leg2, PINK), F(slot, INKFILL), F(eye, INKFILL), F(coinB, GOLD)],
+  };
+};
+
+const safe = (): Shape => {
+  const body = rect(16, 16, 110, 110), door = rect(28, 28, 86, 86), dial = circle(78, 70, 18), hub = circle(78, 70, 6);
+  return {
+    viewBox: { w: 142, h: 142 },
+    strokes: [body, door, dial, hub, line(78, 52, 78, 46), line(78, 88, 78, 94), line(60, 70, 54, 70), line(96, 70, 118, 70), rect(26, 116, 14, 20), rect(102, 116, 14, 20)],
+    fills: [F(body, GREY_D), F(door, GREY), F(dial, GOLD), F(hub, GOLD_D)],
+  };
+};
+
+const vault = (): Shape => {
+  const wall = rect(10, 10, 130, 130), door = circle(75, 75, 54), innerRing = circle(75, 75, 44), hub = circle(75, 75, 12);
+  const spokes = `M 75 75 L 75 29 M 75 75 L 121 75 M 75 75 L 75 121 M 75 75 L 29 75 M 75 75 L 108 42 M 75 75 L 108 108 M 75 75 L 42 108 M 75 75 L 42 42`;
+  return {
+    viewBox: { w: 150, h: 150 },
+    strokes: [wall, door, innerRing, hub, spokes, `M 120 75 L 140 75`],
+    fills: [F(wall, GREY_D), F(door, GOLD), F(innerRing, GOLD_L), F(hub, GREY_D)],
+  };
+};
+
+const atm = (): Shape => {
+  const body = rect(14, 10, 92, 150), screen = rect(26, 26, 68, 42), slot = rect(30, 80, 60, 8), keypad = rect(34, 96, 52, 34), tray = rect(26, 140, 64, 12);
+  return {
+    viewBox: { w: 120, h: 170 },
+    strokes: [body, screen, slot, keypad, tray,
+      line(46, 96, 46, 130), line(58, 96, 58, 130), line(70, 96, 70, 130), line(34, 107, 86, 107), line(34, 118, 86, 118),
+      line(34, 44, 60, 44), line(34, 54, 54, 54)],
+    fills: [F(body, GREY), F(screen, GREEN_SCR), F(slot, INKFILL), F(keypad, GREY_D), F(tray, INKFILL)],
+  };
+};
+
+const creditCard = (): Shape => {
+  const card = roundRect(10, 12, 154, 96, 12), chip = roundRect(30, 40, 32, 26, 5);
+  return {
+    viewBox: { w: 174, h: 120 },
+    strokes: [card, chip, line(34, 52, 58, 52), line(46, 40, 46, 66), line(30, 86, 70, 86), line(80, 86, 120, 86), line(130, 86, 160, 86)],
+    fills: [F(card, GREEN), F(chip, GOLD)],
+  };
+};
+
+const receipt = (): Shape => {
+  const paper = `M 20 18 L 100 18 L 100 140 L 92 148 L 84 140 L 76 148 L 68 140 L 60 148 L 52 140 L 44 148 L 36 140 L 28 148 L 20 140 Z`;
+  const lines = [40, 56, 72, 88, 104, 120].map((y) => `M 30 ${y} Q 45 ${y - 4} 60 ${y} Q 75 ${y + 4} 90 ${y}`);
+  return { viewBox: { w: 120, h: 160 }, strokes: [paper, ...lines], fills: [F(paper, CREAM)] };
+};
+
+const invoice = (): Shape => {
+  const paper = rect(16, 14, 108, 140);
+  const lines = [40, 56, 72, 100, 116].map((y) => line(30, y, 110, y));
+  const stamp = `M 36 92 L 104 80 L 110 112 L 42 124 Z`;
+  return {
+    viewBox: { w: 140, h: 170 },
+    strokes: [paper, ...lines, stamp, line(50, 99, 92, 92), line(52, 107, 96, 100), line(54, 115, 88, 109)],
+    fills: [F(paper, CREAM), F(stamp, RED, 0.55)],
+  };
+};
+
+const contractScroll = (): Shape => {
+  const body = rect(24, 26, 92, 128), rollTop = ell(70, 26, 52, 10), rollBot = ell(70, 154, 52, 10);
+  const lines: Stroke[] = [];
+  let y = 46;
+  const spans = [80, 78, 74, 70, 64, 58, 52, 46, 40, 34];
+  for (let i = 0; i < spans.length; i++) { const w = spans[i]!; lines.push(line(70 - w / 2, y, 70 + w / 2, y)); y += 11 - i * 0.4; }
+  return { viewBox: { w: 140, h: 180 }, strokes: [body, rollTop, rollBot, ...lines], fills: [F(body, CREAM), F(rollTop, CREAM_D), F(rollBot, CREAM_D)] };
+};
+
+const calculator = (): Shape => {
+  const body = roundRect(14, 10, 96, 150, 10), disp = rect(26, 24, 72, 30);
+  const btns: Stroke[] = [], bfills: FillRegion[] = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) { const x = 28 + c * 24, by = 66 + r * 22, b = roundRect(x, by, 18, 16, 4); btns.push(b); bfills.push(F(b, GREY_DD)); }
+  return { viewBox: { w: 124, h: 170 }, strokes: [body, disp, ...btns], fills: [F(body, GREY), F(disp, GREEN_SCR), ...bfills] };
+};
+
+const percentTag = (): Shape => {
+  const tag = `M 44 14 L 116 14 L 116 76 L 44 76 L 18 45 Z`, hole = circle(38, 45, 6);
+  return {
+    viewBox: { w: 130, h: 90 },
+    strokes: [tag, hole, line(66, 62, 98, 28), circle(70, 34, 7), circle(94, 56, 7)],
+    fills: [F(tag, GOLD), F(hole, BOARD)],
+  };
+};
+
+const priceTag = (): Shape => {
+  const tag = `M 54 20 L 120 20 L 120 92 L 54 92 L 26 56 Z`, hole = circle(44, 56, 6), string = `M 44 56 Q 20 36 14 14`;
+  return {
+    viewBox: { w: 130, h: 100 },
+    strokes: [tag, hole, string, line(64, 64, 104, 64), line(64, 76, 92, 76)],
+    fills: [F(tag, CREAM), F(hole, CREAM_D)],
+  };
+};
+
+const interestClock = (): Shape => {
+  const outer = circle(70, 76, 62), face = circle(70, 76, 56), hub = circle(70, 76, 4);
+  const ticks: Stroke[] = [];
+  for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2, x1 = 70 + Math.cos(a) * 50, y1 = 76 + Math.sin(a) * 50, x2 = 70 + Math.cos(a) * 56, y2 = 76 + Math.sin(a) * 56; ticks.push(line(x1, y1, x2, y2)); }
+  return {
+    viewBox: { w: 140, h: 150 },
+    strokes: [outer, face, ...ticks, line(70, 76, 70, 44), line(70, 76, 98, 86), dollarSign(70, 40, 0.5), dollarSign(104, 88, 0.45), hub],
+    fills: [F(outer, GOLD), F(face, CREAM), F(hub, INKFILL)],
+  };
+};
+
+const balanceScale = (): Shape => {
+  const panL = `M 8 56 Q 30 92 52 56 Z`, panR = `M 128 56 Q 150 92 172 56 Z`, base = rect(66, 118, 48, 10), foot = poly(72, 150, 108, 150, 98, 128, 82, 128), hub = circle(90, 24, 6);
+  return {
+    viewBox: { w: 180, h: 160 },
+    strokes: [line(90, 24, 90, 118), base, foot, line(28, 40, 152, 40), line(30, 40, 30, 56), line(150, 40, 150, 56), panL, panR, hub],
+    fills: [F(panL, GOLD), F(panR, GOLD), F(base, GREY_D), F(foot, GREY_D), F(hub, GOLD)],
+  };
+};
+
+const funnel = (): Shape => {
+  const body = `M 20 40 L 120 40 L 82 100 L 82 140 L 58 140 L 58 100 Z`;
+  const c1 = circle(50, 22, 10), c2 = circle(78, 16, 9), c3 = circle(66, 34, 8);
+  return {
+    viewBox: { w: 140, h: 160 },
+    strokes: [body, c1, c2, c3, dollarSign(50, 22, 0.4)],
+    fills: [F(body, GREY), F(c1, GOLD), F(c2, GOLD), F(c3, GOLD)],
+  };
+};
+
+const gaugeMeter = (): Shape => {
+  const dial = `M 20 100 A 60 60 0 0 1 140 100 Z`;
+  const greenArc = `M 30 100 A 50 50 0 0 1 80 50 L 86 58 A 42 42 0 0 0 38 100 Z`;
+  const redArc = `M 80 50 A 50 50 0 0 1 130 100 L 122 100 A 42 42 0 0 0 86 58 Z`;
+  const hub = circle(80, 100, 6);
+  return {
+    viewBox: { w: 160, h: 116 },
+    strokes: [dial, `M 30 100 A 50 50 0 0 1 130 100`, line(80, 100, 112, 64), hub],
+    fills: [F(dial, CREAM), F(greenArc, GREEN), F(redArc, RED), F(hub, INKFILL)],
+  };
+};
+
+const shoppingCart = (): Shape => {
+  const basket = `M 40 36 L 150 36 L 134 92 L 56 92 Z`, handle = `M 10 20 L 32 20 L 40 36`, w1 = circle(66, 122, 10), w2 = circle(128, 122, 10);
+  return {
+    viewBox: { w: 170, h: 140 },
+    strokes: [handle, basket, line(60, 52, 130, 52), line(66, 72, 124, 72), line(72, 36, 80, 92), line(96, 36, 100, 92), line(120, 36, 116, 92), `M 56 92 L 48 110`, `M 134 92 L 142 110`, w1, w2],
+    fills: [F(basket, GREY), F(w1, GREY_D), F(w2, GREY_D)],
+  };
+};
+
+const trap = (): Shape => {
+  const base = roundRect(14, 54, 132, 48, 8), spring = circle(30, 78, 9), coinB = circle(104, 64, 13);
+  return {
+    viewBox: { w: 160, h: 112 },
+    strokes: [base, `M 30 78 L 30 30 L 120 30`, spring, coinB, dollarSign(104, 64, 0.55), line(30, 78, 48, 64)],
+    fills: [F(base, BROWN), F(spring, GREY_D), F(coinB, GOLD)],
+  };
+};
+
+const dice = (): Shape => {
+  const d1 = roundRect(18, 28, 72, 72, 12), d2 = roundRect(78, 52, 64, 64, 11);
+  const pips1 = [[38, 48], [70, 48], [54, 64], [38, 80], [70, 80]].map(([x, y]) => circle(x!, y!, 5));
+  const pips2 = [[96, 70], [124, 70], [96, 98], [124, 98]].map(([x, y]) => circle(x!, y!, 4.5));
+  return {
+    viewBox: { w: 156, h: 120 },
+    strokes: [d1, d2, ...pips1, ...pips2],
+    fills: [F(d1, WHITE), F(d2, "#F0F0F0"), ...pips1.map((p) => F(p, INKFILL)), ...pips2.map((p) => F(p, INKFILL))],
+  };
+};
+
+const slotMachine = (): Shape => {
+  const body = roundRect(20, 20, 108, 150, 12), screen = rect(34, 40, 80, 40), tray = rect(34, 120, 80, 20), knob = circle(150, 44, 8);
+  const reels = [rect(36, 42, 24, 36), rect(62, 42, 24, 36), rect(88, 42, 24, 36)];
+  const coins = [circle(50, 150, 6), circle(74, 150, 6), circle(98, 150, 6)];
+  return {
+    viewBox: { w: 170, h: 180 },
+    strokes: [body, screen, ...reels, line(74, 52, 82, 52), tray, `M 128 60 L 148 48`, knob, `M 128 60 L 128 90`, ...coins],
+    fills: [F(body, RED), F(screen, CREAM), ...reels.map((r) => F(r, BOARD)), F(tray, GREY_DD), F(knob, GOLD), ...coins.map((c) => F(c, GOLD))],
+  };
+};
+
 const PROPS: Record<PropKind, (o?: { variant?: string; state?: string }) => Shape> = {
   door: (o) => door(o?.variant === "open" || o?.state === "open"),
   desk, easel,
@@ -378,6 +644,32 @@ const PROPS: Record<PropKind, (o?: { variant?: string; state?: string }) => Shap
   seedling, sapling, tree, brain, heart, gears, ladder, wall, gift, phone, bed, dumbbell, shoe, coffee, snowball,
   coins, dollar, bargraph, piechart, trendup, percent,
   dominoes, checkmark, brick,
+  // money props (Phase 1B)
+  coin,
+  "coin-stack": coinStack,
+  bill,
+  "cash-stack": cashStack,
+  "money-bag": moneyBag,
+  wallet,
+  "piggy-bank": piggyBank,
+  safe,
+  vault,
+  atm,
+  "credit-card": creditCard,
+  receipt,
+  invoice,
+  "contract-scroll": contractScroll,
+  calculator,
+  "percent-tag": percentTag,
+  "price-tag": priceTag,
+  "interest-clock": interestClock,
+  "balance-scale": balanceScale,
+  funnel,
+  "gauge-meter": gaugeMeter,
+  "shopping-cart": shoppingCart,
+  trap,
+  dice,
+  "slot-machine": slotMachine,
 };
 
 /** Resolve a prop kind (+ optional variant/state) to its drawable shape. */

@@ -24,8 +24,25 @@ being rebuilt.
     vector appearance changed (new hair `slick`/`bowler`, sunglasses, per-role
     signature props, danger-red accents, new wardrobe). Approval sheets +
     motion-test in `design/cast/`.
-  - **1B (next)** — money/mechanism prop & diagram library (cogs, cash-flow
-    arrows, funnels, balance sheets) and any new scene types the format needs.
+  - **1B (✅ DONE)** — money prop library + stages. Added **25 money props**
+    (`remotion/src/drawing/props.ts`) — coin/coin-stack/bill/cash-stack/money-bag/
+    wallet/piggy-bank/safe/vault/atm, credit-card/receipt/invoice/contract-scroll/
+    calculator/percent-tag/price-tag/interest-clock, balance-scale/funnel/
+    gauge-meter/shopping-cart/trap/dice/slot-machine — each flat-vector with
+    EXPLICIT fills (ink for outlines + small darks only; palette gold `#F5B700`,
+    green `#0E7B4F`, danger `#D64545`, plus muted neutrals). Added **5 stages**
+    (`stage.ts`) — bank-interior, storefront, kitchen-table, boardroom,
+    street-market — in light muted tones so cast/props pop. Registered in
+    `schema.ts` (`PROP_KINDS` + `STAGE_NAMES`) and documented in
+    `content/schema.md` (full name lists, one-line descriptions, a money
+    verb→prop table). Regenerated review sheets → `design/props/prop-sheet.png`
+    (all props ≥200px, labeled) and `design/stages/stage-sheet.png` (every stage
+    as a panel with Penny + a prop, proving fore/background contrast). Fixture
+    now uses the `bank-interior` stage + 6 new props (credit-card, coin-stack,
+    percent-tag, vault, receipt, trap); tsc/validate/lint green and the fixture
+    renders cast + props correctly colored (no black blobs).
+  - **1C (next)** — cash-flow diagrams, funnels/arrows wired into new scene types
+    the mechanism format needs.
 - **Phase 2 — content system.** Rewrite `template.md` / `schema.md` for mechanism
   explainers; generalize the `part`/`principle` roles and framing; build the topic
   queue (replacing the removed launch-plan/xlsx machinery) and the daily
