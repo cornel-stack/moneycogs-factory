@@ -19,6 +19,10 @@ on:
         description: "Release tag to publish into (blank = the video id)."
         required: false
         default: ""
+      skip_runtime_guard:
+        description: "Set to 1 to bypass the duration guard (smoke/test renders of short fixtures)."
+        required: false
+        default: ""
   # Reusable: the scheduler (scheduled-render.yml) calls this inline so it can
   # flip calendar status on success. Same inputs as the manual dispatch.
   workflow_call:
@@ -34,6 +38,11 @@ on:
         default: ""
       release_tag:
         description: "Release tag to publish into (blank = the video id)."
+        required: false
+        type: string
+        default: ""
+      skip_runtime_guard:
+        description: "Set to 1 to bypass the duration guard (smoke/test renders)."
         required: false
         type: string
         default: ""
@@ -58,6 +67,12 @@ jobs:
       chunk_array: ${{ steps.meta.outputs.array }}
     steps:
       - uses: actions/checkout@v4
+      - name: Verify drawing-hand assets (fail fast — renders would be handless)
+        run: |
+          for f in grip1.png grip2.png; do
+            test -f "remotion/public/hand/processed/$f" || { echo "✖ missing hand asset remotion/public/hand/processed/$f"; exit 1; }
+          done
+          echo "✓ drawing-hand assets present"
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -87,6 +102,8 @@ jobs:
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
         run: python pipeline/generate_audio.py "${{ inputs.video_id }}"
       - name: Timing manifest
+        env:
+          SKIP_RUNTIME_GUARD: ${{ inputs.skip_runtime_guard }}
         run: npx tsx pipeline/build_manifest.ts "${{ inputs.video_id }}"
       - name: Script lint
         run: npx tsx pipeline/lint_script.ts "${{ inputs.video_id }}"

@@ -30,6 +30,20 @@ if (!existsSync(scriptJson)) {
   process.exit(1);
 }
 
+// Fail fast if the photographed drawing-hand assets are missing — otherwise
+// every scene renders handless (the hand silently 404s). These are committed;
+// regenerate with pipeline/process_hand.py (needs the source hand photos).
+const gripDir = join(REPO, "remotion", "public", "hand", "processed");
+for (const g of ["grip1.png", "grip2.png"]) {
+  if (!existsSync(join(gripDir, g))) {
+    console.error(
+      `✖ Drawing-hand asset missing: remotion/public/hand/processed/${g}\n` +
+        `  Renders would be handless. Restore the committed assets or run pipeline/process_hand.py.`,
+    );
+    process.exit(1);
+  }
+}
+
 // Format dispatch: shorts render the vertical "Short" composition and get
 // per-platform metadata; long-form renders "Main" + a thumbnail + chapters.
 const isShort = (JSON.parse(readFileSync(scriptJson, "utf8")).format ?? "longform") === "short";

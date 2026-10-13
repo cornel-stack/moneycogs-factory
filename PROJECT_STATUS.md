@@ -1,6 +1,38 @@
 # Project status — MoneyCogs video factory
 
-_Last updated: **Phase 1A** — MoneyCogs cast (10 archetypes + Coggy mascot)._
+_Last updated: **Phase 1 — COMPLETE** (cast + mascot + props + stages + scene types; drawing hand verified; dress rehearsal + CI smoke test passed)._
+
+## Phase 1 — COMPLETE
+
+The MoneyCogs visual system is now in place. What it contains:
+- **Cast (1A):** 10 flat-vector money archetypes (Penny, Ledger, Rosa, Sterling,
+  Vera, Joe, Norma, Felix, Slick, Keys) with 5 skin tones, dominant wardrobe
+  blocks, big readable faces (happy/worried/shocked/curious), per-role signature
+  props, and the **Coggy** coin-gear mascot (point/wave/thumbs-up/spin).
+- **Props (1B):** 25 money props + the pre-existing metaphor library, every shape
+  explicitly filled (ink is outlines + small darks only).
+- **Stages (1B):** 5 money stages (bank-interior, storefront, kitchen-table,
+  boardroom, street-market) in light muted tones so foreground pops.
+- **Scene types (1C):** the signature **`money_flow`** animated diagram (nodes +
+  hand-drawn arrows synced to narration, coins travelling, amount tags) plus
+  `stat_chart` **`waterfall`** and **`counter`** modes — all with vertical variants.
+- **Drawing hand (1D):** the photographed hand (`remotion/public/hand/`) works and
+  is committed; renders must pass `--public-dir=remotion/public` (the pipeline +
+  CI already do). A fail-fast check now guards the grip PNGs.
+- **Pipeline:** audio → manifest → captions → render (audio muxed) → thumbnails →
+  package, proven end-to-end locally (dress rehearsal in `design/rehearsal/`) and
+  on GitHub Actions (render.yml + render-shorts.yml smoke test).
+
+**TTS provider situation:** `edge-tts` is **403ing globally** (free Edge read-aloud
+is unreliable). The offline **Kokoro-82M** fallback (Apache-2.0, CPU torch, native
+per-word timings) works both locally and in CI and is what produced every Phase 1C/1D
+render. CI auto-falls back edge → Azure → Kokoro. **Recommendation:** add
+`AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION` repo secrets for fast, commercially-licensed
+CI narration; Kokoro remains the keyless safety net.
+
+---
+
+_Prior log: Phase 1A — MoneyCogs cast (10 archetypes + Coggy mascot)._
 
 MoneyCogs is a daily whiteboard-explainer channel about business & money
 **mechanisms**. This repo is a fork of a general whiteboard-video engine; we are
@@ -58,7 +90,20 @@ being rebuilt.
     sample fixture gains hub-flow + waterfall + counter scenes; rendered with real
     (offline Kokoro) TTS to `design/scenes/` — 3 horizontal MP4s + 1 vertical hub
     short with burned captions. tsc / validate / lint / goldens green.
-  - **1D (next)** — remaining diagram types the mechanism format needs.
+  - **1D (✅ DONE)** — drawing hand + full dress rehearsal + CI smoke test
+    (Phase 1 closeout). The photographed hand assets were already present and
+    committed (`remotion/public/hand/hand.json` + `processed/grip1.png`+`grip2.png`);
+    the earlier "handless" 404s were only ad-hoc renders missing
+    `--public-dir=remotion/public`. Added a **fail-fast grip-PNG check** to
+    `pipeline/build.ts` and both render workflows' first step so a handless render
+    can never ship silently. Ran the **complete local pipeline** (real Kokoro TTS →
+    manifest → captions → full render with muxed audio → 1080p+720p thumbnails →
+    package) for the fixture AND `flow-short`; watchable outputs in
+    `design/rehearsal/` (fixture MP4 with sound + hand, vertical short with burned
+    captions, thumbnails). **CI smoke test:** added a `skip_runtime_guard` input to
+    `render.yml` + `render-shorts.yml` (the short fixtures are under the duration
+    floors) and ran both on GitHub Actions; verified the published Release assets
+    and `fetch_release.ts` download. Phase 1 is complete.
 - **Phase 2 — content system.** Rewrite `template.md` / `schema.md` for mechanism
   explainers; generalize the `part`/`principle` roles and framing; build the topic
   queue (replacing the removed launch-plan/xlsx machinery) and the daily
