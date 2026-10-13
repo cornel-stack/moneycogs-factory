@@ -76,6 +76,7 @@ export const COLORS = {
   flameSoft: "#A7D8BE", // light tint of the accent, for background bursts only (never on characters)
   marker: "#F5B700", // Coin Gold highlighter swipes behind keywords (sparing)
   slate: "#2F6690", // charts only — second data series
+  danger: "#D64545", // Alert Red — fees, fine print, the catch; danger-accent cast
 } as const;
 
 /**
@@ -95,26 +96,21 @@ export const SCENE_PALETTE = {
 export type SceneColor = keyof typeof SCENE_PALETTE;
 
 /**
- * CAST_WARDROBE (Phase 8 fusion) — a muted top/garment color per cast member.
- * Cool/jewel-toned so they're clearly distinct from the warm earthy
- * SCENE_PALETTE, no two alike. The flame accent item (tie/hairband/etc.) stays
- * and stays the brightest thing on the character; hands render paper-tone.
+ * CAST_WARDROBE — a muted top/garment color per MoneyCogs cast member. Each is
+ * distinct so roles read apart at a glance; the gold (or danger) accent item
+ * stays the brightest thing on the character; hands render skin-tone.
  */
 export const CAST_WARDROBE = {
-  alex: "#3F6F8F", // muted denim blue
-  sage: "#6B7A52", // muted olive
-  max: "#495A6B", // slate charcoal (a volatile suit)
-  maya: "#8E5E78", // muted plum / berry
-  pip: "#3E8577", // muted teal (kept cool so it never competes with flame)
-  // ---- Phase 17 ensemble (distinct cool/jewel tones) ----
-  jade: "#2E7D6B", // deep jade green
-  omar: "#5A6E8C", // dusty indigo
-  nadia: "#9A5A6E", // muted rose
-  theo: "#C98A3C", // warm ochre (kid — a touch brighter)
-  rosa: "#7A6AA3", // muted violet
-  kwame: "#3C6E97", // ocean blue
-  lena: "#6E7B86", // soft slate grey
-  deshawn: "#4E7A4A", // forest green
+  penny: "#5E8CA8", // everyday sky blue (The Customer)
+  ledger: "#2F3A4A", // pinstripe navy (The Banker)
+  rosa: "#B06A4F", // terracotta under the apron (The Merchant)
+  sterling: "#23262E", // sharp charcoal suit (The CEO)
+  vera: "#6E5A8C", // blazer violet (The Investor)
+  joe: "#8A5A2B", // work-brown under the hi-vis (The Worker)
+  norma: "#40566B", // official steel blue (The Regulator)
+  felix: "#3A3A3A", // bureaucrat grey (The Taxman)
+  slick: "#8E3B6B", // flashy magenta jacket (The Hustler)
+  keys: "#6B7A52", // landlord olive (The Landlord)
 } as const;
 
 /** Lighter tints of the palette, for large soft background washes (sky, walls). */

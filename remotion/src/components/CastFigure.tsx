@@ -31,6 +31,7 @@ import type { Expression } from "../drawing/character";
 // Base mapper: top/sleeve/hand → ink (no wardrobe).
 export const fillColor = (f: Fill) =>
   f === "flame" ? COLORS.flame
+    : f === "danger" ? COLORS.danger
     : f === "inkFar" ? COLORS.inkFar
     : f === "paper" ? COLORS.paper
     : f === "skin" ? SKIN.light
@@ -56,6 +57,7 @@ export function castFillColor(id: CastId, mode: WardrobeMode, pal: CastPalette =
   const skin = CAST[id]?.skin ?? SKIN.light;
   return (f: Fill): string => {
     if (f === "flame") return pal.accent;
+    if (f === "danger") return COLORS.danger;
     if (f === "inkFar") return COLORS.inkFar;
     if (f === "paper") return pal.paper;
     if (f === "skin") return skin;

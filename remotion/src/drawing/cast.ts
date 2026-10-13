@@ -24,20 +24,30 @@ import {
  * ink face reads, and flame on exactly one accent item.
  */
 
+// MoneyCogs cast (Phase 1A) — 10 recurring money-mechanism archetypes. Each is a
+// pure DATA entry; a distinct silhouette comes from build/height/head + hair +
+// an optional headwear/signature prop. (The Coggy mascot is NOT a rig character;
+// it lives in its own lightweight component.)
 export type CastId =
-  | "alex" | "sage" | "max" | "maya" | "pip"
-  // Phase 17 ensemble — a bigger, more diverse cast (ages / builds / skin tones).
-  | "jade" | "omar" | "nadia" | "theo" | "rosa" | "kwame" | "lena" | "deshawn";
+  | "penny" | "ledger" | "rosa" | "sterling" | "vera"
+  | "joe" | "norma" | "felix" | "slick" | "keys";
 // "top"/"hand" are semantic tags for the fusion wardrobe layer — they render as
-// ink in the normal cast (so the live cast is pixel-identical), but the fusion
-// renderer recolors "top" → wardrobe color and "hand" → paper.
-// "skin"/"skinFar" are the per-member skin tone (head + hands); the ink outline
-// keeps them reading as distinct shapes — which is also what makes a raised /
-// collinear hand read as a hand instead of merging into the ink arm.
-export type Fill = "ink" | "paper" | "flame" | "inkFar" | "top" | "sleeve" | "hand" | "skin" | "skinFar";
+// ink in the normal cast, but the fusion renderer recolors "top" → wardrobe
+// color and "hand" → paper. "skin"/"skinFar" are the per-member skin tone (head
+// + hands). "danger" is the alert-red accent (slick/felix). The ink outline
+// keeps every filled shape reading as a distinct part.
+export type Fill = "ink" | "paper" | "flame" | "inkFar" | "top" | "sleeve" | "hand" | "skin" | "skinFar" | "danger";
 export type Part = { d: string; fill: Fill };
-export type HairKind = "short" | "swoop" | "ponytail" | "sage" | "beanie" | "afro" | "bun" | "bald" | "curly" | "long";
+export type HairKind =
+  | "short" | "swoop" | "ponytail" | "fringe" | "beanie" | "afro" | "bun" | "bald" | "curly" | "long"
+  // MoneyCogs additions:
+  | "slick" // slicked-back with a side part (Sterling)
+  | "bowler"; // bowler hat (Felix the Taxman)
 export type AccentKind = "sneakers" | "bowtie" | "tie" | "hairband" | "beanie" | "scarf" | "earrings";
+/** A signature role prop baked onto the figure (front view), for instant
+ *  silhouette recognition across daily videos. */
+export type SignatureKind =
+  | "tote" | "briefcase" | "apron" | "tablet" | "clipboard" | "hivis" | "folder" | "keyring";
 export type TorsoShape = "default" | "aline";
 /** Where a seated figure sits. "chair" is the default; "none" opts out (the
  *  scene supplies the surface, e.g. a wall or ledge). */
@@ -46,14 +56,18 @@ export type SeatKind = "chair" | "desk" | "none";
 export type CastDef = {
   id: CastId;
   name: string;
+  role: string; // the money-mechanism archetype (The Customer, The Banker, …)
   heightScale: number; // overall figure scale
   build: number; // limb/torso width multiplier
   headScale: number; // head radius multiplier (big readable heads)
   hair: HairKind;
   beard?: boolean;
   glasses?: boolean;
+  shades?: boolean; // glasses render as solid danger-red sunglasses
   gray?: boolean; // hair/beard render in muted grey (age cue)
   accent: AccentKind;
+  signature?: SignatureKind; // baked role prop (front view)
+  danger?: boolean; // accent + signature render in alert red instead of the gold accent
   torsoShape?: TorsoShape;
   skin?: string; // head + hand tone (hex); defaults to the brand paper
 };
@@ -69,21 +83,17 @@ export const SKIN = {
 } as const;
 
 export const CAST: Record<CastId, CastDef> = {
-  // ---- originals (now with skin tones; hands/heads read against the ink body) ----
-  alex: { id: "alex", name: "Alex", heightScale: 1.0, build: 1.0, headScale: 1.0, hair: "short", accent: "sneakers", skin: SKIN.light },
-  sage: { id: "sage", name: "Sage", heightScale: 1.07, build: 0.82, headScale: 1.0, hair: "sage", beard: true, glasses: true, gray: true, accent: "bowtie", skin: SKIN.porcelain },
-  max: { id: "max", name: "Max", heightScale: 0.95, build: 1.55, headScale: 1.08, hair: "short", accent: "tie", skin: SKIN.tan },
-  maya: { id: "maya", name: "Maya", heightScale: 1.0, build: 0.98, headScale: 1.0, hair: "ponytail", accent: "hairband", torsoShape: "aline", skin: SKIN.olive },
-  pip: { id: "pip", name: "Pip", heightScale: 0.78, build: 1.22, headScale: 1.12, hair: "beanie", accent: "beanie", skin: SKIN.warm },
-  // ---- Phase 17 ensemble ----
-  jade: { id: "jade", name: "Jade", heightScale: 1.0, build: 0.95, headScale: 1.0, hair: "afro", accent: "earrings", torsoShape: "aline", skin: SKIN.deep },
-  omar: { id: "omar", name: "Omar", heightScale: 1.05, build: 0.9, headScale: 1.0, hair: "bald", beard: true, glasses: true, gray: true, accent: "scarf", skin: SKIN.olive },
-  nadia: { id: "nadia", name: "Nadia", heightScale: 1.0, build: 1.02, headScale: 1.0, hair: "bun", accent: "hairband", torsoShape: "aline", skin: SKIN.warm },
-  theo: { id: "theo", name: "Theo", heightScale: 0.72, build: 1.0, headScale: 1.2, hair: "curly", accent: "sneakers", skin: SKIN.tan },
-  rosa: { id: "rosa", name: "Rosa", heightScale: 0.98, build: 1.05, headScale: 1.0, hair: "long", accent: "hairband", torsoShape: "aline", skin: SKIN.light },
-  kwame: { id: "kwame", name: "Kwame", heightScale: 1.06, build: 1.2, headScale: 1.02, hair: "curly", accent: "tie", skin: SKIN.deep },
-  lena: { id: "lena", name: "Lena", heightScale: 1.0, build: 0.9, headScale: 1.0, hair: "bun", glasses: true, gray: true, accent: "bowtie", torsoShape: "aline", skin: SKIN.porcelain },
-  deshawn: { id: "deshawn", name: "Deshawn", heightScale: 1.04, build: 1.35, headScale: 1.04, hair: "short", accent: "sneakers", skin: SKIN.warm },
+  // id         name        role            body                                    hair/face                         accent        signature     skin
+  penny:    { id: "penny",    name: "Penny",    role: "The Customer",  heightScale: 1.0,  build: 0.98, headScale: 1.0,  hair: "long",   accent: "earrings", signature: "tote",      torsoShape: "aline", skin: SKIN.light },
+  ledger:   { id: "ledger",   name: "Ledger",   role: "The Banker",    heightScale: 1.04, build: 0.95, headScale: 1.0,  hair: "short",  glasses: true, accent: "bowtie",   signature: "briefcase", gray: true,          skin: SKIN.porcelain },
+  rosa:     { id: "rosa",     name: "Rosa",     role: "The Merchant",  heightScale: 0.98, build: 1.05, headScale: 1.0,  hair: "bun",    accent: "earrings", signature: "apron",     torsoShape: "aline", skin: SKIN.tan },
+  sterling: { id: "sterling", name: "Sterling", role: "The CEO",       heightScale: 1.06, build: 1.02, headScale: 1.0,  hair: "slick",  accent: "tie",                              skin: SKIN.olive },
+  vera:     { id: "vera",     name: "Vera",     role: "The Investor",  heightScale: 1.0,  build: 0.95, headScale: 1.0,  hair: "swoop",  accent: "earrings", signature: "tablet",    torsoShape: "aline", skin: SKIN.deep },
+  joe:      { id: "joe",      name: "Joe",      role: "The Worker",    heightScale: 1.0,  build: 1.22, headScale: 1.04, hair: "short",  accent: "sneakers", signature: "hivis",     skin: SKIN.warm },
+  norma:    { id: "norma",    name: "Norma",    role: "The Regulator", heightScale: 1.02, build: 0.96, headScale: 1.0,  hair: "bun",    accent: "hairband", signature: "clipboard", torsoShape: "aline", skin: SKIN.warm },
+  felix:    { id: "felix",    name: "Felix",    role: "The Taxman",    heightScale: 1.03, build: 0.9,  headScale: 1.0,  hair: "bowler", glasses: true, accent: "bowtie",   signature: "folder",    danger: true, gray: true, skin: SKIN.porcelain },
+  slick:    { id: "slick",    name: "Slick",    role: "The Hustler",   heightScale: 1.02, build: 1.05, headScale: 1.0,  hair: "slick",  glasses: true, shades: true, accent: "tie",       danger: true,        skin: SKIN.tan },
+  keys:     { id: "keys",     name: "Keys",     role: "The Landlord",  heightScale: 1.04, build: 1.18, headScale: 1.02, hair: "short",  beard: true, accent: "sneakers", signature: "keyring",   skin: SKIN.olive },
 };
 
 /** Which hand pose each arm uses per body pose (L/R before any flip). */
@@ -301,7 +311,7 @@ function hairParts(kind: HairKind, cx: number, cy: number, r: number, fill: Fill
         { d: ellipseD(cx + r * 1.15, cy - r * 0.1, r * 0.42, r * 0.78), fill }, // ponytail blob
         { d: `M ${n(cx - r * 1.0)} ${n(cy - r * 0.1)} Q ${n(cx - r * 1.05)} ${n(cy - r * 1.25)} ${cx} ${n(cy - r * 1.22)} Q ${n(cx + r * 1.05)} ${n(cy - r * 1.2)} ${n(cx + r * 1.0)} ${n(cy - r * 0.1)} Q ${cx} ${n(cy - r * 0.68)} ${n(cx - r * 1.0)} ${n(cy - r * 0.1)} Z`, fill },
       ];
-    case "sage":
+    case "fringe":
       return [
         { d: `M ${n(cx - r * 1.02)} ${n(cy + r * 0.05)} Q ${n(cx - r * 1.05)} ${n(cy - r * 0.75)} ${n(cx - r * 0.55)} ${n(cy - r * 0.95)} Q ${n(cx - r * 0.75)} ${n(cy - r * 0.35)} ${n(cx - r * 0.95)} ${n(cy + r * 0.25)} Z`, fill }, // left side hair
         { d: `M ${n(cx + r * 1.02)} ${n(cy + r * 0.05)} Q ${n(cx + r * 1.05)} ${n(cy - r * 0.75)} ${n(cx + r * 0.55)} ${n(cy - r * 0.95)} Q ${n(cx + r * 0.75)} ${n(cy - r * 0.35)} ${n(cx + r * 0.95)} ${n(cy + r * 0.25)} Z`, fill }, // right side hair
@@ -332,6 +342,19 @@ function hairParts(kind: HairKind, cx: number, cy: number, r: number, fill: Fill
         { d: `M ${n(cx - r * 1.05)} ${n(cy + r * 0.9)} Q ${n(cx - r * 1.15)} ${n(cy - r * 0.4)} ${n(cx - r * 0.9)} ${n(cy - r * 0.95)} Q ${n(cx - r * 0.6)} ${n(cy - r * 0.5)} ${n(cx - r * 0.72)} ${n(cy + r * 0.9)} Z`, fill }, // left drape
         { d: `M ${n(cx + r * 1.05)} ${n(cy + r * 0.9)} Q ${n(cx + r * 1.15)} ${n(cy - r * 0.4)} ${n(cx + r * 0.9)} ${n(cy - r * 0.95)} Q ${n(cx + r * 0.6)} ${n(cy - r * 0.5)} ${n(cx + r * 0.72)} ${n(cy + r * 0.9)} Z`, fill }, // right drape
         { d: `M ${n(cx - r * 1.0)} ${n(cy - r * 0.1)} Q ${cx} ${n(cy - r * 1.24)} ${n(cx + r * 1.0)} ${n(cy - r * 0.1)} Q ${cx} ${n(cy - r * 0.72)} ${n(cx - r * 1.0)} ${n(cy - r * 0.1)} Z`, fill }, // crown
+      ];
+    case "slick":
+      // slicked-back hair with a side part: a low cap hugging the crown plus a
+      // small forelock sweep across the part line.
+      return [
+        { d: `M ${n(cx - r * 0.95)} ${n(cy - r * 0.3)} Q ${cx} ${n(cy - r * 1.18)} ${n(cx + r * 0.98)} ${n(cy - r * 0.42)} Q ${n(cx + r * 0.2)} ${n(cy - r * 0.78)} ${n(cx - r * 0.95)} ${n(cy - r * 0.3)} Z`, fill },
+        { d: `M ${n(cx - r * 0.55)} ${n(cy - r * 0.9)} Q ${cx} ${n(cy - r * 1.12)} ${n(cx + r * 0.6)} ${n(cy - r * 0.82)} L ${n(cx + r * 0.1)} ${n(cy - r * 0.74)} Z`, fill },
+      ];
+    case "bowler":
+      // bowler hat: a rounded black dome + a flat curled brim (always ink).
+      return [
+        { d: `M ${n(cx - r * 0.84)} ${n(cy - r * 0.8)} Q ${cx} ${n(cy - r * 1.72)} ${n(cx + r * 0.84)} ${n(cy - r * 0.8)} Z`, fill: "ink" },
+        { d: `M ${n(cx - r * 1.2)} ${n(cy - r * 0.78)} Q ${cx} ${n(cy - r * 0.58)} ${n(cx + r * 1.2)} ${n(cy - r * 0.78)} L ${n(cx + r * 1.2)} ${n(cy - r * 0.95)} Q ${cx} ${n(cy - r * 0.75)} ${n(cx - r * 1.2)} ${n(cy - r * 0.95)} Z`, fill: "ink" },
       ];
   }
 }
@@ -364,15 +387,118 @@ function accentShape(kind: AccentKind, cx: number, cy: number, r: number, neckY:
   }
 }
 
-function glassesParts(cx: number, cy: number, r: number): Part[] {
+function glassesParts(cx: number, cy: number, r: number, shades = false): Part[] {
   const dx = r * 0.42;
   const ey = cy - r * 0.06;
   const gr = r * 0.28;
+  const bridge: Part = { d: `M ${n(cx - dx + gr)} ${n(ey)} L ${n(cx + dx - gr)} ${n(ey)} L ${n(cx + dx - gr)} ${n(ey + 1.2)} L ${n(cx - dx + gr)} ${n(ey + 1.2)} Z`, fill: "ink" };
+  if (shades) {
+    // solid danger-red sunglasses (The Hustler): filled lenses, ink bridge
+    return [
+      { d: circleD(cx - dx, ey, gr), fill: "danger" },
+      { d: circleD(cx + dx, ey, gr), fill: "danger" },
+      bridge,
+    ];
+  }
   return [
     { d: circleD(cx - dx, ey, gr) + " " + circleD(cx - dx, ey, gr * 0.68), fill: "ink" },
     { d: circleD(cx + dx, ey, gr) + " " + circleD(cx + dx, ey, gr * 0.68), fill: "ink" },
-    { d: `M ${n(cx - dx + gr)} ${n(ey)} L ${n(cx + dx - gr)} ${n(ey)} L ${n(cx + dx - gr)} ${n(ey + 1.2)} L ${n(cx - dx + gr)} ${n(ey + 1.2)} Z`, fill: "ink" },
+    bridge,
   ];
+}
+
+/**
+ * Signature role prop (front view), baked onto the torso/head so each archetype
+ * has an instantly-recognizable silhouette. Closed flat shapes only; the renderer
+ * gives each one the shared ink outline. `accFill` is the member's gold accent
+ * (or danger red). Kept to the front view — side/walk relies on body + headwear.
+ */
+type SigGeo = {
+  cx: number; shoulderY: number; torsoBot: number;
+  shoulderHalf: number; hipHalf: number; headCy: number; headR: number; accFill: Fill;
+};
+function signatureParts(kind: SignatureKind, g: SigGeo): Part[] {
+  const { cx, shoulderY, torsoBot, shoulderHalf, hipHalf, headCy, headR, accFill } = g;
+  const midY = shoulderY + (torsoBot - shoulderY) * 0.5;
+  const rect = (x0: number, y0: number, x1: number, y1: number, fill: Fill): Part => ({
+    d: `M ${n(x0)} ${n(y0)} L ${n(x1)} ${n(y0)} L ${n(x1)} ${n(y1)} L ${n(x0)} ${n(y1)} Z`,
+    fill,
+  });
+  switch (kind) {
+    case "apron": {
+      const w = shoulderHalf * 0.82;
+      const top = shoulderY + (torsoBot - shoulderY) * 0.16;
+      return [
+        { d: `M ${n(cx - w)} ${n(top)} L ${n(cx + w)} ${n(top)} L ${n(cx + w * 1.08)} ${n(torsoBot - 2)} L ${n(cx - w * 1.08)} ${n(torsoBot - 2)} Z`, fill: "paper" },
+        rect(cx - w * 0.55, midY + 6, cx + w * 0.55, midY + 20, "paper"), // pocket
+        // pencil tucked behind the ear
+        { d: `M ${n(cx + headR * 0.9)} ${n(headCy - headR * 0.28)} L ${n(cx + headR * 1.5)} ${n(headCy - headR * 0.5)} L ${n(cx + headR * 1.58)} ${n(headCy - headR * 0.36)} L ${n(cx + headR * 0.98)} ${n(headCy - headR * 0.14)} Z`, fill: accFill },
+      ];
+    }
+    case "hivis": {
+      const w = shoulderHalf * 0.98;
+      const top = shoulderY + 3;
+      return [
+        rect(cx - w, top, cx - w * 0.28, torsoBot - 4, "flame"),
+        rect(cx + w * 0.28, top, cx + w, torsoBot - 4, "flame"),
+        rect(cx - w, midY, cx + w, midY + 5, "paper"), // reflective band
+      ];
+    }
+    case "tote": {
+      const bx = cx + hipHalf * 1.05;
+      const by = midY + 4;
+      return [
+        rect(bx - 8, by, bx + 8, by + 17, "paper"), // bag
+        { d: `M ${n(bx - 6)} ${n(by)} L ${n(cx + shoulderHalf * 0.3)} ${n(shoulderY + 4)} L ${n(cx + shoulderHalf * 0.3 + 3)} ${n(shoulderY + 6)} L ${n(bx - 3)} ${n(by + 2)} Z`, fill: "paper" }, // strap
+      ];
+    }
+    case "briefcase": {
+      const bx = cx + hipHalf * 1.1;
+      const by = midY + 10;
+      return [
+        rect(bx - 11, by, bx + 11, by + 15, "paper"), // case
+        rect(bx - 4, by - 4, bx + 4, by, "ink"), // handle
+      ];
+    }
+    case "tablet": {
+      const w = shoulderHalf * 0.6;
+      const top = midY - 4;
+      const scr = rect(cx - w + 2.5, top + 2.5, cx + w - 2.5, top + 24, "paper");
+      return [
+        rect(cx - w, top, cx + w, top + 27, "ink"), // frame
+        scr,
+        rect(cx - w * 0.5, top + 16, cx - w * 0.5 + 3, top + 22, accFill), // tiny chart bars
+        rect(cx - w * 0.1, top + 11, cx - w * 0.1 + 3, top + 22, accFill),
+        rect(cx + w * 0.3, top + 7, cx + w * 0.3 + 3, top + 22, accFill),
+      ];
+    }
+    case "clipboard": {
+      const w = shoulderHalf * 0.6;
+      const top = midY - 6;
+      return [
+        rect(cx - w, top, cx + w, top + 28, "paper"), // board
+        rect(cx - 5, top - 4, cx + 5, top + 2, "ink"), // clip
+        { d: circleD(cx - shoulderHalf * 0.55, shoulderY + 14, 5), fill: accFill }, // round badge
+      ];
+    }
+    case "folder": {
+      const w = shoulderHalf * 0.72;
+      const top = midY - 2;
+      return [
+        rect(cx - w, top + 4, cx + w, top + 26, accFill), // folder body
+        { d: `M ${n(cx - w)} ${n(top + 4)} L ${n(cx - w * 0.2)} ${n(top + 4)} L ${n(cx - w * 0.05)} ${n(top)} L ${n(cx - w)} ${n(top)} Z`, fill: accFill }, // tab
+      ];
+    }
+    case "keyring": {
+      const kx = cx - hipHalf * 0.95;
+      const ky = torsoBot - 14;
+      return [
+        { d: circleD(kx, ky, 5) + " " + circleD(kx, ky, 2.6), fill: accFill }, // ring
+        rect(kx - 1.5, ky + 4, kx + 1.5, ky + 16, accFill), // key shaft
+        rect(kx + 1.5, ky + 12, kx + 5, ky + 16, accFill), // key teeth
+      ];
+    }
+  }
 }
 
 // ---------- assembly ----------
@@ -473,10 +599,16 @@ export function castRender(def: CastDef, pose: CastPoseA, opts: CastRenderOpts =
   bodyFills.push({ d: capsule(AR[1], AR[2], aE, aW), fill: "sleeve" });
   bodyFills.push({ d: handPart(hL, AL[2], AL[1], handScale), fill: inkOrFlame("skin") });
   bodyFills.push({ d: handPart(hR, AR[2], AR[1], handScale), fill: inkOrFlame("skin") });
+  // the member's accent colour: gold by default, alert-red for danger members.
+  const accFill: Fill = sil ? "ink" : def.danger ? "danger" : "flame";
   // accent on the body/neck (tie/bowtie) — stays with the torso (suppressed on
   // the minimum-width turn frame so no stray accent pixels show)
   if (!simple && (def.accent === "tie" || def.accent === "bowtie" || def.accent === "scarf")) {
-    bodyFills.push(...accentShape(def.accent, cx, headCy, headR, chinY).map((pp) => ({ ...pp, fill: inkOrFlame(pp.fill) })));
+    bodyFills.push(...accentShape(def.accent, cx, headCy, headR, chinY).map((pp) => ({ ...pp, fill: accFill })));
+  }
+  // signature role prop (front view only), baked onto the torso/head
+  if (!simple && !sil && def.signature) {
+    bodyFills.push(...signatureParts(def.signature, { cx, shoulderY, torsoBot, shoulderHalf, hipHalf, headCy, headR, accFill }));
   }
 
   const headFills: Part[] = [];
@@ -488,9 +620,9 @@ export function castRender(def: CastDef, pose: CastPoseA, opts: CastRenderOpts =
   if (def.beard && !simple) headFills.push({ ...beardPart(cx, headCy, headR), fill: hairInk });
   if (def.hair === "beanie") headFills.push(...hairParts("beanie", cx, headCy, headR, simple ? "ink" : inkOrFlame("flame")));
   if (!simple && (def.accent === "hairband" || def.accent === "earrings")) {
-    headFills.push(...accentShape(def.accent, cx, headCy, headR, chinY).map((pp) => ({ ...pp, fill: inkOrFlame(pp.fill) })));
+    headFills.push(...accentShape(def.accent, cx, headCy, headR, chinY).map((pp) => ({ ...pp, fill: sil ? "ink" : def.danger ? "danger" : pp.fill })));
   }
-  if (def.glasses && !sil && !simple) headFills.push(...glassesParts(cx, headCy, headR));
+  if (def.glasses && !sil && !simple) headFills.push(...glassesParts(cx, headCy, headR, def.shades));
 
   const face = sil || simple ? [] : faceFeatures(head, opts.expression ?? "neutral", { blink: opts.blink, look: opts.look });
 
@@ -565,7 +697,7 @@ function hairSide(def: CastDef, cx: number, cy: number, r: number, face: number,
     out.push({ d: `M ${n(cx - r * 1.05)} ${n(cy - r * 0.15)} L ${n(cx + r * 1.05)} ${n(cy - r * 0.15)} L ${n(cx + r * 1.05)} ${n(cy - r * 0.34)} L ${n(cx - r * 1.05)} ${n(cy - r * 0.34)} Z`, fill: inkOr("flame") });
     return out;
   }
-  if (def.hair === "sage") {
+  if (def.hair === "fringe") {
     // bald top, a TRIMMED hair fringe hugging the back of the head (no halo)
     out.push({ d: `M ${n(cx - face * r * 0.98)} ${n(cy + r * 0.18)} Q ${n(cx - face * r * 0.98)} ${n(cy - r * 0.52)} ${n(cx - face * r * 0.48)} ${n(cy - r * 0.68)} Q ${n(cx - face * r * 0.58)} ${n(cy - r * 0.12)} ${n(cx - face * r * 0.9)} ${n(cy + r * 0.36)} Z`, fill: inkOr("ink") });
     return out;
@@ -587,7 +719,13 @@ function hairSide(def: CastDef, cx: number, cy: number, r: number, face: number,
       });
     return out;
   }
-  // short cap (Alex, Max): over the top, slightly down the back
+  if (def.hair === "bowler") {
+    // bowler hat in profile: black dome + a flat brim extending past the face
+    out.push({ d: `M ${n(cx - r * 0.82)} ${n(cy - r * 0.78)} Q ${n(cx + face * r * 0.1)} ${n(cy - r * 1.68)} ${n(cx + r * 0.82)} ${n(cy - r * 0.78)} Z`, fill: "ink" });
+    out.push({ d: `M ${n(cx - r * 1.1)} ${n(cy - r * 0.74)} L ${n(cx + face * r * 1.3)} ${n(cy - r * 0.74)} L ${n(cx + face * r * 1.3)} ${n(cy - r * 0.9)} L ${n(cx - r * 1.1)} ${n(cy - r * 0.9)} Z`, fill: "ink" });
+    return out;
+  }
+  // short cap (slick/keys/joe): over the top, slightly down the back
   out.push({ d: `M ${n(cx - face * r * 0.95)} ${n(cy - r * 0.35)} Q ${n(cx - face * r * 0.2)} ${n(cy - r * 1.2)} ${n(cx + face * r * 0.98)} ${n(cy - r * 0.5)} Q ${n(cx + face * r * 0.1)} ${n(cy - r * 0.78)} ${n(cx - face * r * 0.95)} ${n(cy - r * 0.35)} Z`, fill: inkOr("ink") });
   return out;
 }
@@ -782,11 +920,12 @@ export function castRenderSide(def: CastDef, pose: CastPoseA, opts: CastRenderOp
   bodyFills.push({ d: handPart(hNear, ANear[2], ANear[1], handScale), fill: handNearFill });
   // front accents — deliberate profile versions, always visible (dropped only
   // on the minimum-width turn frame)
+  const accFillSide: Fill = sil ? "ink" : def.danger ? "danger" : "flame";
   if (!simple && def.accent === "tie") {
-    bodyFills.push({ d: tieSide(cx, chinY, dS, belly, face), fill: inkOr("flame") });
+    bodyFills.push({ d: tieSide(cx, chinY, dS, belly, face), fill: accFillSide });
   }
   if (!simple && def.accent === "bowtie") {
-    bodyFills.push({ d: bowtieSide(cx, chinY, dS, face), fill: inkOr("flame") });
+    bodyFills.push({ d: bowtieSide(cx, chinY, dS, face), fill: accFillSide });
   }
 
   const headFills: Part[] = [];
@@ -798,7 +937,7 @@ export function castRenderSide(def: CastDef, pose: CastPoseA, opts: CastRenderOp
   headFills.push({ d: headSide(cx, headCy, headR, face), fill: sil ? "ink" : "skin" });
   headFills.push(...hairSide(def, cx, headCy, headR, face, hairInkOr));
   if (def.beard && !simple) headFills.push({ d: beardSide(cx, headCy, headR, face), fill: inkOr(def.gray ? "inkFar" : "ink") });
-  if (def.glasses && !sil && !simple) headFills.push({ d: glassesSide(cx, headCy, headR, face), fill: "ink" });
+  if (def.glasses && !sil && !simple) headFills.push({ d: glassesSide(cx, headCy, headR, face), fill: def.shades ? "danger" : "ink" });
 
   const faceStrokes = sil || simple ? [] : faceSideFeatures(head, opts.expression ?? "neutral", face, opts.blink === true);
 

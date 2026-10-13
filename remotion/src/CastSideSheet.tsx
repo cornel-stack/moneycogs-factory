@@ -4,7 +4,7 @@ import { COLORS, FONTS } from "./theme";
 import { CAST, castFigureRender, type CastId, type SeatKind } from "./drawing/cast";
 import { CastStatic, fillColor } from "./components/CastFigure";
 
-const IDS: CastId[] = ["alex", "sage", "max", "maya", "pip"];
+const IDS: CastId[] = ["penny", "ledger", "sterling", "vera", "joe"];
 const W = 1920;
 const H = 1080;
 
@@ -52,7 +52,7 @@ const TurnFrame: React.FC<{ id: CastId; view: "front" | "side"; squashX: number;
 export const CastSideSheet: React.FC = () => {
   const colX = [300, 620, 940, 1260, 1580];
   // Sage sits at a desk (mentor), everyone else on a chair — the seat default.
-  const seatFor = (id: CastId): SeatKind => (id === "sage" ? "desk" : "chair");
+  const seatFor = (id: CastId): SeatKind => (id === "ledger" ? "desk" : "chair");
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.paper }}>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
@@ -98,7 +98,7 @@ export const CastSideSheet: React.FC = () => {
           { v: "front" as const, sx: 0.5 },
           { v: "front" as const, sx: 1 },
         ].map((f, i) => (
-          <TurnFrame key={i} id="max" view={f.v} squashX={f.sx} cx={720 + i * 110} feetY={1065} base={0.42} />
+          <TurnFrame key={i} id="sterling" view={f.v} squashX={f.sx} cx={720 + i * 110} feetY={1065} base={0.42} />
         ))}
       </svg>
     </AbsoluteFill>

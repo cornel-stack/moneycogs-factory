@@ -21,10 +21,10 @@ export const CastSideExprCheck: React.FC = () => {
           </text>
         ))}
         {EXPRS.map((e, i) => (
-          <CastStatic key={`a${e}`} id="alex" pose="standing" view="side" expression={e} seat="none" cx={colX[i]!} feetY={480} base={0.78} />
+          <CastStatic key={`a${e}`} id="penny" pose="standing" view="side" expression={e} seat="none" cx={colX[i]!} feetY={480} base={0.78} />
         ))}
         {EXPRS.map((e, i) => (
-          <CastStatic key={`s${e}`} id="sage" pose="standing" view="side" expression={e} seat="none" cx={colX[i]!} feetY={900} base={0.78} />
+          <CastStatic key={`s${e}`} id="ledger" pose="standing" view="side" expression={e} seat="none" cx={colX[i]!} feetY={900} base={0.78} />
         ))}
       </svg>
     </AbsoluteFill>

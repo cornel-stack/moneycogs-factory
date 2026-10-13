@@ -16,6 +16,7 @@ import { PeepsCalib } from "./PeepsCalib";
 import { PeepsFusionSheet } from "./PeepsFusionSheet";
 import { CrowdDemo } from "./CrowdDemo";
 import { MotionTest } from "./MotionTest";
+import { CoggySheet } from "./components/Coggy";
 import { VIDEO } from "./theme";
 import { Script } from "./schema";
 import type { RenderProps } from "./schema";
@@ -79,6 +80,7 @@ export const RemotionRoot: React.FC = () => {
       <Still id="CastCheckSheet" component={CastCheckSheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="CastSideExprCheck" component={CastSideExprCheck} width={VIDEO.width} height={VIDEO.height} />
       <Still id="PropSheet" component={PropSheet} width={VIDEO.width} height={VIDEO.height} />
+      <Still id="Coggy" component={CoggySheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="StageSheet" component={StageSheet} width={VIDEO.width} height={VIDEO.height} />
       <Composition id="TravelTest" component={TravelTest} width={VIDEO.width} height={VIDEO.height} fps={VIDEO.fps} durationInFrames={130} />
       <Still id="WardrobeCompare" component={WardrobeCompare} width={VIDEO.width} height={VIDEO.height} />

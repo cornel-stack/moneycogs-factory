@@ -6,9 +6,12 @@ import type { StickPose } from "./drawing/stick";
 import type { Expression } from "./drawing/character";
 import { CastStatic } from "./components/CastFigure";
 
-const IDS: CastId[] = ["alex", "sage", "max", "maya", "pip"];
+// The full MoneyCogs cast (10 archetypes), one row each.
+const IDS: CastId[] = ["penny", "ledger", "rosa", "sterling", "vera", "joe", "norma", "felix", "slick", "keys"];
 const W = 1920;
 const H = 1080;
+// 10 rows packed into the page; feet line per row + a small figure scale.
+const rowFeet = (i: number) => 212 + i * 86;
 
 const Label: React.FC<{ x: number; y: number; text: string; size?: number; color?: string }> = ({
   x,
@@ -22,26 +25,24 @@ const Label: React.FC<{ x: number; y: number; text: string; size?: number; color
   </text>
 );
 
-/** Page 1 — each cast member in 4 poses. */
+/** Page 1 — every cast member in 4 key poses. */
 export const CastSheetPoses: React.FC = () => {
   const poses: StickPose[] = ["standing", "pointing", "walking", "sitting"];
-  const poseLabel = ["standing", "pointing", "walking", "sitting"];
-  const colX = [470, 820, 1170, 1540];
-  const rowFeet = [280, 450, 620, 790, 960];
+  const colX = [620, 980, 1340, 1680];
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.paper }}>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-        <text x={80} y={70} fontFamily={FONTS.heading} fontSize={54} fill={COLORS.ink}>
-          The Cast · Poses
+        <text x={80} y={60} fontFamily={FONTS.heading} fontSize={48} fill={COLORS.ink}>
+          MoneyCogs Cast · Poses
         </text>
         {poses.map((p, c) => (
-          <Label key={p} x={colX[c]!} y={120} text={poseLabel[c]!} size={30} color={COLORS.flame} />
+          <Label key={p} x={colX[c]!} y={96} text={p} size={26} color={COLORS.flame} />
         ))}
         {IDS.map((id, rI) => (
           <React.Fragment key={id}>
-            <Label x={150} y={rowFeet[rI]! - 50} text={CAST[id].name} size={34} color={COLORS.ink} />
+            <Label x={270} y={rowFeet(rI) - 26} text={`${CAST[id].name} · ${CAST[id].role}`} size={26} color={COLORS.ink} />
             {poses.map((p, c) => (
-              <CastStatic key={p} id={id} pose={p} expression="happy" cx={colX[c]!} feetY={rowFeet[rI]!} base={0.82} />
+              <CastStatic key={p} id={id} pose={p} expression="happy" cx={colX[c]!} feetY={rowFeet(rI)} base={0.4} />
             ))}
           </React.Fragment>
         ))}
@@ -50,34 +51,30 @@ export const CastSheetPoses: React.FC = () => {
   );
 };
 
-/** Page 2 — each cast member in 4 expressions, plus a silhouette lineup. */
+/** Page 2 — every cast member across 4 expressions (+ a silhouette lineup). */
 export const CastSheetExpr: React.FC = () => {
   const exprs: Expression[] = ["happy", "worried", "shocked", "curious"];
-  const colX = [470, 820, 1170, 1540];
-  const rowFeet = [250, 400, 550, 700, 850];
+  const colX = [660, 1000, 1340, 1620];
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.paper }}>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-        <text x={80} y={66} fontFamily={FONTS.heading} fontSize={54} fill={COLORS.ink}>
-          The Cast · Expressions &amp; Silhouettes
+        <text x={80} y={60} fontFamily={FONTS.heading} fontSize={48} fill={COLORS.ink}>
+          MoneyCogs Cast · Expressions
         </text>
         {exprs.map((e, c) => (
-          <Label key={e} x={colX[c]!} y={112} text={e} size={30} color={COLORS.flame} />
+          <Label key={e} x={colX[c]!} y={96} text={e} size={26} color={COLORS.flame} />
         ))}
         {IDS.map((id, rI) => (
           <React.Fragment key={id}>
-            <Label x={150} y={rowFeet[rI]! - 42} text={CAST[id].name} size={30} color={COLORS.ink} />
+            <Label x={250} y={rowFeet(rI) - 26} text={CAST[id].name} size={26} color={COLORS.ink} />
             {exprs.map((e, c) => (
-              <CastStatic key={e} id={id} pose="standing" expression={e} cx={colX[c]!} feetY={rowFeet[rI]!} base={0.66} />
+              <CastStatic key={e} id={id} pose="standing" expression={e} cx={colX[c]!} feetY={rowFeet(rI)} base={0.4} />
             ))}
+            {/* silhouette at the far right — identifiable with no face */}
+            <CastStatic id={id} pose="standing" expression="happy" silhouette cx={1850} feetY={rowFeet(rI)} base={0.4} />
           </React.Fragment>
         ))}
-        {/* silhouette lineup */}
-        <line x1={80} y1={905} x2={W - 80} y2={905} stroke={COLORS.inkSoft} strokeWidth={1} opacity={0.4} />
-        <Label x={W / 2} y={945} text="silhouette test — identifiable with no face" size={28} />
-        {IDS.map((id, i) => (
-          <CastStatic key={id} id={id} pose="standing" expression="happy" silhouette cx={430 + i * 270} feetY={1060} base={0.62} />
-        ))}
+        <Label x={1850} y={96} text="silhouette" size={24} color={COLORS.inkSoft} />
       </svg>
     </AbsoluteFill>
   );

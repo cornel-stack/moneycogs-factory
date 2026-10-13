@@ -123,7 +123,7 @@ export const CtaVisual = z.object({
 });
 
 /** A single drawable element in a character scene (figure or prop). */
-export const CAST_IDS = ["alex", "sage", "max", "maya", "pip", "jade", "omar", "nadia", "theo", "rosa", "kwame", "lena", "deshawn"] as const;
+export const CAST_IDS = ["penny", "ledger", "rosa", "sterling", "vera", "joe", "norma", "felix", "slick", "keys"] as const;
 
 /** An expression swing: a bare name, or a name that starts on a spoken phrase. */
 const ExpressionCue = z.union([
@@ -152,7 +152,7 @@ export const CharacterElement = z.object({
   id: z.string().optional(),
   at: At,
   // figure options (v2.0 — the proprietary Cast is the one character system):
-  cast: z.enum(CAST_IDS).default("alex"),
+  cast: z.enum(CAST_IDS).default("penny"),
   pose: StickPose.optional(),
   poses: z.array(StickPose).optional(),
   expression: z.enum(EXPRESSIONS).optional(),
@@ -331,7 +331,7 @@ export const Script = z.object({
     // Falls back to headline words if omitted.
     punch_words: z.array(z.string()).min(1).max(4).optional(),
     subline: z.string().optional(),
-    cast: z.enum(CAST_IDS).default("alex"),
+    cast: z.enum(CAST_IDS).default("penny"),
     pose: StickPose.default("thinking"),
     expression: z.enum(EXPRESSIONS).default("shocked"),
     props: z.array(PropKind).max(2).default([]),

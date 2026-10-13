@@ -12,10 +12,11 @@ fail fast with a readable error before any audio or rendering happens.
 ## What changed in v2.0 (vs v1.x) — **breaking**
 
 - **The Cast is the one character system.** Every `kind: "figure"` is a cast
-  member: `cast: "alex"|"sage"|"max"|"maya"|"pip"` (default `alex`). The old
-  LinePeople renderer and its appearance variants are **retired** — `hair`,
-  `glasses`, `tie`, and the boolean `flip` are **removed**. Identity now comes
-  from the cast member (Sage already has glasses+beard+bowtie, Max a tie, etc.).
+  member: `cast: "penny"|"ledger"|"rosa"|"sterling"|"vera"|"joe"|"norma"|"felix"|"slick"|"keys"`
+  (default `penny`). The old LinePeople renderer and its appearance variants are
+  **retired** — `hair`, `glasses`, `tie`, and the boolean `flip` are **removed**.
+  Identity now comes from the cast member (Ledger has glasses+briefcase, Felix a
+  bowler hat, Slick sunglasses, etc.).
 - **Facing** `facing: "left"|"right"` (default right) replaces `flip`.
 - **View** `view: "front"|"side"` (optional; default auto — `walking`/`sitting`
   render in profile, everything else front). Mainly for standing profiles.
@@ -83,7 +84,7 @@ Brand palette (unchanged): paper `#FAF6EE`, ink `#1C1A17`, flame `#E8501E`
 |-------|------|-----|-------|
 | `headline` | string ≤5 words | ✓ | Huge Caveat headline with marker underline. |
 | `subline` | string | — | Small line under the headline. |
-| `cast` | CastId | — | Which cast member is the figure. Default `alex`. |
+| `cast` | CastId | — | Which cast member is the figure. Default `penny`. |
 | `pose` | Pose | — | Figure pose. Default `thinking`. |
 | `expression` | Expression | — | Figure face. Default `shocked`. |
 | `props` | PropKind[] (≤2) | — | 1–2 drawn props flanking the figure. |
@@ -126,15 +127,15 @@ transitions, walk-ins, turns). `elements` positioned on the grid.
 {
   "title": "Meet Mr. Market",
   "elements": [
-    { "kind": "figure", "cast": "max", "at": { "col": 5, "row": 1, "w": 4, "h": 5 },
-      "enter": { "type": "walk", "direction": "right" }, "poses": ["standing","presenting"], "label": "Mr. Market" },
-    { "kind": "figure", "cast": "alex", "at": { "col": 0, "row": 2, "w": 3, "h": 4 }, "facing": "right", "label": "You" }
+    { "kind": "figure", "cast": "ledger", "at": { "col": 5, "row": 1, "w": 4, "h": 5 },
+      "enter": { "type": "walk", "direction": "right" }, "poses": ["standing","presenting"], "label": "The Bank" },
+    { "kind": "figure", "cast": "penny", "at": { "col": 0, "row": 2, "w": 3, "h": 4 }, "facing": "right", "label": "You" }
   ]
 }
 ```
 Element fields: `kind` (`figure` or a PropKind) · `at` · `scale?` · `color?`
 (`ink|accent`, props only) · `label?` (≤6 words) · `sync?`.
-Figure-only: `cast` (default `alex`) · `pose?` / `poses?` (pose or transition
+Figure-only: `cast` (default `penny`) · `pose?` / `poses?` (pose or transition
 sequence) · `expression?` / `expressions?` (bare names, or `{ value, sync }`
 to swing on a phrase) · `view?` (`front|side`) · `facing?` (`left|right`) ·
 `seat?` (`chair|desk|none`) · `holding?` (`{ prop, hand }`) ·
@@ -168,7 +169,7 @@ Overlay kinds: `thought_bubble`, `question_marks`, `exclamation`,
 Oversized hand-drawn quote marks, quote fades in line by line, attribution in
 Caveat with a drawn underline.
 ```json
-{ "quote": "Price is what you pay...", "attribution": "Benjamin Graham", "cast": "sage" }
+{ "quote": "Price is what you pay...", "attribution": "Warren Buffett", "cast": "vera" }
 ```
 - `quote` · `attribution` · optional `cast` (a cast member presents the line
   from the left margin, hand-drawn then alive).

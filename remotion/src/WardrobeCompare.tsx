@@ -4,7 +4,7 @@ import { COLORS, FONTS, CAST_WARDROBE } from "./theme";
 import { CAST, type CastId } from "./drawing/cast";
 import { CastStatic } from "./components/CastFigure";
 
-const IDS: CastId[] = ["alex", "sage", "max", "maya", "pip"];
+const IDS: CastId[] = ["penny", "ledger", "sterling", "vera", "joe"];
 
 /** Torso-only (default) vs full-top wardrobe, side by side, for the producer. */
 export const WardrobeCompare: React.FC = () => {

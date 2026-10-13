@@ -1,6 +1,6 @@
 # Project status — MoneyCogs video factory
 
-_Last updated: **Phase 0** — rebrand to MoneyCogs + legacy scrub + cron disabled._
+_Last updated: **Phase 1A** — MoneyCogs cast (10 archetypes + Coggy mascot)._
 
 MoneyCogs is a daily whiteboard-explainer channel about business & money
 **mechanisms**. This repo is a fork of a general whiteboard-video engine; we are
@@ -16,9 +16,16 @@ being rebuilt.
   voice/runtime policy, playlists. All legacy channel content and dead references
   removed. Scheduled cron disabled. Repo green (install, typecheck, validate, lint,
   a dev render of the sample fixture).
-- **Phase 1 — new cast + graphics system.** MoneyCogs cast art, a money/mechanism
-  prop & diagram library (cogs, cash-flow arrows, funnels, balance sheets), and any
-  new scene types the mechanism format needs.
+- **Phase 1 — new cast + graphics system.**
+  - **1A (✅ DONE)** — replaced the cast ART with 10 money-mechanism archetypes
+    (Penny/Customer, Ledger/Banker, Rosa/Merchant, Sterling/CEO, Vera/Investor,
+    Joe/Worker, Norma/Regulator, Felix/Taxman, Slick/Hustler, Keys/Landlord) +
+    the **Coggy** mascot. Reused the rig/poses/expressions/renderer; only the
+    vector appearance changed (new hair `slick`/`bowler`, sunglasses, per-role
+    signature props, danger-red accents, new wardrobe). Approval sheets +
+    motion-test in `design/cast/`.
+  - **1B (next)** — money/mechanism prop & diagram library (cogs, cash-flow
+    arrows, funnels, balance sheets) and any new scene types the format needs.
 - **Phase 2 — content system.** Rewrite `template.md` / `schema.md` for mechanism
   explainers; generalize the `part`/`principle` roles and framing; build the topic
   queue (replacing the removed launch-plan/xlsx machinery) and the daily
@@ -89,3 +96,20 @@ being rebuilt.
 5. **Default framing → `explainer`.** Since MoneyCogs is not book-based, the schema
    default framing was switched from `book-structure` to `explainer` so bookless
    scripts are the clean default.
+
+## Phase 1A decisions
+
+1. **Coggy is NOT a rig character.** It's a lightweight self-contained component
+   (`components/Coggy.tsx`), not a `CastId`, so `CAST_IDS` stays at the 10 humans.
+   It'll be wired into CTA/end-card/watermark in a later phase.
+2. **Signature props are front-view only.** The baked role props (tote, apron,
+   hi-vis, briefcase, tablet, clipboard, folder, keyring) render in the front
+   view; walk/sit (side view) rely on body build + headwear (bowler/slick) +
+   accents for recognition. Full side-view signature art is deferred.
+3. **Per-character accent colour** is gold by default (`flame` → brand accent);
+   `danger: true` members (Slick, Felix) use alert red via a new `danger` fill
+   (`COLORS.danger`). The `HairKind` value `sage` was renamed `fringe` (it was a
+   hairstyle name colliding with an old cast id).
+4. **Dev-sheet cast ids** in the `Cast*/Motion/Wardrobe/Crowd/Peeps/Stage` demo
+   compositions were remapped old→new so they compile; they are approval tooling,
+   not shipped video.

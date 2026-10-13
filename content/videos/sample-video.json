@@ -8,7 +8,7 @@
     "headline": "How Cards Make Money",
     "punch_words": ["CARDS", "MAKE", "MONEY"],
     "subline": "The hidden swipe machine",
-    "cast": "max",
+    "cast": "ledger",
     "pose": "presenting",
     "expression": "happy",
     "props": ["coins", "percent"],
@@ -37,7 +37,7 @@
           {
             "kind": "figure",
             "id": "you",
-            "cast": "alex",
+            "cast": "penny",
             "at": { "col": 1, "row": 1, "w": 3, "h": 5 },
             "pose": "standing",
             "expression": "curious",
@@ -81,7 +81,7 @@
           {
             "kind": "figure",
             "id": "bank",
-            "cast": "max",
+            "cast": "ledger",
             "at": { "col": 6, "row": 1, "w": 4, "h": 5 },
             "facing": "left",
             "pose": "presenting",
@@ -135,7 +135,7 @@
           {
             "kind": "figure",
             "id": "payer",
-            "cast": "pip",
+            "cast": "penny",
             "at": { "col": 4, "row": 1, "w": 4, "h": 5 },
             "pose": "standing",
             "expressions": ["worried", { "value": "shocked", "sync": { "phrase": "quietly double" } }],
@@ -177,7 +177,7 @@
           {
             "kind": "figure",
             "id": "winner",
-            "cast": "alex",
+            "cast": "penny",
             "at": { "col": 4, "row": 0, "w": 5, "h": 6 },
             "pose": "sitting",
             "seat": "desk",

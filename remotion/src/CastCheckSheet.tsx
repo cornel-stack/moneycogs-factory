@@ -12,7 +12,7 @@ const IDS: CastId[] = Object.keys(CAST) as CastId[];
 // A focused, LARGE check: the hand-critical poses across a diverse subset, so
 // the skin-toned hands are big enough to eyeball.
 const CHECK_POSES: StickPose[] = ["standing", "pointing", "presenting", "celebrating", "panicking", "thinking", "walking"];
-const CHECK_IDS: CastId[] = ["alex", "jade", "omar", "theo", "nadia", "kwame"];
+const CHECK_IDS: CastId[] = ["penny", "rosa", "felix", "keys", "norma", "slick"];
 
 export const CastCheckSheet: React.FC = () => {
   const poses = CHECK_POSES;

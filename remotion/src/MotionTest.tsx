@@ -17,8 +17,8 @@ const Caption: React.FC<{ text: string }> = ({ text }) => (
 const AlexBeat: React.FC = () => {
   const frame = useCurrentFrame();
   const el = castBoardElement({
-    key: "alex",
-    castId: "alex",
+    key: "penny",
+    castId: "penny",
     box: { x: 740, y: 210, w: 440, h: 690 },
     startFrame: 0,
     sceneFrame: frame,
@@ -40,8 +40,8 @@ const AlexBeat: React.FC = () => {
 const CarryBeat: React.FC = () => {
   const frame = useCurrentFrame();
   const el = castBoardElement({
-    key: "maya",
-    castId: "maya",
+    key: "vera",
+    castId: "vera",
     box: { x: 760, y: 230, w: 420, h: 660 },
     startFrame: 0,
     sceneFrame: frame,
@@ -62,8 +62,8 @@ const CarryBeat: React.FC = () => {
 /** Beat 3 — Sage + Max duo: staggered idles, nod vs head-shake. */
 const DuoBeat: React.FC = () => {
   const frame = useCurrentFrame();
-  const sage = castBoardElement({ key: "sage", castId: "sage", box: { x: 250, y: 170, w: 400, h: 740 }, startFrame: 0, sceneFrame: frame, poses: ["standing", "presenting"], expressions: ["happy"], action: { kind: "nod", startFrame: 150 }, label: "Sage", seed: "sage-duo" });
-  const max = castBoardElement({ key: "max", castId: "max", box: { x: 1280, y: 200, w: 420, h: 700 }, startFrame: 0, sceneFrame: frame, poses: ["standing"], expressions: ["worried"], flip: true, action: { kind: "headshake", startFrame: 165 }, label: "Max", seed: "max-duo" });
+  const sage = castBoardElement({ key: "ledger", castId: "ledger", box: { x: 250, y: 170, w: 400, h: 740 }, startFrame: 0, sceneFrame: frame, poses: ["standing", "presenting"], expressions: ["happy"], action: { kind: "nod", startFrame: 150 }, label: "Sage", seed: "sage-duo" });
+  const max = castBoardElement({ key: "sterling", castId: "sterling", box: { x: 1280, y: 200, w: 420, h: 700 }, startFrame: 0, sceneFrame: frame, poses: ["standing"], expressions: ["worried"], flip: true, action: { kind: "headshake", startFrame: 165 }, label: "Max", seed: "max-duo" });
   return (
     <AbsoluteFill>
       <DrawingBoard elements={[sage, max]} />
@@ -75,7 +75,7 @@ const DuoBeat: React.FC = () => {
 /** Beat 4 — Pip comic double-take. */
 const PipBeat: React.FC = () => {
   const frame = useCurrentFrame();
-  const el = castBoardElement({ key: "pip", castId: "pip", box: { x: 780, y: 300, w: 360, h: 600 }, startFrame: 0, sceneFrame: frame, poses: ["standing"], expressionSteps: [{ value: "happy", atFrame: 0 }, { value: "shocked", atFrame: 60 }], action: { kind: "shake", startFrame: 60 }, label: "Pip", seed: "pip" });
+  const el = castBoardElement({ key: "joe", castId: "joe", box: { x: 780, y: 300, w: 360, h: 600 }, startFrame: 0, sceneFrame: frame, poses: ["standing"], expressionSteps: [{ value: "happy", atFrame: 0 }, { value: "shocked", atFrame: 60 }], action: { kind: "shake", startFrame: 60 }, label: "Pip", seed: "joe" });
   return (
     <AbsoluteFill>
       <DrawingBoard elements={[el]} />

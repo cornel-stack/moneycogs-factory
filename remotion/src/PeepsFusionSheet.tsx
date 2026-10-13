@@ -73,24 +73,24 @@ export const PeepsFusionSheet: React.FC = () => {
 
         {/* old vs new, standing, both chars */}
         <Label x={300} y={110} t="Max — cast v2" c={COLORS.flame} />
-        <CastStatic id="max" pose="standing" expression="happy" cx={300} feetY={470} base={0.78} />
+        <CastStatic id="sterling" pose="standing" expression="happy" cx={300} feetY={470} base={0.78} />
         <Label x={560} y={110} t="Max — FUSION" c={COLORS.flame} />
-        <FusionFigure id="max" pose="standing" expression="happy" cx={560} feetY={470} base={0.78} />
+        <FusionFigure id="sterling" pose="standing" expression="happy" cx={560} feetY={470} base={0.78} />
         <Label x={1120} y={110} t="Maya — cast v2" c={COLORS.flame} />
-        <CastStatic id="maya" pose="standing" expression="happy" cx={1120} feetY={470} base={0.78} />
+        <CastStatic id="vera" pose="standing" expression="happy" cx={1120} feetY={470} base={0.78} />
         <Label x={1380} y={110} t="Maya — FUSION" c={COLORS.flame} />
-        <FusionFigure id="maya" pose="standing" expression="happy" cx={1380} feetY={470} base={0.78} />
+        <FusionFigure id="vera" pose="standing" expression="happy" cx={1380} feetY={470} base={0.78} />
 
         {/* 7 expressions — fusion, front */}
         <Label x={960} y={540} t="fusion expressions (front) — Max top, Maya bottom" />
         {EXPRS.map((e, i) => (
           <React.Fragment key={`mx${e}`}>
-            <FusionFigure id="max" pose="standing" expression={e} cx={180 + i * 250} feetY={760} base={0.5} />
+            <FusionFigure id="sterling" pose="standing" expression={e} cx={180 + i * 250} feetY={760} base={0.5} />
             <Label x={180 + i * 250} y={580} t={e} c={COLORS.flame} s={20} />
           </React.Fragment>
         ))}
         {EXPRS.map((e, i) => (
-          <FusionFigure key={`my${e}`} id="maya" pose="standing" expression={e} cx={180 + i * 250} feetY={1000} base={0.5} />
+          <FusionFigure key={`my${e}`} id="vera" pose="standing" expression={e} cx={180 + i * 250} feetY={1000} base={0.5} />
         ))}
 
         {/* silhouette identity check */}

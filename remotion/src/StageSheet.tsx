@@ -6,12 +6,12 @@ import { CAST, castFigureRender, type CastId } from "./drawing/cast";
 import { fillColor } from "./components/CastFigure";
 
 const STAGES: { name: StageName; who: CastId }[] = [
-  { name: "plain", who: "alex" },
-  { name: "outdoor", who: "maya" },
-  { name: "room", who: "sage" },
-  { name: "desk-office", who: "alex" },
-  { name: "street", who: "max" },
-  { name: "stage-spotlight", who: "sage" },
+  { name: "plain", who: "penny" },
+  { name: "outdoor", who: "vera" },
+  { name: "room", who: "ledger" },
+  { name: "desk-office", who: "penny" },
+  { name: "street", who: "sterling" },
+  { name: "stage-spotlight", who: "ledger" },
 ];
 
 /** One stage drawn full-frame-scaled into a cell, with a cast figure for scale. */

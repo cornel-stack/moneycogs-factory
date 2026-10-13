@@ -51,7 +51,7 @@ export const CrowdDemo: React.FC = () => {
       </svg>
       {/* cast member (v2) in front, on the spotlight */}
       <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0 }}>
-        <CastStatic id="sage" pose="presenting" expression="happy" cx={960} feetY={900} base={1.15} />
+        <CastStatic id="ledger" pose="presenting" expression="happy" cx={960} feetY={900} base={1.15} />
       </svg>
     </AbsoluteFill>
   );

@@ -39,14 +39,14 @@ export const CastGestureSheet: React.FC = () => {
         <text x={W / 2} y={470} textAnchor="middle" fontFamily={FONTS.label} fontSize={30} fill={COLORS.inkSoft}>
           gestures in context
         </text>
-        <CastStatic id="alex" pose="pointing" expression="happy" cx={420} feetY={1020} base={1.5} />
+        <CastStatic id="penny" pose="pointing" expression="happy" cx={420} feetY={1020} base={1.5} />
         <text x={420} y={1055} textAnchor="middle" fontFamily={FONTS.label} fontSize={30} fill={COLORS.inkSoft}>point</text>
 
-        <CastStatic id="sage" pose="presenting" expression="happy" cx={960} feetY={1020} base={1.5} />
+        <CastStatic id="ledger" pose="presenting" expression="happy" cx={960} feetY={1020} base={1.5} />
         <text x={960} y={1055} textAnchor="middle" fontFamily={FONTS.label} fontSize={30} fill={COLORS.inkSoft}>present</text>
 
         {/* holding a book: the book is gripped at the hand anchor */}
-        <CastStatic id="maya" pose="presenting" expression="happy" holding={{ prop: "book", hand: "right" }} cx={1480} feetY={1020} base={1.5} />
+        <CastStatic id="vera" pose="presenting" expression="happy" holding={{ prop: "book", hand: "right" }} cx={1480} feetY={1020} base={1.5} />
         <text x={1480} y={1055} textAnchor="middle" fontFamily={FONTS.label} fontSize={30} fill={COLORS.inkSoft}>hold a book</text>
       </svg>
     </AbsoluteFill>
