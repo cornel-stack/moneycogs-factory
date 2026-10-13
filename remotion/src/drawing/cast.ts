@@ -36,7 +36,13 @@ export type CastId =
 // color and "hand" → paper. "skin"/"skinFar" are the per-member skin tone (head
 // + hands). "danger" is the alert-red accent (slick/felix). The ink outline
 // keeps every filled shape reading as a distinct part.
-export type Fill = "ink" | "paper" | "flame" | "inkFar" | "top" | "sleeve" | "hand" | "skin" | "skinFar" | "danger";
+export type Fill =
+  | "ink" | "paper" | "flame" | "inkFar" | "top" | "sleeve" | "hand" | "skin" | "skinFar" | "danger"
+  // clothing / prop color tags (resolved by the fill mappers):
+  | "pants" // trouser slate — legs
+  | "bag" // tote-bag green
+  | "case" // briefcase brown
+  | "apronC"; // apron terracotta
 export type Part = { d: string; fill: Fill };
 export type HairKind =
   | "short" | "swoop" | "ponytail" | "fringe" | "beanie" | "afro" | "bun" | "bald" | "curly" | "long"
@@ -47,7 +53,7 @@ export type AccentKind = "sneakers" | "bowtie" | "tie" | "hairband" | "beanie" |
 /** A signature role prop baked onto the figure (front view), for instant
  *  silhouette recognition across daily videos. */
 export type SignatureKind =
-  | "tote" | "briefcase" | "apron" | "tablet" | "clipboard" | "hivis" | "folder" | "keyring";
+  | "tote" | "briefcase" | "apron" | "tablet" | "clipboard" | "hivis" | "folder" | "keyring" | "chain";
 export type TorsoShape = "default" | "aline";
 /** Where a seated figure sits. "chair" is the default; "none" opts out (the
  *  scene supplies the surface, e.g. a wall or ledge). */
@@ -72,28 +78,28 @@ export type CastDef = {
   skin?: string; // head + hand tone (hex); defaults to the brand paper
 };
 
-// Warm skin palette, kept light→medium so the ink face features always read.
+// Five named skin tones (light→deep) spread across the cast. Hair may be dark,
+// but SKIN is never near-black — the ink face features always read on top.
 export const SKIN = {
-  porcelain: "#F4D9BE",
-  light: "#EEC39A",
-  tan: "#E0A878",
-  olive: "#CE9262",
-  warm: "#C07D4E",
-  deep: "#A5663B",
+  fair: "#F2C9A0",
+  tan: "#D9A066",
+  bronze: "#B07B4F",
+  brown: "#8C5A33",
+  deep: "#5C3A21",
 } as const;
 
 export const CAST: Record<CastId, CastDef> = {
   // id         name        role            body                                    hair/face                         accent        signature     skin
-  penny:    { id: "penny",    name: "Penny",    role: "The Customer",  heightScale: 1.0,  build: 0.98, headScale: 1.0,  hair: "long",   accent: "earrings", signature: "tote",      torsoShape: "aline", skin: SKIN.light },
-  ledger:   { id: "ledger",   name: "Ledger",   role: "The Banker",    heightScale: 1.04, build: 0.95, headScale: 1.0,  hair: "short",  glasses: true, accent: "bowtie",   signature: "briefcase", gray: true,          skin: SKIN.porcelain },
-  rosa:     { id: "rosa",     name: "Rosa",     role: "The Merchant",  heightScale: 0.98, build: 1.05, headScale: 1.0,  hair: "bun",    accent: "earrings", signature: "apron",     torsoShape: "aline", skin: SKIN.tan },
-  sterling: { id: "sterling", name: "Sterling", role: "The CEO",       heightScale: 1.06, build: 1.02, headScale: 1.0,  hair: "slick",  accent: "tie",                              skin: SKIN.olive },
+  penny:    { id: "penny",    name: "Penny",    role: "The Customer",  heightScale: 1.0,  build: 0.98, headScale: 1.0,  hair: "long",   accent: "earrings", signature: "tote",      torsoShape: "aline", skin: SKIN.tan },
+  ledger:   { id: "ledger",   name: "Ledger",   role: "The Banker",    heightScale: 0.96, build: 1.12, headScale: 1.0,  hair: "short",  glasses: true, accent: "bowtie",   signature: "briefcase", gray: true,          skin: SKIN.fair },
+  rosa:     { id: "rosa",     name: "Rosa",     role: "The Merchant",  heightScale: 0.98, build: 1.05, headScale: 1.0,  hair: "bun",    accent: "earrings", signature: "apron",     torsoShape: "aline", skin: SKIN.bronze },
+  sterling: { id: "sterling", name: "Sterling", role: "The CEO",       heightScale: 1.1,  build: 0.9,  headScale: 1.0,  hair: "slick",  accent: "tie",                              skin: SKIN.fair },
   vera:     { id: "vera",     name: "Vera",     role: "The Investor",  heightScale: 1.0,  build: 0.95, headScale: 1.0,  hair: "swoop",  accent: "earrings", signature: "tablet",    torsoShape: "aline", skin: SKIN.deep },
-  joe:      { id: "joe",      name: "Joe",      role: "The Worker",    heightScale: 1.0,  build: 1.22, headScale: 1.04, hair: "short",  accent: "sneakers", signature: "hivis",     skin: SKIN.warm },
-  norma:    { id: "norma",    name: "Norma",    role: "The Regulator", heightScale: 1.02, build: 0.96, headScale: 1.0,  hair: "bun",    accent: "hairband", signature: "clipboard", torsoShape: "aline", skin: SKIN.warm },
-  felix:    { id: "felix",    name: "Felix",    role: "The Taxman",    heightScale: 1.03, build: 0.9,  headScale: 1.0,  hair: "bowler", glasses: true, accent: "bowtie",   signature: "folder",    danger: true, gray: true, skin: SKIN.porcelain },
-  slick:    { id: "slick",    name: "Slick",    role: "The Hustler",   heightScale: 1.02, build: 1.05, headScale: 1.0,  hair: "slick",  glasses: true, shades: true, accent: "tie",       danger: true,        skin: SKIN.tan },
-  keys:     { id: "keys",     name: "Keys",     role: "The Landlord",  heightScale: 1.04, build: 1.18, headScale: 1.02, hair: "short",  beard: true, accent: "sneakers", signature: "keyring",   skin: SKIN.olive },
+  joe:      { id: "joe",      name: "Joe",      role: "The Worker",    heightScale: 1.0,  build: 1.26, headScale: 1.04, hair: "short",  accent: "sneakers", signature: "hivis",     skin: SKIN.brown },
+  norma:    { id: "norma",    name: "Norma",    role: "The Regulator", heightScale: 1.02, build: 0.96, headScale: 1.0,  hair: "bun",    accent: "hairband", signature: "clipboard", torsoShape: "aline", skin: SKIN.bronze },
+  felix:    { id: "felix",    name: "Felix",    role: "The Taxman",    heightScale: 1.03, build: 0.9,  headScale: 1.0,  hair: "bowler", glasses: true, accent: "bowtie",   signature: "folder",    danger: true, gray: true, skin: SKIN.fair },
+  slick:    { id: "slick",    name: "Slick",    role: "The Hustler",   heightScale: 1.02, build: 1.05, headScale: 1.0,  hair: "slick",  glasses: true, shades: true, accent: "tie",       danger: true, signature: "chain", skin: SKIN.brown },
+  keys:     { id: "keys",     name: "Keys",     role: "The Landlord",  heightScale: 1.04, build: 1.18, headScale: 1.02, hair: "short",  beard: true, accent: "sneakers", signature: "keyring",   skin: SKIN.tan },
 };
 
 /** Which hand pose each arm uses per body pose (L/R before any flip). */
@@ -159,7 +165,7 @@ export function castProps(def: CastDef): CastProps {
   return {
     build,
     aline,
-    headR: 22 * def.headScale,
+    headR: 26 * def.headScale, // bigger, stylized-explainer heads (~1:3.5–4 head-to-body)
     aS: 11 * build, aE: 8 * build, aW: 4.5 * build,
     lH: 13 * build, lK: 9 * build, lA: 6 * build,
     handScale: 1.05 * build, footScale: 1.2 * build,
@@ -428,11 +434,16 @@ function signatureParts(kind: SignatureKind, g: SigGeo): Part[] {
     case "apron": {
       const w = shoulderHalf * 0.82;
       const top = shoulderY + (torsoBot - shoulderY) * 0.16;
+      const tgx = cx + w * 0.62; // price tag, clipped to the apron
+      const tgy = midY + 8;
       return [
-        { d: `M ${n(cx - w)} ${n(top)} L ${n(cx + w)} ${n(top)} L ${n(cx + w * 1.08)} ${n(torsoBot - 2)} L ${n(cx - w * 1.08)} ${n(torsoBot - 2)} Z`, fill: "paper" },
-        rect(cx - w * 0.55, midY + 6, cx + w * 0.55, midY + 20, "paper"), // pocket
+        { d: `M ${n(cx - w)} ${n(top)} L ${n(cx + w)} ${n(top)} L ${n(cx + w * 1.08)} ${n(torsoBot - 2)} L ${n(cx - w * 1.08)} ${n(torsoBot - 2)} Z`, fill: "apronC" },
+        rect(cx - w * 0.55, midY + 6, cx + w * 0.55, midY + 20, "apronC"), // pocket (ink outline reads)
         // pencil tucked behind the ear
         { d: `M ${n(cx + headR * 0.9)} ${n(headCy - headR * 0.28)} L ${n(cx + headR * 1.5)} ${n(headCy - headR * 0.5)} L ${n(cx + headR * 1.58)} ${n(headCy - headR * 0.36)} L ${n(cx + headR * 0.98)} ${n(headCy - headR * 0.14)} Z`, fill: accFill },
+        // price tag (gold) hanging on the apron
+        { d: `M ${n(tgx)} ${n(tgy)} L ${n(tgx + 10)} ${n(tgy + 3)} L ${n(tgx + 8)} ${n(tgy + 11)} L ${n(tgx - 2)} ${n(tgy + 8)} Z`, fill: accFill },
+        { d: circleD(tgx + 1.5, tgy + 3.5, 1.3), fill: "paper" }, // tag hole
       ];
     }
     case "hivis": {
@@ -447,17 +458,32 @@ function signatureParts(kind: SignatureKind, g: SigGeo): Part[] {
     case "tote": {
       const bx = cx + hipHalf * 1.05;
       const by = midY + 4;
+      const px = cx - hipHalf * 1.12; // phone in the other hand
+      const py = midY + 6;
       return [
-        rect(bx - 8, by, bx + 8, by + 17, "paper"), // bag
-        { d: `M ${n(bx - 6)} ${n(by)} L ${n(cx + shoulderHalf * 0.3)} ${n(shoulderY + 4)} L ${n(cx + shoulderHalf * 0.3 + 3)} ${n(shoulderY + 6)} L ${n(bx - 3)} ${n(by + 2)} Z`, fill: "paper" }, // strap
+        rect(bx - 8, by, bx + 8, by + 17, "bag"), // green tote
+        { d: `M ${n(bx - 6)} ${n(by)} L ${n(cx + shoulderHalf * 0.3)} ${n(shoulderY + 4)} L ${n(cx + shoulderHalf * 0.3 + 3)} ${n(shoulderY + 6)} L ${n(bx - 3)} ${n(by + 2)} Z`, fill: "bag" }, // strap
+        rect(px - 4, py, px + 4, py + 14, "ink"), // phone body
+        rect(px - 2.6, py + 1.6, px + 2.6, py + 9.5, accFill), // phone screen (glowing)
       ];
     }
     case "briefcase": {
       const bx = cx + hipHalf * 1.1;
       const by = midY + 10;
       return [
-        rect(bx - 11, by, bx + 11, by + 15, "paper"), // case
+        rect(bx - 11, by, bx + 11, by + 15, "case"), // brown case
         rect(bx - 4, by - 4, bx + 4, by, "ink"), // handle
+        { d: `M ${n(bx - 11)} ${n(by + 6)} L ${n(bx + 11)} ${n(by + 6)} L ${n(bx + 11)} ${n(by + 7.5)} L ${n(bx - 11)} ${n(by + 7.5)} Z`, fill: "ink" }, // seam
+      ];
+    }
+    case "chain": {
+      // gold hustler chain: a thin V-necklace crescent + pendant at the chest.
+      const ny = shoulderY + 7;
+      const w = shoulderHalf * 0.58;
+      const dip = ny + 18;
+      return [
+        { d: `M ${n(cx - w)} ${n(ny)} Q ${cx} ${n(dip)} ${n(cx + w)} ${n(ny)} Q ${cx} ${n(dip - 3.2)} ${n(cx - w)} ${n(ny)} Z`, fill: "flame" },
+        { d: circleD(cx, dip + 1, 3.2), fill: "flame" }, // pendant
       ];
     }
     case "tablet": {
@@ -467,9 +493,10 @@ function signatureParts(kind: SignatureKind, g: SigGeo): Part[] {
       return [
         rect(cx - w, top, cx + w, top + 27, "ink"), // frame
         scr,
-        rect(cx - w * 0.5, top + 16, cx - w * 0.5 + 3, top + 22, accFill), // tiny chart bars
-        rect(cx - w * 0.1, top + 11, cx - w * 0.1 + 3, top + 22, accFill),
-        rect(cx + w * 0.3, top + 7, cx + w * 0.3 + 3, top + 22, accFill),
+        // tiny green up-chart (rising bars)
+        rect(cx - w * 0.5, top + 16, cx - w * 0.5 + 3, top + 22, "bag"),
+        rect(cx - w * 0.1, top + 11, cx - w * 0.1 + 3, top + 22, "bag"),
+        rect(cx + w * 0.3, top + 7, cx + w * 0.3 + 3, top + 22, "bag"),
       ];
     }
     case "clipboard": {
@@ -582,10 +609,10 @@ export function castRender(def: CastDef, pose: CastPoseA, opts: CastRenderOpts =
 
   const bodyFills: Part[] = [];
   // legs (behind) from the hip sockets
-  bodyFills.push({ d: capsule(LL[0], LL[1], lH, lK), fill: "ink" });
-  bodyFills.push({ d: capsule(LL[1], LL[2], lK, lA), fill: "ink" });
-  bodyFills.push({ d: capsule(LR[0], LR[1], lH, lK), fill: "ink" });
-  bodyFills.push({ d: capsule(LR[1], LR[2], lK, lA), fill: "ink" });
+  bodyFills.push({ d: capsule(LL[0], LL[1], lH, lK), fill: "pants" });
+  bodyFills.push({ d: capsule(LL[1], LL[2], lK, lA), fill: "pants" });
+  bodyFills.push({ d: capsule(LR[0], LR[1], lH, lK), fill: "pants" });
+  bodyFills.push({ d: capsule(LR[1], LR[2], lK, lA), fill: "pants" });
   bodyFills.push({ d: footPart(LL[2], LL[2][0] >= cx ? 1 : -1, footScale), fill: footFill });
   bodyFills.push({ d: footPart(LR[2], LR[2][0] >= cx ? 1 : -1, footScale), fill: footFill });
   // clean torso (wardrobe "top") + short neck (skin, so it bridges head→body)
@@ -912,8 +939,8 @@ export function castRenderSide(def: CastDef, pose: CastPoseA, opts: CastRenderOp
   bodyFills.push({ d: torsoSide(cx, shoulderY, torsoBot, dS, pr.depthHip, belly, face), fill: "top" });
   bodyFills.push({ d: capsule([cx, shoulderY + 2], [cx, chinY + 3], headR * 0.4, headR * 0.38), fill: sil || simple ? "ink" : "skin" });
   // near limbs (front) — near arm is a sleeve ("top"), near hand "hand"
-  bodyFills.push({ d: capsule(LNear[0], LNear[1], lH, lK), fill: "ink" });
-  bodyFills.push({ d: capsule(LNear[1], LNear[2], lK, lA), fill: "ink" });
+  bodyFills.push({ d: capsule(LNear[0], LNear[1], lH, lK), fill: "pants" });
+  bodyFills.push({ d: capsule(LNear[1], LNear[2], lK, lA), fill: "pants" });
   bodyFills.push({ d: footPart(LNear[2], face, footScale), fill: footFillNear });
   bodyFills.push({ d: capsule(ANear[0], ANear[1], aS, aE), fill: "sleeve" });
   bodyFills.push({ d: capsule(ANear[1], ANear[2], aE, aW), fill: "sleeve" });

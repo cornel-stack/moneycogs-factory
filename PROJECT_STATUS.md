@@ -97,6 +97,48 @@ being rebuilt.
    default framing was switched from `book-structure` to `explainer` so bookless
    scripts are the clean default.
 
+## Phase 1A revision (art + sheet fixes; rig/engine untouched)
+
+A revision pass corrected a rendering defect and several readability problems in
+the 1A cast art. Only the vector appearance, palette, and dev sheets changed —
+the joint rig, poses, motion, and FK are untouched.
+
+1. **Ink-fill bug fixed.** Figures previously read as black silhouettes: the
+   torso wardrobe covered only a narrow trapezoid while sleeves, legs, hair and
+   feet were all ink. Now the default wardrobe mode is **`full-top`** (torso +
+   sleeves take the member's dominant garment color), legs render a trouser
+   **slate** (`COLORS.trouser`, not pure ink), and the dominant color covers
+   most of the figure. The default flipped in every cast entry point
+   (`CastStatic`, `AliveCast`, `CastFillWipe`, `castBoardElement`, `Thumbnail`).
+2. **Skin tones.** `SKIN` is now five named tones (`fair #F2C9A0`, `tan #D9A066`,
+   `bronze #B07B4F`, `brown #8C5A33`, `deep #5C3A21`) assigned across the cast;
+   skin is never near-black so the ink face always reads.
+3. **Wardrobe.** `CAST_WARDROBE` holds one dominant color per member (penny sky
+   blue, ledger charcoal, rosa cream + terracotta apron, sterling navy, vera
+   purple, joe grey + hi-vis, norma teal, felix dark grey, slick black, keys
+   olive). New `Fill` tags `pants`/`bag`/`case`/`apronC` carry trouser/prop
+   colors through the fill mappers.
+4. **Bigger heads + faces.** `headR` 22 → 26 (≈1:3.5–4 head-to-body); face
+   strokes thickened (sw ×1.4 → ×1.7); `worried` is now angled brows + a small
+   frown, `shocked` raised brows + round mouth, `curious` one raised brow + small
+   o (+ head tilt on the FaceSheet). Eyes enlarged for 120px readability.
+5. **Signatures recolored to read.** Props were `paper` (cream on cream, nearly
+   invisible); now tote = green, briefcase = brown, apron = terracotta, with a
+   phone (penny), price tag (rosa), gold chain (slick, new `chain` signature),
+   green up-chart (vera). Builds/heights varied (ledger short+round, sterling
+   tall+lean, joe broad).
+6. **Grey chair.** Seated figures sit on a `#9A9A9A` chair (`COLORS.chair`) with
+   an ink outline, so figure and chair never merge.
+7. **Coggy gestures.** Longer arms with mitten hands, drawn in front of the coin:
+   point = extended arm + index finger; wave = raised open palm + 2 motion arcs;
+   thumbsup = fist + large gold thumb; spin = ~15° body tilt + 3 speed arcs.
+8. **Sheets.** `CastSheetPoses`/`CastSheetExpr` enlarged ~2× on a taller
+   (1920×1560) canvas; new **`CastFaceSheet`** (1920×1600) — a head+shoulders
+   grid of all 10 × 5 expressions. Re-exported `cast-poses.png`,
+   `cast-expressions.png`, `face-sheet.png`, `coggy.png`, and `motion-test.mp4`
+   to `design/cast/`; re-rendered the 90-frame fixture check
+   (`output/_phase0-check/`). tsc / validate / lint green.
+
 ## Phase 1A decisions
 
 1. **Coggy is NOT a rig character.** It's a lightweight self-contained component

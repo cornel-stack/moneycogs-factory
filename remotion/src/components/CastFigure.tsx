@@ -28,14 +28,25 @@ import { type PropKind } from "../drawing/props";
 import { type StickPose } from "../drawing/stick";
 import type { Expression } from "../drawing/character";
 
-// Base mapper: top/sleeve/hand → ink (no wardrobe).
+// Cloth/prop tag colors shared by both mappers.
+const CLOTH = {
+  bag: "#7A9E5E", // tote green
+  case: "#6B4A2F", // briefcase brown
+  apronC: "#C96F4A", // apron terracotta
+} as const;
+
+// Base mapper: top/sleeve/hand → ink (no wardrobe); clothing/prop tags colored.
 export const fillColor = (f: Fill) =>
   f === "flame" ? COLORS.flame
     : f === "danger" ? COLORS.danger
     : f === "inkFar" ? COLORS.inkFar
     : f === "paper" ? COLORS.paper
-    : f === "skin" ? SKIN.light
-    : f === "skinFar" ? shade(SKIN.light, 0.32)
+    : f === "skin" ? SKIN.fair
+    : f === "skinFar" ? shade(SKIN.fair, 0.32)
+    : f === "pants" ? COLORS.trouser
+    : f === "bag" ? CLOTH.bag
+    : f === "case" ? CLOTH.case
+    : f === "apronC" ? CLOTH.apronC
     : COLORS.ink;
 
 export type WardrobeMode = "torso" | "full-top" | "none";
@@ -54,16 +65,21 @@ const LEGACY_CAST_PALETTE: CastPalette = { accent: COLORS.flame, paper: COLORS.p
  *  "none"/silhouette → ink. Pass the brand palette from useBrand(). */
 export function castFillColor(id: CastId, mode: WardrobeMode, pal: CastPalette = LEGACY_CAST_PALETTE) {
   const w = CAST_WARDROBE[id];
-  const skin = CAST[id]?.skin ?? SKIN.light;
+  const skin = CAST[id]?.skin ?? SKIN.fair;
+  const none = mode === "none"; // silhouette: clothing collapses to ink
   return (f: Fill): string => {
-    if (f === "flame") return pal.accent;
-    if (f === "danger") return COLORS.danger;
+    if (f === "flame") return none ? COLORS.ink : pal.accent;
+    if (f === "danger") return none ? COLORS.ink : COLORS.danger;
     if (f === "inkFar") return COLORS.inkFar;
     if (f === "paper") return pal.paper;
     if (f === "skin") return skin;
     if (f === "skinFar") return shade(skin, 0.32);
-    if (f === "top") return mode === "none" ? COLORS.ink : w;
+    if (f === "top") return none ? COLORS.ink : w;
     if (f === "sleeve") return mode === "full-top" ? w : COLORS.ink;
+    if (f === "pants") return none ? COLORS.ink : COLORS.trouser;
+    if (f === "bag") return none ? COLORS.ink : CLOTH.bag;
+    if (f === "case") return none ? COLORS.ink : CLOTH.case;
+    if (f === "apronC") return none ? COLORS.ink : CLOTH.apronC;
     return COLORS.ink; // ink, hand
   };
 }
@@ -89,7 +105,7 @@ export const CastStatic: React.FC<{
   cx: number;
   feetY: number;
   base: number;
-}> = ({ id, pose = "standing", expression = "happy", flip, silhouette, blink, view, seat = "chair", wardrobe = "torso", holding, cx, feetY, base }) => {
+}> = ({ id, pose = "standing", expression = "happy", flip, silhouette, blink, view, seat = "chair", wardrobe = "full-top", holding, cx, feetY, base }) => {
   const brand = useBrand();
   const pal: CastPalette = { accent: brand.accentOnInk, paper: brand.paper };
   const scale = base * CAST[id].heightScale;
@@ -105,7 +121,7 @@ export const CastStatic: React.FC<{
   return (
     <>
       {sStrokes.behind.map((d, i) => (
-        <path key={`sb${i}`} d={d} fill={COLORS.ink} stroke={COLORS.ink} strokeWidth={2} strokeLinejoin="round" />
+        <path key={`sb${i}`} d={d} fill={COLORS.chair} stroke={COLORS.ink} strokeWidth={2} strokeLinejoin="round" />
       ))}
       <g transform={`translate(${tx} ${ty}) scale(${scale})`}>
         {r.fills.map((p, i) => (
@@ -125,7 +141,7 @@ export const CastStatic: React.FC<{
             d={d}
             fill="none"
             stroke={COLORS.ink}
-            strokeWidth={sw * 1.4}
+            strokeWidth={sw * 1.7}
             strokeLinecap="round"
             strokeLinejoin="round"
           />

@@ -33,12 +33,15 @@ type FaceSpec = {
 
 const FACES: Record<Expression, FaceSpec> = {
   neutral: { eye: "dot", browInner: 0, browOuter: 0, mouth: "flat" },
-  happy: { eye: "dot", browInner: -0.06, browOuter: -0.1, mouth: "smile" },
-  worried: { eye: "dot", browInner: -0.2, browOuter: 0.04, mouth: "wavy" },
-  shocked: { eye: "wide", browInner: -0.24, browOuter: -0.24, mouth: "open" },
-  angry: { eye: "dot", browInner: 0.14, browOuter: -0.06, mouth: "frown" },
+  happy: { eye: "dot", browInner: -0.08, browOuter: -0.12, mouth: "smile" },
+  // worried = angled brows (inner raised, outer down) + a small frown
+  worried: { eye: "dot", browInner: -0.26, browOuter: 0.1, mouth: "frown" },
+  // shocked = round open mouth + both brows raised high + wide eyes
+  shocked: { eye: "wide", browInner: -0.3, browOuter: -0.3, mouth: "open" },
+  angry: { eye: "dot", browInner: 0.16, browOuter: -0.08, mouth: "frown" },
   tired: { eye: "line", browInner: 0.02, browOuter: 0.06, mouth: "flat" },
-  curious: { eye: "dot", browInner: -0.16, browOuter: -0.2, browAsymMul: 0, mouth: "smallo" },
+  // curious = ONE raised brow (right stays flat) + small o mouth (+ head tilt on sheets)
+  curious: { eye: "dot", browInner: -0.14, browOuter: -0.26, browAsymMul: 0, mouth: "smallo" },
 };
 
 function faceStrokes(
@@ -52,7 +55,7 @@ function faceStrokes(
   const eyeY = cy - rad * 0.06;
   const look = (opts.look ?? 0) * rad * 0.18;
   const blink = opts.blink === true;
-  const eyeR = spec.eye === "wide" ? rad * 0.2 : rad * 0.13;
+  const eyeR = spec.eye === "wide" ? rad * 0.23 : rad * 0.15;
 
   const eye = (sx: number): Stroke => {
     const ex = sx + look;

@@ -77,6 +77,9 @@ export const COLORS = {
   marker: "#F5B700", // Coin Gold highlighter swipes behind keywords (sparing)
   slate: "#2F6690", // charts only — second data series
   danger: "#D64545", // Alert Red — fees, fine print, the catch; danger-accent cast
+  trouser: "#33373F", // dark slate "slacks" — character legs (NOT pure ink, so the
+  // lower body reads as trousers rather than a black blob)
+  chair: "#9A9A9A", // mid grey for seats, with an ink outline (never merges with the figure)
 } as const;
 
 /**
@@ -96,21 +99,23 @@ export const SCENE_PALETTE = {
 export type SceneColor = keyof typeof SCENE_PALETTE;
 
 /**
- * CAST_WARDROBE — a muted top/garment color per MoneyCogs cast member. Each is
- * distinct so roles read apart at a glance; the gold (or danger) accent item
- * stays the brightest thing on the character; hands render skin-tone.
+ * CAST_WARDROBE — the ONE DOMINANT garment color per MoneyCogs cast member. It
+ * covers the whole top (torso + sleeves) so each figure reads as clothed, not a
+ * black silhouette. Each is distinct so roles read apart at a glance; the gold
+ * (or danger) accent item stays the brightest thing on the character; hands and
+ * head render skin-tone; legs render trouser-slate.
  */
 export const CAST_WARDROBE = {
-  penny: "#5E8CA8", // everyday sky blue (The Customer)
-  ledger: "#2F3A4A", // pinstripe navy (The Banker)
-  rosa: "#B06A4F", // terracotta under the apron (The Merchant)
-  sterling: "#23262E", // sharp charcoal suit (The CEO)
-  vera: "#6E5A8C", // blazer violet (The Investor)
-  joe: "#8A5A2B", // work-brown under the hi-vis (The Worker)
-  norma: "#40566B", // official steel blue (The Regulator)
-  felix: "#3A3A3A", // bureaucrat grey (The Taxman)
-  slick: "#8E3B6B", // flashy magenta jacket (The Hustler)
-  keys: "#6B7A52", // landlord olive (The Landlord)
+  penny: "#5B8DB8", // soft sky blue (The Customer)
+  ledger: "#3A4150", // charcoal pinstripe suit (The Banker)
+  rosa: "#E8DCC0", // cream blouse under the terracotta apron (The Merchant)
+  sterling: "#273043", // navy suit (The CEO)
+  vera: "#7B5EA7", // purple blazer (The Investor)
+  joe: "#8A8F98", // grey work shirt under the hi-vis vest (The Worker)
+  norma: "#2E7D7B", // teal blazer (The Regulator)
+  felix: "#3A3A3A", // dark grey bureaucrat suit (The Taxman)
+  slick: "#1E1E22", // black hustler jacket (The Hustler)
+  keys: "#6B7F3A", // landlord olive jacket (The Landlord)
 } as const;
 
 /** Lighter tints of the palette, for large soft background washes (sky, walls). */

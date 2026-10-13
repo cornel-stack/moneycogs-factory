@@ -68,7 +68,7 @@ export const CastFillWipe: React.FC<{
   wardrobe?: WardrobeMode;
   scale: number;
   progress: number; // 0 → 1
-}> = ({ castId, pose, expression, flip, seat, view, wardrobe = "torso", scale, progress }) => {
+}> = ({ castId, pose, expression, flip, seat, view, wardrobe = "full-top", scale, progress }) => {
   const r = castFigureRender(CAST[castId], pose, { expression, flip, seat, view });
   const sw = 2 / scale;
   const brand = useBrand();
@@ -92,7 +92,7 @@ export const CastFillWipe: React.FC<{
       </defs>
       <g mask={`url(#${gid}-m)`}>
         {sStrokes.behind.map((d, i) => (
-          <path key={`sb${i}`} d={d} fill={COLORS.ink} stroke={COLORS.ink} strokeWidth={sw} strokeLinejoin="round" />
+          <path key={`sb${i}`} d={d} fill={COLORS.chair} stroke={COLORS.ink} strokeWidth={sw} strokeLinejoin="round" />
         ))}
         {drawPaths(r.fills, sw, cc)}
         {sStrokes.front.map((d, i) => (
@@ -120,7 +120,7 @@ export const AliveCast: React.FC<{
   wardrobe?: WardrobeMode;
   entrance?: "draw" | "walk";
   enterSlide?: number; // local-unit off-edge start for a walk-in
-}> = ({ castId, poses, expression, flip, frame, scale, action, seed = castId, holding, seat = "chair", view: forcedView, wardrobe = "torso", entrance, enterSlide }) => {
+}> = ({ castId, poses, expression, flip, frame, scale, action, seed = castId, holding, seat = "chair", view: forcedView, wardrobe = "full-top", entrance, enterSlide }) => {
   const def = CAST[castId];
   const seg = segmentAt(poses, frame);
   // forced view overrides the auto (walk/sit → side) for both ends of a segment.
@@ -231,7 +231,7 @@ export const AliveCast: React.FC<{
   return (
     <>
       {seatG.behind.map((d, i) => (
-        <path key={`sb${i}`} d={d} fill={COLORS.ink} stroke={COLORS.ink} strokeWidth={sw} strokeLinejoin="round" />
+        <path key={`sb${i}`} d={d} fill={COLORS.chair} stroke={COLORS.ink} strokeWidth={sw} strokeLinejoin="round" />
       ))}
       <g transform={`translate(${slideX + bodyShake + idle.shiftX} ${bodyY}) rotate(${leanDeg + idle.swayDeg * 0.5} 50 188)${squash}`}>
         {drawPaths(r.bodyFills, sw, cc)}
@@ -245,7 +245,7 @@ export const AliveCast: React.FC<{
         <g transform={`rotate(${hrot} ${nx} ${ny}) translate(0 ${hy})`}>
           {drawPaths(r.headFills, sw, cc)}
           {r.face.map((d, i) => (
-            <path key={`f${i}`} d={d} fill="none" stroke={COLORS.ink} strokeWidth={sw * 1.4} strokeLinecap="round" strokeLinejoin="round" />
+            <path key={`f${i}`} d={d} fill="none" stroke={COLORS.ink} strokeWidth={sw * 1.7} strokeLinecap="round" strokeLinejoin="round" />
           ))}
         </g>
       </g>
@@ -280,7 +280,7 @@ export function castBoardElement(args: {
   const { castId, poses, expressions, expressionSteps, flip, sceneFrame, view, entrance, enterSlide } = args;
   const seed = args.seed ?? args.key;
   const seat = args.seat ?? "chair";
-  const wardrobe = args.wardrobe ?? "torso";
+  const wardrobe = args.wardrobe ?? "full-top";
   const pose0 = poses[0]!;
   const expr0 = expressionSteps?.[0]?.value ?? expressions?.[0] ?? "neutral";
 

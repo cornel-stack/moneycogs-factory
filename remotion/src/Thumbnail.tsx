@@ -22,7 +22,7 @@ const Figure: React.FC<{
 }> = ({ cast, pose, expression, x, y, scale, pal }) => {
   const r = castFigureRender(CAST[cast], pose, { expression });
   const sw = 2 / scale;
-  const cc = castFillColor(cast, "torso", pal);
+  const cc = castFillColor(cast, "full-top", pal);
   return (
     <g transform={`translate(${x} ${y}) scale(${scale})`}>
       {r.fills.map((p, i) => (

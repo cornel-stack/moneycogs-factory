@@ -4,6 +4,7 @@ import { Video } from "./Video";
 import { ShortVideo } from "./ShortVideo";
 import { Thumbnail } from "./Thumbnail";
 import { CastSheetPoses, CastSheetExpr } from "./CastSheet";
+import { CastFaceSheet } from "./CastFaceSheet";
 import { CastGestureSheet } from "./CastGestureSheet";
 import { CastSideSheet } from "./CastSideSheet";
 import { CastCheckSheet } from "./CastCheckSheet";
@@ -73,8 +74,9 @@ export const RemotionRoot: React.FC = () => {
           height: props.manifest.height,
         })}
       />
-      <Still id="CastSheetPoses" component={CastSheetPoses} width={VIDEO.width} height={VIDEO.height} />
-      <Still id="CastSheetExpr" component={CastSheetExpr} width={VIDEO.width} height={VIDEO.height} />
+      <Still id="CastSheetPoses" component={CastSheetPoses} width={1920} height={1560} />
+      <Still id="CastSheetExpr" component={CastSheetExpr} width={1920} height={1560} />
+      <Still id="CastFaceSheet" component={CastFaceSheet} width={1920} height={1600} />
       <Still id="CastGestureSheet" component={CastGestureSheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="CastSideSheet" component={CastSideSheet} width={VIDEO.width} height={VIDEO.height} />
       <Still id="CastCheckSheet" component={CastCheckSheet} width={VIDEO.width} height={VIDEO.height} />
