@@ -1,0 +1,112 @@
+/**
+ * Producer's morning command — pull a finished video package onto this machine.
+ *
+ *   npm run fetch -- atomic-habits     # a specific video
+ *   npm run fetch -- --today           # whatever the calendar publishes today (Nairobi)
+ *
+ * Downloads the GitHub Release tagged <video_id> into
+ *   ~/Videos/moneycogs-factory/<video_id>/           (override with FETCH_DIR)
+ * Uses the gh CLI when available (grabs every release asset); otherwise falls
+ * back to plain curl against the stable release download URLs. Fetching a
+ * public release needs no secrets; Releases never expire.
+ */
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Package file set (see package.ts / package_short.ts). The gh path downloads
+// ALL release assets; this list is only the curl fallback, so it's a superset
+// across longform + short and skips any that don't exist for a given video.
+const files = (id: string) => [
+  `${id}-video.mp4`, // longform (search-first filename)
+  `${id}.mp4`, // short
+  "captions.srt",
+  "thumbnail.png",
+  "thumbnail-1280x720.png",
+  "description.txt",
+  "upload-notes.txt",
+  "retention-map.txt",
+  "youtube.txt",
+  "tiktok.txt",
+  "instagram.txt",
+  "short-notes.txt",
+];
+
+function repoSlug(): string {
+  if (process.env.FETCH_REPO) return process.env.FETCH_REPO;
+  try {
+    const url = execFileSync("git", ["remote", "get-url", "origin"], { cwd: REPO, encoding: "utf8" }).trim();
+    const m = url.match(/github\.com[:/]([^/]+\/[^/]+?)(?:\.git)?$/);
+    if (m) return m[1]!;
+  } catch {
+    /* fall through */
+  }
+  return "cornel-stack/moneycogs-factory";
+}
+
+function todaysBundleTag(): string {
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Nairobi" });
+  const cal: { publish_date: string }[] = JSON.parse(readFileSync(join(REPO, "content", "calendar.json"), "utf8"));
+  if (!cal.some((e) => e.publish_date === today)) {
+    console.warn(`(nothing is dated ${today} in the calendar — trying the bundle anyway)`);
+  }
+  console.log(`Today (${today}, Nairobi) → bundle content-${today}`);
+  return `content-${today}`;
+}
+
+function hasGh(): boolean {
+  const r = spawnSync("gh", ["--version"], { stdio: "ignore" });
+  return r.status === 0;
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  // --today pulls the whole daily bundle Release (content-<date>); otherwise a
+  // single video/short's own Release by id.
+  const id = args.includes("--today") ? todaysBundleTag() : args.find((a) => !a.startsWith("--"));
+  if (!id) {
+    console.error("Usage: npm run fetch -- [video_id|--today]");
+    process.exit(1);
+  }
+
+  const destRoot = process.env.FETCH_DIR || join(homedir(), "Videos", "moneycogs-factory");
+  const dest = join(destRoot, id);
+  mkdirSync(dest, { recursive: true });
+  const slug = repoSlug();
+
+  console.log(`Fetching release "${id}" from ${slug} → ${dest}`);
+
+  if (hasGh()) {
+    execFileSync("gh", ["release", "download", id, "--repo", slug, "--dir", dest, "--clobber"], {
+      stdio: "inherit",
+    });
+  } else {
+    console.log("(gh CLI not found — using curl against the release URLs)");
+    let got = 0;
+    for (const f of files(id)) {
+      const url = `https://github.com/${slug}/releases/download/${id}/${encodeURIComponent(f)}`;
+      try {
+        execFileSync("curl", ["-fSL", "--retry", "3", "-o", join(dest, f), url], { stdio: "inherit" });
+        got++;
+      } catch {
+        console.warn(`  ⚠ could not download ${f} (may not exist for this video)`);
+      }
+    }
+    if (got === 0) {
+      console.error(`✖ no files downloaded — is the release "${id}" published yet?`);
+      process.exit(1);
+    }
+  }
+
+  console.log(`\n✓ ${id} ready in ${dest}`);
+  const mp4 = [`${id}-video.mp4`, `${id}.mp4`].find((f) => existsSync(join(dest, f)));
+  if (mp4) console.log(`  video:       ${join(dest, mp4)}`);
+  if (existsSync(join(dest, "description.txt"))) console.log(`  description:  ${join(dest, "description.txt")}`);
+  if (existsSync(join(dest, "upload-notes.txt"))) console.log(`  upload notes: ${join(dest, "upload-notes.txt")}`);
+}
+
+main();

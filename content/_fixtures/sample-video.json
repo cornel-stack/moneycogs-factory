@@ -1,0 +1,214 @@
+{
+  "id": "sample-video",
+  "title": "How Credit Cards Actually Make Money",
+  "brand": "moneycogs",
+  "description": "A hand-drawn look at the hidden money machine behind every credit card swipe: interchange fees, interest, and late fees — and the one move that shuts it off.",
+  "tags": ["credit cards", "interchange fee", "how banks make money", "personal finance", "interest", "money machine"],
+  "thumbnail": {
+    "headline": "How Cards Make Money",
+    "punch_words": ["CARDS", "MAKE", "MONEY"],
+    "subline": "The hidden swipe machine",
+    "cast": "max",
+    "pose": "presenting",
+    "expression": "happy",
+    "props": ["coins", "percent"],
+    "pointer": "spotlight"
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "section_title",
+      "narration": "Every time you swipe a credit card, a tiny money machine springs to life. Here is exactly how it turns your spending into profit.",
+      "visual": {
+        "number": 1,
+        "title": "The Card Machine",
+        "emphasis": "underline",
+        "sync": { "phrase": "money machine" }
+      }
+    },
+    {
+      "id": "swipe",
+      "type": "character_scene",
+      "narration": "You buy a coffee and tap your card. In a blink, your four dollars starts a race between three companies you never see.",
+      "visual": {
+        "title": "Tap to pay",
+        "stage": "street",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "alex",
+            "at": { "col": 1, "row": 1, "w": 3, "h": 5 },
+            "pose": "standing",
+            "expression": "curious",
+            "holding": { "prop": "coffee", "hand": "right" },
+            "label": "you",
+            "effects": [{ "kind": "thought_bubble", "sync": { "phrase": "never see" } }]
+          },
+          {
+            "kind": "coins",
+            "at": { "col": 8, "row": 1, "w": 3, "h": 4 },
+            "color": "accent",
+            "label": "four dollars",
+            "sync": { "phrase": "four dollars" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "split",
+      "type": "stat_chart",
+      "narration": "Picture your four dollars split four ways. The shop keeps the most, but the bank and the card network each take a slice, and the processor grabs a few cents too.",
+      "visual": {
+        "label": "Where your money goes (cents)",
+        "mode": "bars",
+        "datapoints": [
+          { "label": "Shop", "value": 388, "sync": { "phrase": "shop keeps" } },
+          { "label": "Bank", "value": 8, "sync": { "phrase": "bank" } },
+          { "label": "Network", "value": 3, "sync": { "phrase": "card network" } },
+          { "label": "Processor", "value": 1, "sync": { "phrase": "processor grabs" } }
+        ]
+      }
+    },
+    {
+      "id": "interchange",
+      "type": "character_scene",
+      "narration": "That slice the bank takes is called the interchange fee. It is roughly two percent of everything you spend, quietly skimmed off every single swipe.",
+      "visual": {
+        "title": "The bank's cut",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "max",
+            "at": { "col": 6, "row": 1, "w": 4, "h": 5 },
+            "facing": "left",
+            "pose": "presenting",
+            "expression": "happy",
+            "holding": { "prop": "moneybag", "hand": "left" },
+            "label": "the bank",
+            "effects": [{ "kind": "money", "sync": { "phrase": "every single swipe" } }]
+          },
+          {
+            "kind": "percent",
+            "at": { "col": 1, "row": 1, "w": 2, "h": 3 },
+            "color": "accent",
+            "label": "two percent",
+            "sync": { "phrase": "two percent" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "taps",
+      "type": "list_card",
+      "narration": "So a card makes money in three ways. It charges merchants a fee. It charges you interest when you carry a balance. And it charges late fees when you slip.",
+      "visual": {
+        "title": "Three money taps",
+        "items": [
+          { "label": "Merchant swipe fees", "icon": "tick", "sync": { "phrase": "charges merchants a fee" } },
+          { "label": "Interest on balances", "icon": "box", "sync": { "phrase": "carry a balance" } },
+          { "label": "Late fees", "icon": "arrow", "sync": { "phrase": "late fees" } }
+        ]
+      }
+    },
+    {
+      "id": "apr",
+      "type": "stat_chart",
+      "narration": "Interest is the real engine. The average card charges about twenty two percent a year on money you borrow.",
+      "visual": {
+        "label": "Typical card interest",
+        "mode": "number",
+        "suffix": "%",
+        "datapoints": [{ "label": "APR", "value": 22, "sync": { "phrase": "twenty two percent" } }]
+      }
+    },
+    {
+      "id": "trap",
+      "type": "character_scene",
+      "narration": "Here is the trap. If you only pay the minimum, that twenty two percent compounds, and a small balance can quietly double over a few years.",
+      "visual": {
+        "title": "The minimum trap",
+        "stage": "room",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "payer",
+            "cast": "pip",
+            "at": { "col": 4, "row": 1, "w": 4, "h": 5 },
+            "pose": "standing",
+            "expressions": ["worried", { "value": "shocked", "sync": { "phrase": "quietly double" } }],
+            "label": "minimum payer",
+            "effects": [{ "kind": "sweat_drop", "sync": { "phrase": "the trap" } }]
+          },
+          {
+            "kind": "snowball",
+            "at": { "col": 8, "row": 1, "w": 3, "h": 4 },
+            "label": "it compounds",
+            "sync": { "phrase": "compounds" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "growth",
+      "type": "stat_chart",
+      "narration": "Watch a two thousand dollar balance at that rate. Year one it is near two thousand four forty. Year two, almost three thousand. Year three, over three thousand six hundred.",
+      "visual": {
+        "label": "A 2000 dollar balance grows ($)",
+        "mode": "line",
+        "datapoints": [
+          { "label": "Now", "value": 2000, "sync": { "phrase": "two thousand dollar" } },
+          { "label": "Yr 1", "value": 2440, "sync": { "phrase": "two thousand four forty" } },
+          { "label": "Yr 2", "value": 2980, "sync": { "phrase": "almost three thousand" } },
+          { "label": "Yr 3", "value": 3640, "sync": { "phrase": "three thousand six hundred" } }
+        ]
+      }
+    },
+    {
+      "id": "beat",
+      "type": "character_scene",
+      "narration": "You beat the machine in one move. Pay the full balance every month, and all those fees and interest simply never touch you.",
+      "visual": {
+        "title": "Beat the machine",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "winner",
+            "cast": "alex",
+            "at": { "col": 4, "row": 0, "w": 5, "h": 6 },
+            "pose": "sitting",
+            "seat": "desk",
+            "holding": { "prop": "dollar", "hand": "left" },
+            "expression": "happy",
+            "label": "pay in full",
+            "effects": [{ "kind": "nod", "sync": { "phrase": "one move" } }]
+          },
+          {
+            "kind": "checkmark",
+            "at": { "col": 9, "row": 1, "w": 2, "h": 3 },
+            "color": "accent",
+            "label": "paid in full",
+            "sync": { "phrase": "full balance" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "recap",
+      "type": "recap_card",
+      "narration": "So remember how the money machine runs. Swipe fees pay the bank. Interest is the real profit. And paying in full shuts it off.",
+      "visual": {
+        "title": "Remember this",
+        "scope": "final",
+        "items": [
+          { "label": "Swipe fees", "sync": { "phrase": "swipe fees" } },
+          { "label": "Interest is profit", "sync": { "phrase": "real profit" } },
+          { "label": "Pay in full", "sync": { "phrase": "paying in full" } }
+        ]
+      }
+    }
+  ]
+}
