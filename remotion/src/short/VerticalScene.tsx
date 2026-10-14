@@ -253,7 +253,7 @@ const VSectionTitle: React.FC<{ visual: TitleV; words: WordTiming[] }> = ({ visu
   const titleY = interpolate(frame, [6, 20], [40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleOp = interpolate(frame, [6, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const kicker =
-    visual.role === "part" ? `PART ${visual.number ?? ""}`.trim() : visual.role === "principle" ? `PRINCIPLE ${visual.number ?? ""}`.trim() : null;
+    visual.role === "section" ? `SECTION ${visual.number ?? ""}`.trim() : visual.role === "point" ? `${visual.number ?? ""}`.trim() || null : null;
 
   const markStart = syncStartFrame(words, visual.sync, fps, 18);
   const markW = Math.min(820, Math.max(360, visual.title.length * 58));

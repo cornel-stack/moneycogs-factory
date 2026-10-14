@@ -128,9 +128,24 @@ being rebuilt.
     the content — no dirty files); `fill_calendar.ts` stamps each entry's
     `category` from the topic bank; `validate_script.ts` warns if a script's
     declared category disagrees with its topic. Documented in README.
-  - **2B (next)** — rewrite `template.md`/`schema.md` for mechanism explainers,
-    generalize the `part`/`principle` roles/framing, and the daily `/make-money`
-    authoring skill.
+  - **2B (✅ DONE)** — MoneyCogs writing template + schema role generalization
+    (no skill yet). **`section_title.role`** is now canonical **`section`|`point`**;
+    the book-era **`part`|`principle`** still VALIDATE as deprecated aliases and
+    map to section/point at parse time (preprocess), so old scripts/goldens don't
+    break (asserted by `golden_test.ts` against `content/_fixtures/legacy-roles.json`).
+    On-screen labels render **"SECTION n" / numbered point** (never PART/PRINCIPLE)
+    in `SectionTitle.tsx` + `short/VerticalScene.tsx`; `Video.tsx` board-memory,
+    `package.ts` chapters/retention map, and `derive_shorts.ts` split all key on the
+    canonical roles. The mid-recap structural rule now applies only to
+    `framing: "book-structure"` (mechanism explainers use per-section re-hooks
+    instead). **`content/template.md`** rewritten as the mechanism writing guide
+    (format constants, the 6-step skeleton, number rules, cast-archetype table,
+    scene-type budget linking `schema.md`, title/SEO formulas, shorts hooks).
+    `derive_shorts.ts` + `scripts/derive-shorts.md` carry **money hooks + the Coggy
+    CTA**, and require a human pass on every auto-hook. `lint_script.ts` warns on a
+    longform with < 2 `money_flow` or no `waterfall`/`counter` (mirrors the budget).
+  - **2C (next)** — the daily `/make-money` authoring skill + a golden reference
+    script written to this template.
 - **Phase 3 — hardening & cron.** Re-enable `scheduled-render.yml` (add the
   `schedule:` trigger back), end-to-end CI render on real content, failure alerting.
 - **Phase 4 — inventory & launch.** Topic backlog at scale, channel art, publishing

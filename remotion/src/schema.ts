@@ -105,11 +105,18 @@ const wordLimit = (n: number) =>
 
 // ---------- Per-scene visual payloads ----------
 
+// Canonical section-title roles (Phase 2B): a "section" is one gear of the
+// machine; a "point" is a sub-beat within it. The book-era "part"/"principle"
+// still VALIDATE as deprecated aliases and map to section/point internally, so
+// legacy scripts/goldens don't break.
+export const SECTION_ROLES = ["section", "point"] as const;
+const roleAlias = (v: unknown): unknown => (v === "part" ? "section" : v === "principle" ? "point" : v);
+
 export const SectionTitleVisual = z.object({
-  // role in the explainer skeleton; `number` is the part- or principle-
-  // number, `part` the owning part (for a principle). Omit role for plain
-  // section titles (hook card, close).
-  role: z.enum(["part", "principle"]).optional(),
+  // role in the explainer skeleton; `number` is the section/point number,
+  // `part` the owning section (for a point). Omit role for plain section
+  // titles (hook card, close).
+  role: z.preprocess(roleAlias, z.enum(SECTION_ROLES)).optional(),
   number: z.number().int().positive().optional(),
   part: z.number().int().positive().optional(),
   title: z.string().min(1),
@@ -458,13 +465,15 @@ export const Script = z.object({
       });
     }
   }
-  // Structural discipline for longform (framing-agnostic): every "part" title
-  // must be followed by a mid-recap before the next part. Roles stay for now;
-  // Phase 2 generalizes the framing/roles for mechanism explainers.
-  if (s.format === "longform") {
+  // Structural discipline for the BOOK-STRUCTURE framing only (Phase 2B): a
+  // book summary's every section ("part") must be followed by a mid-recap before
+  // the next. MoneyCogs mechanism explainers (framing "explainer") end each
+  // section with a one-line re-hook instead, so this rule no longer applies to
+  // them. Roles are canonical here ("part" already mapped to "section").
+  if (s.format === "longform" && s.template.framing === "book-structure") {
     const partIdx = s.scenes
       .map((sc, i) => ({ i, sc }))
-      .filter((m) => m.sc.type === "section_title" && (m.sc.visual as { role?: string }).role === "part")
+      .filter((m) => m.sc.type === "section_title" && (m.sc.visual as { role?: string }).role === "section")
       .map((m) => m.i);
     partIdx.forEach((start, k) => {
       const end = k + 1 < partIdx.length ? partIdx[k + 1]! : s.scenes.length;
@@ -472,7 +481,7 @@ export const Script = z.object({
       if (!hasMid) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `part at scene ${start} ("${(s.scenes[start]!.visual as { title?: string }).title}") must be followed by a recap_card scope:"mid" before the next part`,
+          message: `section at scene ${start} ("${(s.scenes[start]!.visual as { title?: string }).title}") must be followed by a recap_card scope:"mid" before the next section (book-structure framing)`,
           path: ["scenes", start],
         });
       }

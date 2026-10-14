@@ -1,13 +1,15 @@
 /**
- * Derive vertical shorts from a long-form script (Phase 13 / amendment: works
- * for BOTH brands). Each principle/section becomes one short:
- *   HOOK (synthesized 1-sentence re-hook) → the section's best story scene
- *   → takeaway card (its application list) → brand end-card.
+ * Derive vertical shorts from a long-form MoneyCogs script (Phase 2B). Each
+ * "point" (section_title role:"point", or the legacy alias "principle") becomes
+ * one short — one point's HIDDEN-FLOW moment:
+ *   HOOK (synthesized money re-hook) → the section's best story scene
+ *   → takeaway card (its application list) → Coggy end-card.
  *
  * This is a MECHANICAL first pass: it picks and re-frames scenes and writes a
  * fresh hook. Narration from the source scenes is reused verbatim (so every
- * sync phrase still resolves) — the derivation playbook (scripts/derive-shorts.md)
- * calls out where a human should tighten the hook / trim to ≤55s before publish.
+ * sync phrase still resolves). The playbook (scripts/derive-shorts.md) REQUIRES
+ * a human pass on every auto-hook (tighten + fact-check + trim to ≤55s) before
+ * publish.
  *
  *   npx tsx pipeline/derive_shorts.ts <source-id> [--max N]
  *
@@ -21,13 +23,19 @@ import { Script } from "../remotion/src/schema.js";
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = join(REPO, "content", "videos");
 
-// Re-hook formulas (varied by index) for the synthesized 1-sentence hook.
+// MONEY re-hook formulas (varied by index) — one point's hidden-flow tease.
+// Every auto-hook gets a human pass before publish (see scripts/derive-shorts.md).
 const HOOK_FORMULAS = [
-  (t: string) => `Here's the one idea that makes ${t.toLowerCase()} finally click.`,
-  (t: string) => `Most people get ${t.toLowerCase()} completely backwards.`,
-  (t: string) => `This is why ${t.toLowerCase()} quietly decides everything.`,
-  (t: string) => `You've been thinking about ${t.toLowerCase()} the wrong way.`,
-  (t: string) => `The fastest way to understand ${t.toLowerCase()}, in sixty seconds.`,
+  (t: string) => `Banks hope you never do the math on ${t.toLowerCase()}.`,
+  (t: string) => `${t} has a price tag nobody shows you.`,
+  (t: string) => `Here's who really pays for ${t.toLowerCase()}.`,
+  (t: string) => `This fee inside ${t.toLowerCase()} pays for someone's vacation.`,
+  (t: string) => `Follow the dollar — this is where ${t.toLowerCase()} really goes.`,
+  (t: string) => `${t} is built so the house always wins.`,
+  (t: string) => `The quiet way ${t.toLowerCase()} makes someone rich.`,
+  (t: string) => `What ${t.toLowerCase()} costs you isn't on the receipt.`,
+  (t: string) => `Your money leaves a trail — watch it move in ${t.toLowerCase()}.`,
+  (t: string) => `Sixty seconds on how ${t.toLowerCase()} actually works.`,
 ];
 
 function wc(s: string): number {
@@ -46,13 +54,14 @@ function main() {
   const src = Script.parse(JSON.parse(readFileSync(join(DIR, `${srcId}.json`), "utf8")));
   const scenes = src.scenes;
 
-  // Split into principle sections: a section_title role:"principle" + the scenes
-  // up to the next section_title / recap_card.
+  // Split into point sections: a section_title role:"point" (legacy alias
+  // "principle" maps to "point" at parse time) + the scenes up to the next
+  // section_title / recap_card.
   type Section = { num: number; title: string; memory?: string; body: typeof scenes };
   const sections: Section[] = [];
   for (let i = 0; i < scenes.length; i++) {
     const sc = scenes[i]!;
-    if (sc.type === "section_title" && sc.visual.role === "principle") {
+    if (sc.type === "section_title" && sc.visual.role === "point") {
       const body: typeof scenes = [];
       for (let j = i + 1; j < scenes.length; j++) {
         const n = scenes[j]!;
@@ -74,13 +83,13 @@ function main() {
     const n = String(idx).padStart(2, "0");
     const id = `${srcId}-s${n}`;
     const hookLine = HOOK_FORMULAS[(idx - 1) % HOOK_FORMULAS.length]!(sec.title);
-    const bookName = src.book?.title ?? src.title;
+    const source = src.title;
 
     const outScenes: unknown[] = [
       {
         id: "hook",
         type: "character_scene",
-        narration: `${hookLine} It comes straight from ${bookName}.`,
+        narration: `${hookLine} Here's exactly where the money goes.`,
         visual: {
           stage: "plain",
           elements: [
@@ -99,18 +108,18 @@ function main() {
     outScenes.push({
       id: "end",
       type: "cta",
-      narration: "Follow for the full breakdown, and the next idea.",
-      visual: { text: "Follow for more", style: "card" },
+      narration: "New money machine, every day. Follow so you don't miss the next one.",
+      visual: { text: "New money machine, drawn daily", style: "card" },
     });
 
     const short = {
       id,
       brand: src.brand,
       format: "short",
-      title: `${sec.title} — ${bookName}`.slice(0, 95),
+      title: `${sec.title} — ${source}`.slice(0, 95),
       short_hook: sec.title,
       ...(src.book ? { book: src.book } : {}),
-      description: `${hookLine} A 60-second idea from ${bookName}.`,
+      description: `${hookLine} The hidden money flow, in sixty seconds.`,
       tags: [...new Set([...(src.tags ?? []).slice(0, 4), sec.title.toLowerCase()])],
       thumbnail: { headline: sec.title.split(/\s+/).slice(0, 5).join(" "), cast: src.thumbnail.cast, pose: "presenting", expression: "happy", props: sec.memory ? [sec.memory] : [] },
       voice: src.voice,

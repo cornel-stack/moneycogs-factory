@@ -43,7 +43,7 @@ dated GitHub Release.
 | `content/_fixtures/sample-video.json` | the MoneyCogs sample fixture (also Studio default props) |
 | `content/topics.json` | the **topic bank** — 100 money-mechanism topics + queue (Phase 2A) |
 | `content/calendar.json` | publishing calendar (brand/format/category per id) |
-| `content/template.md` · `content/schema.md` | writing guide + schema reference (Phase 2 rewrites for mechanisms) |
+| `content/template.md` · `content/schema.md` | the **MoneyCogs writing guide** + schema reference (scene types + JSON examples) |
 | `config/brands.ts` | **brand identity** (palette, CTA, runtime policy) — the only place it lives |
 | `remotion/src/` | the render engine: scenes, cast, drawing hand, effects, `theme.ts` |
 | `pipeline/*.ts · *.py` | audio, manifest, captions, package, shorts, calendar, daily driver |
@@ -95,6 +95,22 @@ category/status/demand/difficulty); corruption exits non-zero with a clear
 message. `fill_calendar.ts` stamps each calendar entry's `category` from the
 topic bank, and `validate_script.ts` warns if a script's declared category
 disagrees with its topic.
+
+---
+
+## Writing a video (Phase 2B)
+
+[`content/template.md`](content/template.md) is the MoneyCogs writing system:
+one video = one money **machine**, taken apart gear by gear. Every longform
+follows a fixed skeleton — **cold hook → money_flow overview → 4-5 sections
+(surface story vs hidden flow, with worked dollar numbers) → winners/losers →
+recap → disclaimer + Coggy CTA** — and a scene-type budget that keeps it
+graphics-heavy (≥2 `money_flow`, ≥1 `waterfall`/`counter`, ≥1 `compare`/`table`).
+Scene JSON shapes come from [`content/schema.md`](content/schema.md); the guide
+links them rather than repeating them. Section titles use canonical roles
+`section`/`point` (the book-era `part`/`principle` still validate as aliases).
+Shorts are one point's hidden-flow moment — see
+[`scripts/derive-shorts.md`](scripts/derive-shorts.md).
 
 ---
 

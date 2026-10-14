@@ -1,0 +1,22 @@
+{
+  "id": "legacy-roles",
+  "title": "Legacy role aliases still validate",
+  "brand": "moneycogs",
+  "format": "longform",
+  "description": "A tiny fixture proving the book-era part/principle roles still validate and map to the canonical section/point.",
+  "thumbnail": { "headline": "Legacy roles", "cast": "penny" },
+  "scenes": [
+    {
+      "id": "sec1",
+      "type": "section_title",
+      "narration": "This is the first gear of the machine.",
+      "visual": { "role": "part", "number": 1, "title": "The first gear" }
+    },
+    {
+      "id": "pt1",
+      "type": "section_title",
+      "narration": "And this is one beat inside it.",
+      "visual": { "role": "principle", "number": 1, "title": "One beat inside" }
+    }
+  ]
+}

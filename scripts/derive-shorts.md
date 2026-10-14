@@ -1,7 +1,9 @@
-# Playbook — deriving shorts from long-form
+# Playbook — deriving MoneyCogs shorts from long-form
 
-`pipeline/derive_shorts.ts` turns a long-form explainer into one vertical short
-per principle/section. This doc is how to make the output good.
+`pipeline/derive_shorts.ts` turns a longform mechanism explainer into one
+vertical short per **point** — each short is **one point's hidden-flow moment**
+(the beat where the money quietly goes somewhere surprising). This doc is how to
+make the output good.
 
 ```
 npx tsx pipeline/derive_shorts.ts <source-id> [--max N]
@@ -10,26 +12,31 @@ npx tsx pipeline/derive_shorts.ts <source-id> [--max N]
 
 ## What the tool does (mechanical first pass)
 
-For each `section_title role:"principle"` and the scenes under it, it emits a short:
+For each `section_title role:"point"` (the legacy alias `"principle"` maps to
+`"point"`) and the scenes under it, it emits a short:
 
 ```
-HOOK      synthesized 1-sentence re-hook (names the topic) + short_hook overlay
-IDEA      the section's best story scene (a character_scene), reused verbatim
-TAKEAWAY  the section's application (its list_card), if the total stays ≤ ~45s
-END-CARD  brand end-card (cta scene) — now capped to ~1s (SHORTS_ENDCARD_SECONDS);
-          the CTA has MOVED to the captions + pinned comment (see Shorts ranking)
+HOOK      synthesized MONEY re-hook (names the point) + short_hook overlay
+IDEA      the point's best story scene (a character_scene), reused verbatim
+TAKEAWAY  the point's application (its list_card), if the total stays ≤ ~45s
+END-CARD  Coggy end-card ("New money machine, drawn daily") — capped to ~1s
+          (SHORTS_ENDCARD_SECONDS); the CTA lives in captions + pinned comment
 ```
 
 Source narration is **reused verbatim** so every `sync` phrase still resolves.
 The short runs through the same schema + lint + the 20–70s runtime guard.
 
-## Where a human must tighten (before publish)
+## Where a human must tighten (before publish — REQUIRED)
 
-The mechanical pass is a draft. Fix these by hand:
+The mechanical pass is a **draft**. Every auto-hook gets a human pass:
 
-1. **The hook.** The generated hook is a template (`HOOK_FORMULAS`). Rewrite it
-   to a real scroll-stopper using a re-hook formula (number shock, costly
-   mistake, contrarian). The first 2 seconds decide everything.
+1. **The hook — rewrite AND fact-check it.** The generated hook is drawn from the
+   money-hook pool (`HOOK_FORMULAS`, mirrored in `content/template.md §g`: "Banks
+   hope you never do this math", "Your free app has a price tag", "This fee pays
+   for someone's vacation"…). Rewrite it into a real scroll-stopper for *this*
+   point, and confirm the claim is true + non-stale (no live rates, no named
+   company). **Never publish a machine hook raw.** The first 2 seconds decide
+   everything.
 2. **Self-containment.** A reused story scene may open with "Here's the trap…"
    or name a character the viewer hasn't met. Trim/re-point the first sentence
    so the short stands alone.

@@ -51,14 +51,15 @@ export const Video: React.FC<RenderProps> = ({ script, manifest }) => {
   // Index scenes by id so manifest order/timings drive layout, script drives content.
   const byId = new Map(script.scenes.map((s) => [s.id, s]));
 
-  // Board memory: accumulate each principle's takeaway icon through its part,
-  // wiped at the next part boundary.
+  // Board memory: accumulate each point's takeaway icon through its section,
+  // wiped at the next section boundary. (Canonical roles — "part"/"principle"
+  // map to "section"/"point" at parse time.)
   const memByScene = new Map<string, PropKind[]>();
   let acc: PropKind[] = [];
   for (const s of script.scenes) {
     if (s.type === "section_title") {
-      if (s.visual.role === "part") acc = [];
-      if (s.visual.role === "principle" && s.visual.memory) acc = [...acc, s.visual.memory as PropKind];
+      if (s.visual.role === "section") acc = [];
+      if (s.visual.role === "point" && s.visual.memory) acc = [...acc, s.visual.memory as PropKind];
     }
     memByScene.set(s.id, acc);
   }

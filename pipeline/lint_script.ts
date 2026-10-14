@@ -132,6 +132,13 @@ function main() {
     } else {
       warns.push("no `promise` tagged — cannot verify the 15s core-promise hook (tag the promise sentence)");
     }
+    // (Phase 2B) graphics-heavy budget — mirror the writing template's scene
+    // budget: a mechanism explainer needs an overview + at least one in-section
+    // money_flow, plus at least one worked-number waterfall or counter.
+    const nFlow = script.scenes.filter((sc) => sc.type === "money_flow").length;
+    const nWfCnt = script.scenes.filter((sc) => sc.type === "stat_chart" && (sc.visual.mode === "waterfall" || sc.visual.mode === "counter")).length;
+    if (nFlow < 2) warns.push(`only ${nFlow} money_flow scene(s) — a mechanism explainer wants ≥2 (an overview + at least one per-section flow)`);
+    if (nWfCnt < 1) warns.push("no waterfall/counter scene — add at least one worked-number chart (where the money splits, or the total that stacks up)");
   }
   if (script.format === "short") {
     // (D) duration band + 2s on-screen hook claim.

@@ -53,9 +53,9 @@ function buildChapters(script: Script, manifest: Manifest): string {
   for (const scene of script.scenes) {
     const start = startById.get(scene.id);
     if (start === undefined) continue;
-    if (scene.type === "section_title" && scene.visual.role === "part") {
-      emit(start, `Part ${scene.visual.number ?? "?"} · ${scene.visual.title}`);
-    } else if (scene.type === "section_title" && scene.visual.role === "principle") {
+    if (scene.type === "section_title" && scene.visual.role === "section") {
+      emit(start, `Section ${scene.visual.number ?? "?"} · ${scene.visual.title}`);
+    } else if (scene.type === "section_title" && scene.visual.role === "point") {
       emit(start, `  ${scene.visual.number ?? "?"}) ${scene.visual.title}`);
     } else if (scene.type === "recap_card" && scene.visual.scope === "final") {
       emit(start, "The whole machine");
@@ -185,15 +185,15 @@ function buildRetentionMap(script: Script, manifest: Manifest): string {
     `Retention map — ${script.id}`,
     "Screenshot YouTube's audience-retention graph; map each dip to the scene + TYPE below.",
     "",
-    "time    scene                   type              part",
+    "time    scene                   type              section",
   ];
   let part = 0;
   for (const scene of script.scenes) {
-    if (scene.type === "section_title" && scene.visual.role === "part") part = scene.visual.number ?? part + 1;
+    if (scene.type === "section_title" && scene.visual.role === "section") part = scene.visual.number ?? part + 1;
     const start = startById.get(scene.id);
     if (start === undefined) continue;
     lines.push(
-      `${chapterTime(start, fps).padStart(5)}   ${scene.id.padEnd(22)}  ${scene.type.padEnd(16)}  ${part > 0 ? `part ${part}` : "—"}`,
+      `${chapterTime(start, fps).padStart(5)}   ${scene.id.padEnd(22)}  ${scene.type.padEnd(16)}  ${part > 0 ? `section ${part}` : "—"}`,
     );
   }
   return lines.join("\n") + "\n";

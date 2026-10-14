@@ -16,7 +16,7 @@ import type { WordTiming } from "../schema";
 
 export const SectionTitle: React.FC<{
   visual: {
-    role?: "part" | "principle";
+    role?: "section" | "point";
     number?: number;
     part?: number;
     title: string;
@@ -51,14 +51,15 @@ export const SectionTitle: React.FC<{
   );
   const markerStart = syncStartFrame(words, visual.sync, fps, 18);
 
-  // Section kicker: "PART n" / "PRINCIPLE n" above the title (replaces
-  // the plain circle badge, which stays for role-less section titles).
-  const kicker = visual.role
-    ? `${visual.role.toUpperCase()}${visual.number !== undefined ? ` ${visual.number}` : ""}`
+  // Canonical labels (Phase 2B): a "section" shows a "SECTION n" kicker; a
+  // "point" (and role-less numbered titles) show a numbered circle badge — never
+  // the words PART / PRINCIPLE.
+  const kicker = visual.role === "section"
+    ? `SECTION${visual.number !== undefined ? ` ${visual.number}` : ""}`
     : null;
 
   const elements: BoardElement[] = [];
-  if (visual.number !== undefined && !visual.role) {
+  if (visual.number !== undefined && visual.role !== "section") {
     elements.push({
       key: "badge",
       shape: circleBadge(),

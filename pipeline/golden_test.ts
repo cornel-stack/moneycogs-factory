@@ -84,6 +84,26 @@ function validateDocs(): number {
   return fails;
 }
 
+/** Assert the book-era part/principle roles still validate AND map to the
+ *  canonical section/point (Phase 2B schema generalization). */
+function validateLegacyRoles(): number {
+  const p = join(REPO, "content", "_fixtures", "legacy-roles.json");
+  if (!existsSync(p)) { console.error("✖ missing content/_fixtures/legacy-roles.json"); return 1; }
+  const parsed = Script.safeParse(JSON.parse(readFileSync(p, "utf8")));
+  if (!parsed.success) {
+    console.error("✖ legacy part/principle fixture no longer validates:");
+    for (const i of parsed.error.issues) console.error(`    • ${i.path.join(".")}: ${i.message}`);
+    return 1;
+  }
+  const roles = parsed.data.scenes.filter((s) => s.type === "section_title").map((s) => (s.visual as { role?: string }).role);
+  if (roles[0] !== "section" || roles[1] !== "point") {
+    console.error(`✖ role aliases did not map to canonical: got ${JSON.stringify(roles)} (expected ["section","point"])`);
+    return 1;
+  }
+  console.log('✓ legacy roles: part→"section", principle→"point" (validate + map)');
+  return 0;
+}
+
 function main() {
   const update = process.argv.includes("--update");
   const goldDir = join(REPO, "content", "_goldens");
@@ -123,7 +143,8 @@ function main() {
     }
   }
   if (!update) failed += validateDocs();
-  if (!update && failed === 0) console.log(`✓ all goldens match (${checked} scene snapshot(s)) + docs valid`);
+  if (!update) failed += validateLegacyRoles();
+  if (!update && failed === 0) console.log(`✓ all goldens match (${checked} scene snapshot(s)) + docs valid + legacy roles map`);
   if (failed > 0) process.exit(1);
 }
 
