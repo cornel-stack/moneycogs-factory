@@ -41,7 +41,8 @@ dated GitHub Release.
 |------|------|
 | `content/videos/*.json` | video scripts (Zod-validated) |
 | `content/_fixtures/sample-video.json` | the MoneyCogs sample fixture (also Studio default props) |
-| `content/calendar.json` · `content/launch-plan.json` | publishing calendar + topic queue (empty until Phase 2) |
+| `content/topics.json` | the **topic bank** — 100 money-mechanism topics + queue (Phase 2A) |
+| `content/calendar.json` | publishing calendar (brand/format/category per id) |
 | `content/template.md` · `content/schema.md` | writing guide + schema reference (Phase 2 rewrites for mechanisms) |
 | `config/brands.ts` | **brand identity** (palette, CTA, runtime policy) — the only place it lives |
 | `remotion/src/` | the render engine: scenes, cast, drawing hand, effects, `theme.ts` |
@@ -61,6 +62,39 @@ npm run typecheck                    # tsc --noEmit
 npm run day -- <id>                  # autonomous: shorts → CI → download (Phase 3 cron)
 npm run fetch -- --today             # pull today's finished bundle locally
 ```
+
+---
+
+## Topic engine (Phase 2A)
+
+`content/topics.json` is the **topic bank**: 100 evergreen money-mechanism topics
+(~20 per brand category), each with a `working_title`, a `mechanism_question`, the
+one-line `payoff`, `demand`/`difficulty` judgments, and an integer `order`
+(priority). Each topic is answerable from first principles with worked dollar
+examples and names a money-flow a scene can draw. The `slug` becomes the video id.
+
+**Lifecycle:** every topic starts `queued`. Producing it moves it to `done`
+(with a `completed_date`); setting it aside moves it to `skipped` (with an
+optional `skip_reason`). `npm run day -- <slug>` marks the topic `done`
+automatically — _before_ the day's commit, so the status change ships with the
+content (never left dirty).
+
+```bash
+npm run topics:next                        # the lowest-order queued topic (full entry)
+npm run topics:pick  -- <slug>             # print one topic
+npm run topics:done  -- <slug>             # mark done + completed_date (Nairobi)
+npm run topics:skip  -- <slug> --reason .. # mark skipped
+npm run topics:add   -- --slug .. --title .. --question .. \
+                        --category .. --payoff .. --demand .. --difficulty ..
+npm run topics:list  -- --status queued --category "How Banks Win"
+npm run topics:stats                       # counts by status/category + next 5 up
+```
+
+Every load **validates** the bank (unique slugs + orders, valid
+category/status/demand/difficulty); corruption exits non-zero with a clear
+message. `fill_calendar.ts` stamps each calendar entry's `category` from the
+topic bank, and `validate_script.ts` warns if a script's declared category
+disagrees with its topic.
 
 ---
 

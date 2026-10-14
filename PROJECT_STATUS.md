@@ -104,10 +104,25 @@ being rebuilt.
     `render.yml` + `render-shorts.yml` (the short fixtures are under the duration
     floors) and ran both on GitHub Actions; verified the published Release assets
     and `fetch_release.ts` download. Phase 1 is complete.
-- **Phase 2 — content system.** Rewrite `template.md` / `schema.md` for mechanism
-  explainers; generalize the `part`/`principle` roles and framing; build the topic
-  queue (replacing the removed launch-plan/xlsx machinery) and the daily
-  `/make-money` authoring skill; re-add the "mark topic done" step in `run_day.ts`.
+- **Phase 2 — content system.**
+  - **2A (✅ DONE)** — topic engine (queue + CLI; no writing templates yet).
+    **`content/topics.json`** is a JSON topic bank of **100 evergreen
+    money-mechanism topics** (exactly 20 per brand category), each with
+    `slug`/`working_title`/`mechanism_question`/`category`/`payoff`/`demand`/
+    `difficulty`/`status`/`order`; first-principles + dollar examples, no company
+    filings/news, and each names a money-flow so it stays renderable. First 30
+    ordered by launch value (first 10 the strongest broad-appeal mechanisms).
+    **`pipeline/topics.ts`** is the queue CLI (`topics:next|pick|done|skip|add|
+    list|stats`, wired into `package.json`) with a strict load-time validator
+    (unique slugs + orders, valid enums; corruption exits non-zero). Lifecycle
+    `queued → done|skipped`. Integrations: `run_day.ts` marks the topic **done
+    before the commit** (replacing the Phase-0 `// TODO`, so the status ships with
+    the content — no dirty files); `fill_calendar.ts` stamps each entry's
+    `category` from the topic bank; `validate_script.ts` warns if a script's
+    declared category disagrees with its topic. Documented in README.
+  - **2B (next)** — rewrite `template.md`/`schema.md` for mechanism explainers,
+    generalize the `part`/`principle` roles/framing, and the daily `/make-money`
+    authoring skill.
 - **Phase 3 — hardening & cron.** Re-enable `scheduled-render.yml` (add the
   `schedule:` trigger back), end-to-end CI render on real content, failure alerting.
 - **Phase 4 — inventory & launch.** Topic backlog at scale, channel art, publishing

@@ -13,9 +13,10 @@
  * TTS in CI auto-falls back edge → Azure → Kokoro, so narration never fails.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { markDone } from "./topics.js";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -67,12 +68,18 @@ function main() {
   step("3/7 schedule calendar");
   run("npx", ["tsx", "pipeline/fill_calendar.ts", "--start", date, "--brand", "moneycogs", "--format", "longform", "--ids", slug]);
   run("npx", ["tsx", "pipeline/fill_calendar.ts", "--start", date, "--brand", "moneycogs", "--format", "short", "--per-day", "3", "--ids", shortIds.join(",")]);
-  stampCategory([slug, ...shortIds]);
 
   if (dry) {
     console.log("\n✓ dry run complete — local only (no commit/push/CI). Shorts, validation, and calendar are ready.");
     return;
   }
+
+  // 3b. mark the topic done in the queue BEFORE the commit, so the status change
+  // is committed WITH the day's content (the old factory marked done after the
+  // push and left topics.json dirty — don't repeat that).
+  step("3b/7 mark topic done");
+  if (markDone(slug)) console.log(`  topics.json: ${slug} → done`);
+  else console.warn(`  (⚠ ${slug} is not in content/topics.json — skipping mark-done)`);
 
   // 4. commit + push
   step("4/7 commit + push");
@@ -99,9 +106,7 @@ function main() {
   step("7/7 download → output/" + date);
   run("npx", ["tsx", "pipeline/fetch_release.ts", "--today"], { ...process.env, FETCH_DIR: join(REPO, "output", date) });
 
-  // TODO Phase 2: topic queue — mark the produced topic done in the queue.
-
-  console.log(`\n✅ ${slug}: longform + ${shortIds.length} shorts rendered → output/${date}/`);
+  console.log(`\n✅ ${slug}: longform + ${shortIds.length} shorts rendered → output/${date}/  (topic marked done)`);
 }
 
 /** Latest run id for a workflow on a branch (after we just triggered it). */
@@ -117,19 +122,6 @@ function latestRun(workflow: string, branch: string): string | null {
     sleep(5000);
   }
   return null;
-}
-
-/** Stamp each calendar entry's category from the launch plan (endScreenPicks). */
-function stampCategory(ids: string[]) {
-  const calPath = join(REPO, "content", "calendar.json");
-  const planPath = join(REPO, "content", "launch-plan.json");
-  if (!existsSync(calPath) || !existsSync(planPath)) return;
-  const cal = JSON.parse(readFileSync(calPath, "utf8")) as { video_id: string; category?: string }[];
-  const plan = JSON.parse(readFileSync(planPath, "utf8")) as { slug: string; category: string }[];
-  const cat = plan.find((b) => b.slug === slug)?.category;
-  if (!cat) return;
-  for (const e of cal) if (ids.includes(e.video_id)) e.category = cat;
-  writeFileSync(calPath, JSON.stringify(cal, null, 2) + "\n");
 }
 
 main();

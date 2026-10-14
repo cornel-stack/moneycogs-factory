@@ -20,6 +20,22 @@ import { BRAND_IDS, FORMATS } from "../remotion/src/schema.js";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CAL = join(REPO, "content", "calendar.json");
+const TOPICS = join(REPO, "content", "topics.json");
+
+/** slug → category from the topic bank (best-effort; never hard-fails here). */
+function topicCategories(): Map<string, string> {
+  if (!existsSync(TOPICS)) return new Map();
+  try {
+    const arr = JSON.parse(readFileSync(TOPICS, "utf8")) as { slug: string; category?: string }[];
+    return new Map(arr.filter((t) => t.category).map((t) => [t.slug, t.category!]));
+  } catch {
+    return new Map();
+  }
+}
+/** Category for a calendar id — direct match, else the parent slug of a short. */
+function categoryFor(id: string, m: Map<string, string>): string | undefined {
+  return m.get(id) ?? m.get(id.replace(/-s\d+$/, ""));
+}
 
 type Status = "scheduled" | "rendered" | "published";
 type Entry = {
@@ -67,21 +83,24 @@ function main() {
 
   const cal: Entry[] = existsSync(CAL) ? JSON.parse(readFileSync(CAL, "utf8")) : [];
   const byId = new Map(cal.map((e) => [e.video_id, e]));
+  const topicCat = topicCategories();
 
   let cursor = nextWeekday(new Date(`${start}T00:00:00Z`));
   let onDay = 0;
   for (const id of ids) {
     const date = fmt(cursor);
+    const category = categoryFor(id, topicCat); // stamp from the topic bank
     const existing = byId.get(id);
     if (existing && (existing.status === "rendered" || existing.status === "published")) {
       console.warn(`⚠ "${id}" is already ${existing.status} (${existing.publish_date}) — leaving it untouched`);
     } else if (existing) {
       existing.publish_date = date; existing.brand = brand; existing.format = format; existing.status = "scheduled";
-      console.log(`  re-dated  ${format.padEnd(8)} ${brand.padEnd(9)} ${id.padEnd(26)} → ${date}`);
+      if (category) existing.category = category;
+      console.log(`  re-dated  ${format.padEnd(8)} ${brand.padEnd(9)} ${id.padEnd(26)} → ${date}${category ? `  [${category}]` : ""}`);
     } else {
-      const e: Entry = { video_id: id, brand, format, publish_date: date, status: "scheduled" };
+      const e: Entry = { video_id: id, brand, format, publish_date: date, status: "scheduled", ...(category ? { category } : {}) };
       cal.push(e); byId.set(id, e);
-      console.log(`  queued    ${format.padEnd(8)} ${brand.padEnd(9)} ${id.padEnd(26)} → ${date}`);
+      console.log(`  queued    ${format.padEnd(8)} ${brand.padEnd(9)} ${id.padEnd(26)} → ${date}${category ? `  [${category}]` : ""}`);
     }
     // advance to the next weekday every `perDay` ids
     if (++onDay >= perDay) {

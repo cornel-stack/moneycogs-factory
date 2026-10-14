@@ -13,6 +13,13 @@
     "studio": "remotion studio remotion/src/index.ts",
     "render": "remotion render remotion/src/index.ts Main",
     "calendar:fill": "tsx pipeline/fill_calendar.ts",
+    "topics:next": "tsx pipeline/topics.ts next",
+    "topics:pick": "tsx pipeline/topics.ts pick",
+    "topics:done": "tsx pipeline/topics.ts done",
+    "topics:skip": "tsx pipeline/topics.ts skip",
+    "topics:add": "tsx pipeline/topics.ts add",
+    "topics:list": "tsx pipeline/topics.ts list",
+    "topics:stats": "tsx pipeline/topics.ts stats",
     "day": "tsx pipeline/run_day.ts",
     "fetch": "tsx pipeline/fetch_release.ts",
     "typecheck": "tsc --noEmit"
