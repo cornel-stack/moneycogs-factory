@@ -23,12 +23,20 @@ The MoneyCogs visual system is now in place. What it contains:
   package, proven end-to-end locally (dress rehearsal in `design/rehearsal/`) and
   on GitHub Actions (render.yml + render-shorts.yml smoke test).
 
-**TTS provider situation:** `edge-tts` is **403ing globally** (free Edge read-aloud
-is unreliable). The offline **Kokoro-82M** fallback (Apache-2.0, CPU torch, native
-per-word timings) works both locally and in CI and is what produced every Phase 1C/1D
-render. CI auto-falls back edge → Azure → Kokoro. **Recommendation:** add
-`AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION` repo secrets for fast, commercially-licensed
-CI narration; Kokoro remains the keyless safety net.
+**TTS provider situation:** `edge-tts` **403s from this dev machine** but **works on
+GitHub's runners** — the Phase 1D CI smoke test confirmed CI synthesized with
+`edge` (en-US-ChristopherNeural). Locally, the offline **Kokoro-82M** fallback
+(Apache-2.0, CPU torch, native per-word timings) produced every local Phase 1C/1D
+render. generate_audio auto-falls back edge → Azure → Kokoro, so narration never
+fails either place. **Recommendation:** add `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION`
+repo secrets for fast, commercially-licensed narration that doesn't depend on edge's
+gray-area terms; Kokoro remains the keyless safety net.
+
+**CI smoke test (verified):** `render.yml` (sample-video) and `render-shorts.yml`
+(flow-short) both ran green on Actions with `skip_runtime_guard=1`; the published
+Releases carried the full package (7 longform files; 6 `flow-short__`-prefixed short
+files) and `fetch_release.ts` downloaded both correctly. The temporary
+`content-smoke-*` Releases/tags were deleted afterward.
 
 ---
 
