@@ -49,6 +49,7 @@ on:
 
 permissions:
   contents: write # publish the package to a GitHub Release (stable, non-expiring)
+  issues: write # alert when CI TTS falls all the way back to Kokoro (slower)
 
 env:
   NODE_VERSION: "20"
@@ -100,7 +101,19 @@ jobs:
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
-        run: python pipeline/generate_audio.py "${{ inputs.video_id }}"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eo pipefail
+          python pipeline/generate_audio.py "${{ inputs.video_id }}" | tee /tmp/tts.log
+          # Alert if CI had to use the offline Kokoro fallback (works, but slow).
+          if grep -q "TTS provider: kokoro" /tmp/tts.log; then
+            RUN="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "::warning title=TTS fallback::CI used offline Kokoro (edge down + no Azure key) for ${{ inputs.video_id }}"
+            TITLE="CI TTS fell back to Kokoro"
+            NUM=$(gh issue list --search "$TITLE in:title" --state open --json number --jq '.[0].number' || echo "")
+            BODY="generate_audio used the offline **Kokoro** fallback (edge-tts down + no Azure key) for \`${{ inputs.video_id }}\`. It works but is slower in CI — consider adding AZURE_SPEECH_KEY/REGION repo secrets. Run: $RUN"
+            if [ -n "$NUM" ]; then gh issue comment "$NUM" --body "Again for \`${{ inputs.video_id }}\`. Run: $RUN"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+          fi
       - name: Timing manifest
         env:
           SKIP_RUNTIME_GUARD: ${{ inputs.skip_runtime_guard }}

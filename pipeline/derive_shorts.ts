@@ -11,11 +11,14 @@
  * a human pass on every auto-hook (tighten + fact-check + trim to ≤55s) before
  * publish.
  *
- *   npx tsx pipeline/derive_shorts.ts <source-id> [--max N]
+ *   npx tsx pipeline/derive_shorts.ts <source-id> [--max N] [--force] [--print-hooks]
+ *     --force       overwrite existing shorts (default keeps them — never clobbers
+ *                   hand-rewritten hooks)
+ *     --print-hooks emit "<id>\t<auto-hook>" per short, write nothing
  *
  * Writes content/videos/<source-id>-s01.json, -s02.json, … and prints the list.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Script } from "../remotion/src/schema.js";
@@ -50,6 +53,11 @@ function main() {
   }
   const maxArg = process.argv.indexOf("--max");
   const max = maxArg >= 0 ? parseInt(process.argv[maxArg + 1]!, 10) : Infinity;
+  // --force: overwrite existing shorts (default: KEEP them, so hand-rewritten
+  // hooks are never clobbered). --print-hooks: emit "<id>\t<auto-hook>" per short
+  // without writing anything (used by run_day's hook-review gate).
+  const force = process.argv.includes("--force");
+  const printHooks = process.argv.includes("--print-hooks");
 
   const src = Script.parse(JSON.parse(readFileSync(join(DIR, `${srcId}.json`), "utf8")));
   const scenes = src.scenes;
@@ -85,12 +93,17 @@ function main() {
     const id = `${srcId}-s${n}`;
     const hookLine = HOOK_FORMULAS[(idx - 1) % HOOK_FORMULAS.length]!(sec.title);
     const source = src.title;
+    const autoHook = `${hookLine} Here's exactly where the money goes.`;
+    if (printHooks) {
+      console.log(`${id}\t${autoHook}`);
+      continue;
+    }
 
     const outScenes: unknown[] = [
       {
         id: "hook",
         type: "character_scene",
-        narration: `${hookLine} Here's exactly where the money goes.`,
+        narration: autoHook,
         visual: {
           stage: "plain",
           elements: [
@@ -135,7 +148,13 @@ function main() {
       for (const iss of parsed.error.issues) console.error(`    ${iss.path.join(".")}: ${iss.message}`);
       continue;
     }
-    writeFileSync(join(DIR, `${id}.json`), JSON.stringify(short, null, 2) + "\n");
+    const outPath = join(DIR, `${id}.json`);
+    if (existsSync(outPath) && !force) {
+      written.push(id);
+      console.log(`  = kept existing ${id} (hand edits preserved; --force to overwrite)`);
+      continue;
+    }
+    writeFileSync(outPath, JSON.stringify(short, null, 2) + "\n");
     written.push(id);
     console.log(`  ✓ ${id}  (${outScenes.length} scenes, ~${baseWords} words)  "${sec.title}"`);
   }

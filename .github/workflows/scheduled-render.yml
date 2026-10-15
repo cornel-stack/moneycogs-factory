@@ -1,15 +1,18 @@
 name: Scheduled render
 
-# MoneyCogs daily factory. Renders everything due — the day's long-form mechanism
-# explainer and its shorts — into ONE bundle Release `content-<date>`. Due =
-# scheduled entries with publish_date ≤ today (self-heals a failed day); if
-# nothing is due today it pre-renders tomorrow's (lookahead). On success each
-# entry flips to "rendered" (bot commit, [skip ci]); failures open an issue.
+# MoneyCogs daily factory. Renders everything DUE — scheduled calendar entries
+# with publish_date ≤ today (self-heals a failed day) — into ONE bundle Release
+# `content-<date>`. On success each entry flips to "rendered" (bot commit,
+# [skip ci]); failures open an issue. Calendar sanity: entries whose script file
+# is missing are SKIPPED (with a logged warning + an issue), never fatal.
 #
-# PHASE 0: the cron trigger is DISABLED — nothing fires on a schedule until
-# Phase 3 (hardening/cron). Run manually via workflow_dispatch (dry_run defaults
-# to true). Re-add a `schedule:` block here in Phase 3 to resume daily runs.
+# PHASE 3: the cron is ENABLED — weekdays 03:47 UTC (06:47 EAT). A manual
+# workflow_dispatch still works (dry_run defaults to true). Secrets posture:
+# AZURE_SPEECH_KEY/REGION are OPTIONAL (passed via secrets: inherit to the TTS
+# fallback); with none set, CI uses free edge-tts, then offline Kokoro.
 on:
+  schedule:
+    - cron: "47 3 * * 1-5" # weekdays 03:47 UTC = 06:47 EAT
   workflow_dispatch:
     inputs:
       dry_run:
@@ -40,18 +43,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: p
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           OV="${{ inputs.today_override }}"
           if [ -n "$OV" ]; then TODAY="$OV"; else TODAY=$(TZ=Africa/Nairobi date +%F); fi
-          TOMORROW=$(date -d "$TODAY +1 day" +%F)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" != "false" ]; then DRY=true; else DRY=false; fi
-          eval "$(TODAY="$TODAY" TOMORROW="$TOMORROW" node -e '
+          # DUE = scheduled entries with publish_date <= today (no lookahead).
+          # CALENDAR SANITY: entries whose script file is missing are SKIPPED, not
+          # fatal — the upstream factory died on exactly this. Skipped ids are
+          # logged + reported to an issue below.
+          eval "$(TODAY="$TODAY" node -e '
+            const fs = require("fs");
             const cal = require("./content/calendar.json");
-            const today = process.env.TODAY, tomorrow = process.env.TOMORROW;
-            const sched = cal.filter(e => e.status === "scheduled");
-            let due = sched.filter(e => e.publish_date <= today);
-            let dueDate = today;
-            if (due.length === 0) { due = sched.filter(e => e.publish_date === tomorrow); dueDate = tomorrow; }
+            const today = process.env.TODAY;
+            const sched = cal.filter(e => e.status === "scheduled" && e.publish_date <= today);
+            const hasScript = id => fs.existsSync("content/videos/" + id + ".json");
+            const missing = [...new Set(sched.filter(e => !hasScript(e.video_id)).map(e => e.video_id))];
+            const due = sched.filter(e => hasScript(e.video_id));
             const lf = due.filter(e => (e.format||"longform") === "longform").map(e => e.video_id);
             const sh = due.filter(e => e.format === "short").map(e => e.video_id);
             const all = due.map(e => e.video_id);
@@ -59,7 +68,8 @@ jobs:
               longform_ids: JSON.stringify(lf),
               short_ids_csv: sh.join(","),
               all_ids: JSON.stringify(all),
-              tag: "content-" + dueDate,
+              missing_ids: JSON.stringify(missing),
+              tag: "content-" + today,
               has_long: lf.length ? "true" : "false",
               has_short: sh.length ? "true" : "false",
               has_any: all.length ? "true" : "false",
@@ -81,6 +91,18 @@ jobs:
           echo "- long-form: \`$longform_ids\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- shorts: \`$short_ids_csv\`" >> "$GITHUB_STEP_SUMMARY"
           echo "Plan: tag=$tag long=$longform_ids shorts=$short_ids_csv dry=$DRY"
+          # CALENDAR SANITY — skip (don't fail) entries with no script; report them.
+          if [ "$missing_ids" != "[]" ]; then
+            echo "::warning title=Calendar sanity::Skipping scheduled ids with no script file: $missing_ids"
+            echo "- ⚠ SKIPPED (no script file): \`$missing_ids\`" >> "$GITHUB_STEP_SUMMARY"
+            if [ "$DRY" != "true" ]; then
+              TITLE="Calendar sanity: scheduled ids missing a script"
+              RUN="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              NUM=$(gh issue list --search "$TITLE in:title" --state open --json number --jq '.[0].number' || echo "")
+              BODY="These calendar entries for **$tag** are 'scheduled' but have no content/videos/<id>.json, so they were SKIPPED (not rendered): $missing_ids. Either write the script or remove/re-date the calendar entry. Run: $RUN"
+              if [ -n "$NUM" ]; then gh issue comment "$NUM" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY" --label "automation" 2>/dev/null || gh issue create --title "$TITLE" --body "$BODY"; fi
+            fi
+          fi
 
   prep-release:
     needs: plan
@@ -148,8 +170,11 @@ jobs:
           git commit -m "calendar: ${{ needs.plan.outputs.tag }} rendered [skip ci]" || echo "nothing to commit"
           git push || echo "nothing to push"
           if [ "$LONG_OK" != "true" ] || [ "$SHORT_OK" != "true" ]; then
+            FAILED=""
+            [ "$LONG_OK" != "true" ] && FAILED="$FAILED\n- **longform render** step failed → ids: \`${{ needs.plan.outputs.longform_ids }}\`"
+            [ "$SHORT_OK" != "true" ] && FAILED="$FAILED\n- **shorts render** step failed → ids: \`${{ needs.plan.outputs.short_ids_csv }}\`"
             TITLE="Render failed: ${{ needs.plan.outputs.tag }}"
             NUM=$(gh issue list --search "$TITLE in:title" --state open --json number --jq '.[0].number' || echo "")
-            BODY="A scheduled render failed for ${{ needs.plan.outputs.tag }}. long_ok=$LONG_OK short_ok=$SHORT_OK. Run: $RUN. Failed entries stay 'scheduled' and retry next weekday."
-            if [ -n "$NUM" ]; then gh issue comment "$NUM" --body "Still failing. Run: $RUN"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+            BODY=$(printf "A scheduled render failed for **${{ needs.plan.outputs.tag }}**.\nWhat failed:%b\n\nRun: %s\nFailed entries stay 'scheduled' and retry next weekday." "$FAILED" "$RUN")
+            if [ -n "$NUM" ]; then gh issue comment "$NUM" --body "$BODY"; else gh issue create --title "$TITLE" --body "$BODY"; fi
           fi

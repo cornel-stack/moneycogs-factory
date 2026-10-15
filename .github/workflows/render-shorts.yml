@@ -33,6 +33,7 @@ on:
 
 permissions:
   contents: write
+  issues: write # alert when CI TTS falls all the way back to Kokoro (slower)
 
 env:
   NODE_VERSION: "20"
@@ -97,10 +98,20 @@ jobs:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
           SKIP_RUNTIME_GUARD: ${{ inputs.skip_runtime_guard }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -eo pipefail
           SECONDS=0
           ID="${{ matrix.id }}"
-          python pipeline/generate_audio.py "$ID"
+          python pipeline/generate_audio.py "$ID" | tee /tmp/tts.log
+          if grep -q "TTS provider: kokoro" /tmp/tts.log; then
+            RUN="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "::warning title=TTS fallback::CI used offline Kokoro for $ID"
+            TITLE="CI TTS fell back to Kokoro"
+            NUM=$(gh issue list --search "$TITLE in:title" --state open --json number --jq '.[0].number' || echo "")
+            BODY="generate_audio used the offline **Kokoro** fallback (edge-tts down + no Azure key) for \`$ID\`. Works but slower — consider adding AZURE_SPEECH_KEY/REGION repo secrets. Run: $RUN"
+            if [ -n "$NUM" ]; then gh issue comment "$NUM" --body "Again for \`$ID\`. Run: $RUN"; else gh issue create --title "$TITLE" --body "$BODY"; fi
+          fi
           npx tsx pipeline/build_manifest.ts "$ID"
           npx tsx pipeline/build_captions.ts "$ID"
           npx remotion render remotion/src/index.ts Short ".build/$ID/video.mp4" \
