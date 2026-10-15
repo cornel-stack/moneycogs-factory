@@ -114,6 +114,28 @@ Shorts are one point's hidden-flow moment — see
 
 ---
 
+## The daily flow — `/make-money` (Phase 2C)
+
+The whole day runs from one skill. In a Claude Code session, invoke
+**`/make-money`** (optionally `/make-money <topic-slug>` to override the queue
+pick). The runbook ([`.claude/skills/make-money/SKILL.md`](.claude/skills/make-money/SKILL.md))
+walks a fresh session through: **pick** (`topics:next`) → **study**
+(`template.md` + `schema.md` + the golden script) → **design the machine** (the
+money_flow map + worked numbers, all arithmetic verified) → **write** the
+longform → **validate + lint until clean** → **fact pass** (nothing stale or
+company-specific) → **derive + hand-rewrite 3 shorts** → **ship**
+(`npm run day -- <slug>`). Hard rules baked in: no news / no named-company
+facts, education-not-advice framing, numbers verifiable from the script's own
+arithmetic, and a failure protocol (never `SKIP_RUNTIME_GUARD` in the daily
+flow; fix the sync/narration pair, don't skip it).
+
+The **golden reference script** is
+[`content/videos/how-credit-cards-make-money.json`](content/videos/how-credit-cards-make-money.json)
+— a full ~14-min longform + 3 shorts, lint-clean with zero warnings. It is the
+quality bar every new video is written against.
+
+---
+
 ## Brand & configuration
 
 All brand identity lives in **`config/brands.ts`** (brand id `moneycogs`):

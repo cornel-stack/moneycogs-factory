@@ -1,0 +1,2129 @@
+{
+  "id": "how-credit-cards-make-money",
+  "title": "How Credit Cards Actually Make Money",
+  "brand": "moneycogs",
+  "format": "longform",
+  "description": "How a credit card turns your spending into profit: the swipe fee that pays your bank, the interest that is the real engine, the fees bolted on, and who really funds your rewards. A hand-drawn money machine, taken apart gear by gear.\n\nHow credit cards make money · where your swipe fee goes · why paying in full beats the machine.\n\n#money #creditcards #personalfinance",
+  "tags": [
+    "credit cards",
+    "how credit cards make money",
+    "interchange fee",
+    "credit card interest",
+    "personal finance",
+    "money mechanisms"
+  ],
+  "category": "How Banks Win",
+  "promise": "by the end you will see exactly how a card turns your spending into profit",
+  "pinned_comment": "Most people never do the math on what a swipe really costs. What surprised you most — the fee, the interest, or who funds the rewards?",
+  "title_variants": [
+    "How Credit Cards Actually Make Money",
+    "Why Credit Cards Are Designed to Keep You Paying",
+    "The Real Reason Your Rewards Feel Free"
+  ],
+  "thumbnail": {
+    "headline": "How Cards Make Money",
+    "punch_words": [
+      "WHERE",
+      "$100",
+      "GOES"
+    ],
+    "subline": "The hidden swipe machine",
+    "cast": "ledger",
+    "pose": "presenting",
+    "expression": "shocked",
+    "props": [
+      "credit-card",
+      "coin-stack"
+    ],
+    "pointer": "spotlight"
+  },
+  "voice": "en-US-ChristopherNeural",
+  "template": {
+    "framing": "explainer",
+    "hook": "direct"
+  },
+  "scenes": [
+    {
+      "id": "hook-title",
+      "type": "section_title",
+      "narration": "Every time you tap a credit card, a tiny money machine springs to life behind the counter.",
+      "visual": {
+        "title": "The Card Machine",
+        "emphasis": "underline",
+        "sync": {
+          "phrase": "money machine"
+        }
+      }
+    },
+    {
+      "id": "hook-promise",
+      "type": "character_scene",
+      "narration": "Today, we are going to take that machine apart, gear by gear. And by the end you will see exactly how a card turns your spending into profit, and the one simple move that shuts the whole thing off.",
+      "visual": {
+        "title": "Gear by gear",
+        "stage": "boardroom",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "pointing",
+              "thinking",
+              "presenting"
+            ],
+            "expression": "curious",
+            "label": "let's begin"
+          },
+          {
+            "kind": "gears",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "gear by gear",
+            "sync": {
+              "phrase": "gear by gear"
+            },
+            "effects": [
+              {
+                "kind": "idea_flash",
+                "sync": {
+                  "phrase": "shuts the whole thing off"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "hook-spend",
+      "type": "character_scene",
+      "narration": "Picture it. You spend one hundred dollars at a shop. You walk out happy. The shop looks happy. Nothing about it seems strange at all. But in that one quiet second, a few of those dollars went somewhere you never see, and they started a chain reaction that pays your bank.",
+      "visual": {
+        "title": "Tap to pay",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "pointing",
+              "standing",
+              "presenting"
+            ],
+            "expression": "happy",
+            "holding": {
+              "prop": "credit-card",
+              "hand": "right"
+            },
+            "label": "you"
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "one hundred",
+            "sync": {
+              "phrase": "one hundred dollars"
+            },
+            "effects": [
+              {
+                "kind": "thought_bubble",
+                "sync": {
+                  "phrase": "never see"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "hook-three",
+      "type": "character_scene",
+      "narration": "Because the shop does not actually keep all of it. The shop keeps about ninety seven dollars. The rest is a fee it has to pay just to accept your card at all. That fee feels tiny on one sale. But stretch it across billions of swipes, and it becomes a fortune.",
+      "visual": {
+        "title": "The shop's cut",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "shop",
+            "cast": "rosa",
+            "at": {
+              "col": 2,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "worried",
+            "label": "the shop"
+          },
+          {
+            "kind": "cash-stack",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "keeps ninety-seven",
+            "sync": {
+              "phrase": "ninety seven dollars"
+            },
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "a fortune"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "hook-stakes",
+      "type": "character_scene",
+      "narration": "Now zoom out from that one purchase. Multiply those few hidden dollars across every card, every shop, every day, and you are looking at one of the most profitable kinds of business ever built. And almost all of it runs on money most people never realize they are paying.",
+      "visual": {
+        "title": "The bigger picture",
+        "stage": "street",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "thinking",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "label": "zoom out"
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "a fortune, hidden",
+            "sync": {
+              "phrase": "most profitable"
+            },
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "never realize"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "hook-q",
+      "type": "character_scene",
+      "narration": "So the real question is not whether a credit card costs you something. It is how it costs you, and who quietly ends up richer every single time you tap. So let us follow the money, one gear at a time, until the whole machine is laid bare.",
+      "visual": {
+        "title": "Follow the money",
+        "stage": "street",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "thinking",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "label": "who gets richer?"
+          },
+          {
+            "kind": "coin",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "follow it",
+            "sync": {
+              "phrase": "follow the money"
+            },
+            "effects": [
+              {
+                "kind": "question_marks",
+                "sync": {
+                  "phrase": "laid bare"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "glance",
+      "type": "money_flow",
+      "narration": "Here is the whole machine at a single glance. Your hundred dollars splits three ways the instant you pay. The shop keeps most of it. Your bank quietly takes a small cut. And the card network takes a slice of its own, just for running the rails that carry the money.",
+      "visual": {
+        "title": "Where $100 goes",
+        "layout": "hub",
+        "nodes": [
+          {
+            "id": "you",
+            "kind": "character",
+            "ref": "penny",
+            "label": "you",
+            "amount": "$100"
+          },
+          {
+            "id": "shop",
+            "kind": "character",
+            "ref": "rosa",
+            "label": "the shop",
+            "amount": "$97.10"
+          },
+          {
+            "id": "bank",
+            "kind": "character",
+            "ref": "ledger",
+            "label": "your bank",
+            "amount": "$1.80"
+          },
+          {
+            "id": "net",
+            "kind": "text",
+            "label": "Card network",
+            "amount": "$1.10"
+          }
+        ],
+        "edges": [
+          {
+            "from": "you",
+            "to": "shop",
+            "amount": "$97.10",
+            "color": "green",
+            "sync": {
+              "phrase": "keeps most of it"
+            }
+          },
+          {
+            "from": "you",
+            "to": "bank",
+            "amount": "$1.80",
+            "color": "gold",
+            "sync": {
+              "phrase": "small cut"
+            }
+          },
+          {
+            "from": "you",
+            "to": "net",
+            "amount": "$1.10",
+            "color": "gold",
+            "sync": {
+              "phrase": "the card network"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "glance-thesis",
+      "type": "character_scene",
+      "narration": "So three parties share every single swipe. But here is the thing. Sharing a few cents per sale is not how a card gets truly rich. The swipe is just the doorway. The real money is hidden inside three other gears, and we are going to open each one in turn.",
+      "visual": {
+        "title": "Three hidden gears",
+        "stage": "boardroom",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "thinking",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "label": "you"
+          },
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "facing": "left",
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "holding": {
+              "prop": "money-bag",
+              "hand": "left"
+            },
+            "label": "the bank",
+            "sync": {
+              "phrase": "the real money"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-title",
+      "type": "section_title",
+      "narration": "Gear one. The swipe fee, the piece almost nobody ever notices.",
+      "visual": {
+        "role": "section",
+        "number": 1,
+        "title": "The Swipe Fee",
+        "emphasis": "underline",
+        "sync": {
+          "phrase": "swipe fee"
+        }
+      }
+    },
+    {
+      "id": "s1-merchant",
+      "type": "character_scene",
+      "narration": "When a shop decides to accept cards, it signs up to hand back a slice of every sale. On a hundred dollar purchase, that slice is usually around three dollars. The shop never sends you a bill for it, and you never notice it. It simply comes off the top before the shop sees a cent.",
+      "visual": {
+        "title": "Off the top",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "shop",
+            "cast": "rosa",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "facepalm",
+              "standing",
+              "presenting"
+            ],
+            "expression": "worried",
+            "holding": {
+              "prop": "receipt",
+              "hand": "right"
+            },
+            "label": "the shop"
+          },
+          {
+            "kind": "percent-tag",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "around 3%",
+            "sync": {
+              "phrase": "three dollars"
+            },
+            "effects": [
+              {
+                "kind": "sweat_drop",
+                "sync": {
+                  "phrase": "off the top"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-waterfall",
+      "type": "stat_chart",
+      "narration": "Watch that hundred dollars step down the ladder. First your bank takes its cut, a fee with a boring name, interchange. Then the card network takes a smaller slice for the rails. And what finally lands in the shop's till is only about ninety seven dollars.",
+      "visual": {
+        "label": "Where the $100 goes",
+        "mode": "waterfall",
+        "prefix": "$",
+        "decimals": 2,
+        "datapoints": [
+          {
+            "label": "Sale",
+            "value": 100
+          },
+          {
+            "label": "Bank cut",
+            "value": 1.8,
+            "sync": {
+              "phrase": "interchange"
+            }
+          },
+          {
+            "label": "Network",
+            "value": 1.1,
+            "sync": {
+              "phrase": "smaller slice"
+            }
+          },
+          {
+            "label": "Shop keeps",
+            "value": 97.1,
+            "sync": {
+              "phrase": "ninety seven dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-interchange",
+      "type": "character_scene",
+      "narration": "Now here is the genuinely clever part. That biggest slice, the interchange, does not go to the network. It flows straight to the bank that issued your card. In other words, every time you spend on their card, they get paid by the shop, before you have paid them anything at all.",
+      "visual": {
+        "title": "The bank's cut",
+        "stage": "bank-interior",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 6,
+              "row": 1,
+              "w": 4,
+              "h": 5
+            },
+            "facing": "left",
+            "poses": [
+              "standing",
+              "presenting",
+              "celebrating",
+              "standing",
+              "presenting"
+            ],
+            "expression": "happy",
+            "holding": {
+              "prop": "money-bag",
+              "hand": "left"
+            },
+            "label": "your bank",
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "they get paid"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "credit-card",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 3
+            },
+            "label": "their card",
+            "sync": {
+              "phrase": "their card"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-network",
+      "type": "character_scene",
+      "narration": "What about that smaller slice, the one the network takes? The network is not your bank. It is the company that owns the rails, the wires that carry the payment and check it is not fraud. It touches nearly every swipe in the world, and clips a tiny toll on each one.",
+      "visual": {
+        "title": "Running the rails",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "label": "the network"
+          },
+          {
+            "kind": "gears",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "the rails",
+            "sync": {
+              "phrase": "the rails"
+            },
+            "effects": [
+              {
+                "kind": "motion_lines",
+                "sync": {
+                  "phrase": "tiny toll"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-why-card",
+      "type": "character_scene",
+      "narration": "This is why banks fight so hard to put their card in your wallet, with sign up bonuses and shiny perks. Each card is a little toll booth. The more you reach for theirs, the more shops pay them. You are not the customer here. You are the toll road.",
+      "visual": {
+        "title": "You're the toll road",
+        "stage": "bank-interior",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 2,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "the bank"
+          },
+          {
+            "kind": "credit-card",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 3
+            },
+            "label": "a toll booth",
+            "sync": {
+              "phrase": "toll booth"
+            },
+            "effects": [
+              {
+                "kind": "sparkles",
+                "sync": {
+                  "phrase": "shiny perks"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s1-scale",
+      "type": "character_scene",
+      "narration": "A dollar or two per swipe still sounds like nothing. But you swipe dozens of times a month, and so does nearly everyone you know. Multiply a tiny fee by a mountain of swipes, and the swipe fee alone becomes a wide, steady river of money. And yet, it is still not the main engine.",
+      "visual": {
+        "title": "Tiny × huge",
+        "stage": "bank-interior",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "celebrating",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "the bank"
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "a river of fees",
+            "sync": {
+              "phrase": "river of money"
+            },
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "main engine"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-title",
+      "type": "section_title",
+      "narration": "Gear two. The real engine, the one that quietly dwarfs every swipe.",
+      "visual": {
+        "role": "section",
+        "number": 2,
+        "title": "The Real Engine",
+        "emphasis": "underline",
+        "sync": {
+          "phrase": "real engine"
+        }
+      }
+    },
+    {
+      "id": "s2-carry",
+      "type": "character_scene",
+      "narration": "The engine starts the very moment you do not pay in full. Say you carry a balance of one thousand dollars from one month into the next. Now the card has quietly changed its job. It is no longer just a way to pay. It is a loan. And loans charge interest.",
+      "visual": {
+        "title": "Carrying a balance",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "worried",
+            "holding": {
+              "prop": "credit-card",
+              "hand": "right"
+            },
+            "label": "you"
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "a thousand owed",
+            "sync": {
+              "phrase": "one thousand dollars"
+            },
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "it is a loan"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-why-high",
+      "type": "character_scene",
+      "narration": "And a card is an expensive loan, because the bank hands you money with no collateral and no questions asked. To cover the risk that some people never pay it back, cards charge a high rate on everyone, often around twenty percent a year. Convenience, it turns out, has a price.",
+      "visual": {
+        "title": "Why so expensive",
+        "stage": "bank-interior",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 2,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "neutral",
+            "label": "no collateral"
+          },
+          {
+            "kind": "gauge-meter",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 3
+            },
+            "label": "high rate",
+            "sync": {
+              "phrase": "twenty percent a year"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-counter",
+      "type": "stat_chart",
+      "narration": "Put real numbers on it. On a one thousand dollar balance carried for a full year at that rate, the interest comes to roughly two hundred dollars. Two hundred dollars, just for the privilege of borrowing money you had already spent.",
+      "visual": {
+        "label": "A year of interest",
+        "mode": "counter",
+        "prefix": "$",
+        "datapoints": [
+          {
+            "label": "yearly interest",
+            "value": 200,
+            "sync": {
+              "phrase": "two hundred dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-compound",
+      "type": "character_scene",
+      "narration": "And it quietly gets worse, thanks to compounding. Any interest you do not pay gets added right onto your balance. So the next month, you are charged interest on top of that interest. The debt slowly starts feeding itself, growing a little faster every month you let it sit.",
+      "visual": {
+        "title": "Interest on interest",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "worried",
+            "label": "compounding"
+          },
+          {
+            "kind": "snowball",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "feeds itself",
+            "sync": {
+              "phrase": "feeding itself"
+            },
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "a little faster"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-years",
+      "type": "stat_chart",
+      "narration": "Here is what that looks like stretched over time. Pay only the minimum on a thousand dollars, and years later you can still owe most of it, having handed over hundreds in interest along the way. A short splurge quietly becomes a very long, very expensive drip.",
+      "visual": {
+        "label": "Still owed (minimum only)",
+        "mode": "line",
+        "prefix": "$",
+        "datapoints": [
+          {
+            "label": "Now",
+            "value": 1000,
+            "sync": {
+              "phrase": "a thousand dollars"
+            }
+          },
+          {
+            "label": "Yr 1",
+            "value": 920,
+            "sync": {
+              "phrase": "hundreds in interest"
+            }
+          },
+          {
+            "label": "Yr 2",
+            "value": 830,
+            "sync": {
+              "phrase": "years later"
+            }
+          },
+          {
+            "label": "Yr 3",
+            "value": 730,
+            "sync": {
+              "phrase": "very expensive drip"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-minimum",
+      "type": "character_scene",
+      "narration": "But here is the trap that actually feels responsible. You pay the minimum each month, maybe twenty five dollars, and you feel like a grown up who is handling it. The statement even thanks you for your payment. And the machine, it turns out, is thanking you too.",
+      "visual": {
+        "title": "The minimum trap",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "thinking",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expressions": [
+              "worried",
+              {
+                "value": "shocked",
+                "sync": {
+                  "phrase": "thanking you too"
+                }
+              }
+            ],
+            "holding": {
+              "prop": "calculator",
+              "hand": "left"
+            },
+            "label": "the minimum"
+          },
+          {
+            "kind": "interest-clock",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "interest ticking",
+            "sync": {
+              "phrase": "twenty five dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-split",
+      "type": "stat_chart",
+      "narration": "Split that twenty five dollar payment and watch where it actually goes. About seventeen dollars of it is pure interest, straight to the bank. Only about eight dollars actually pays down what you owe. Most of your payment never touches the balance at all.",
+      "visual": {
+        "label": "Your $25 minimum",
+        "mode": "waterfall",
+        "prefix": "$",
+        "decimals": 2,
+        "datapoints": [
+          {
+            "label": "Payment",
+            "value": 25
+          },
+          {
+            "label": "Interest",
+            "value": 17,
+            "sync": {
+              "phrase": "seventeen dollars"
+            }
+          },
+          {
+            "label": "Paid down",
+            "value": 8,
+            "sync": {
+              "phrase": "eight dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-stuck",
+      "type": "character_scene",
+      "narration": "So the balance barely budges. Pay only the minimum on a thousand dollars, and you can be stuck paying for years and years, handing the bank far more in interest than you ever actually borrowed. This is the point of the whole machine. Interest, not the swipe, is the real profit.",
+      "visual": {
+        "title": "Barely moving",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "facepalm",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "tired",
+            "label": "stuck",
+            "effects": [
+              {
+                "kind": "sweat_drop",
+                "sync": {
+                  "phrase": "stuck paying"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "interest-clock",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "the real profit",
+            "sync": {
+              "phrase": "the real profit"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s2-revolver",
+      "type": "character_scene",
+      "narration": "To the bank, the dream customer is not the person who clears the balance every month. It is the person who always carries a little, month after month, year after year. The industry even has a name for them, revolvers. And revolvers are where the profit truly lives.",
+      "visual": {
+        "title": "The dream customer",
+        "stage": "bank-interior",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 2,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "the bank",
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "profit truly lives"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "revolvers",
+            "sync": {
+              "phrase": "revolvers"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-title",
+      "type": "section_title",
+      "narration": "Gear three. The fees, the machine's busy little side hustle.",
+      "visual": {
+        "role": "section",
+        "number": 3,
+        "title": "The Side Hustle",
+        "emphasis": "underline",
+        "sync": {
+          "phrase": "side hustle"
+        }
+      }
+    },
+    {
+      "id": "s3-late",
+      "type": "character_scene",
+      "narration": "Miss a payment by a single day, and a late fee appears, often around thirty five dollars. Notice that it is not tied to how much you owe. It is a flat penalty, charged the instant you slip up, and it flows straight to the bank that issued your card.",
+      "visual": {
+        "title": "The late fee",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "cast": "slick",
+            "at": {
+              "col": 6,
+              "row": 1,
+              "w": 4,
+              "h": 5
+            },
+            "facing": "left",
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "holding": {
+              "prop": "invoice",
+              "hand": "right"
+            },
+            "label": "the fine print"
+          },
+          {
+            "kind": "invoice",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "late fee",
+            "sync": {
+              "phrase": "thirty five dollars"
+            },
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "the instant you slip"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-table",
+      "type": "table",
+      "narration": "Late fees are only one item on the menu. There is a yearly fee on fancy cards, around ninety five dollars. There is a cash advance fee whenever you pull out cash. And there is a foreign fee, roughly three percent, abroad.",
+      "visual": {
+        "title": "The fee menu",
+        "columns": [
+          "Fee",
+          "Typical",
+          "When"
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Late",
+              "$35",
+              "You slip"
+            ],
+            "sync": {
+              "phrase": "late fees"
+            }
+          },
+          {
+            "cells": [
+              "Annual",
+              "$95",
+              "Fancy cards"
+            ],
+            "sync": {
+              "phrase": "ninety five dollars"
+            }
+          },
+          {
+            "cells": [
+              "Cash advance",
+              "5%",
+              "Pull cash"
+            ],
+            "sync": {
+              "phrase": "cash advance"
+            }
+          },
+          {
+            "cells": [
+              "Foreign",
+              "3%",
+              "Abroad"
+            ],
+            "highlight": true,
+            "sync": {
+              "phrase": "foreign fee"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-why-fees",
+      "type": "character_scene",
+      "narration": "And here is why the bank loves fees so much. They cost almost nothing to charge. A late fee is not covering some real expense somewhere. It is simply a penalty, so nearly all of it drops straight to the bottom line as close to pure profit.",
+      "visual": {
+        "title": "Almost pure profit",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "cast": "slick",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "costs them nothing"
+          },
+          {
+            "kind": "invoice",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 4
+            },
+            "label": "pure profit",
+            "sync": {
+              "phrase": "pure profit"
+            },
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "the bottom line"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-advance",
+      "type": "character_scene",
+      "narration": "The cash advance is quietly the nastiest of them all. Pull cash out of the machine, and there is no grace period whatsoever. Interest starts running on the very first day, right on top of the upfront fee. It is designed to look convenient at the window, and cost you a small fortune later.",
+      "visual": {
+        "title": "No grace period",
+        "stage": "street",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "cast": "slick",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "looks convenient"
+          },
+          {
+            "kind": "atm",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 5
+            },
+            "label": "interest day one",
+            "sync": {
+              "phrase": "the very first day"
+            },
+            "effects": [
+              {
+                "kind": "anger_marks",
+                "sync": {
+                  "phrase": "a small fortune"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-penalty",
+      "type": "character_scene",
+      "narration": "And if you really stumble, the machine keeps one more lever in reserve. Slip badly enough, and the bank can raise your rate itself, to a penalty rate even higher than before. The more you struggle to keep up, the more expensive your debt quietly becomes.",
+      "visual": {
+        "title": "The penalty rate",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "cast": "slick",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "one more lever"
+          },
+          {
+            "kind": "gauge-meter",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 3
+            },
+            "label": "rate jumps",
+            "sync": {
+              "phrase": "penalty rate"
+            },
+            "effects": [
+              {
+                "kind": "anger_marks",
+                "sync": {
+                  "phrase": "more expensive"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s3-optional",
+      "type": "character_scene",
+      "narration": "Now the good news about fees is that nearly all of them are avoidable. Pay on time, skip the cash machine, and read the fine print before you sign. But the whole design quietly counts on the fact that busy, tired people slip. And the next gear is the cleverest trick of all.",
+      "visual": {
+        "title": "Mostly avoidable",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 2,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "holding": {
+              "prop": "receipt",
+              "hand": "right"
+            },
+            "label": "read the print",
+            "effects": [
+              {
+                "kind": "nod",
+                "sync": {
+                  "phrase": "read the fine print"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "checkmark",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "avoidable",
+            "sync": {
+              "phrase": "tired people slip"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-title",
+      "type": "section_title",
+      "narration": "Gear four. The free points trick, and who actually pays for them.",
+      "visual": {
+        "role": "section",
+        "number": 4,
+        "title": "The Free Points Trick",
+        "emphasis": "underline",
+        "sync": {
+          "phrase": "free points"
+        }
+      }
+    },
+    {
+      "id": "s4-rewards",
+      "type": "character_scene",
+      "narration": "You spend one hundred dollars and you earn two dollars back in rewards. It genuinely feels like the card is paying you just to go shopping. Free money, on every single swipe. Which should make you stop and ask one simple question. Where exactly does that two dollars come from?",
+      "visual": {
+        "title": "Two percent back",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "celebrating",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "free money?",
+            "effects": [
+              {
+                "kind": "sparkles",
+                "sync": {
+                  "phrase": "free money"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "percent-tag",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "2% back",
+            "sync": {
+              "phrase": "two dollars come from"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-psych",
+      "type": "character_scene",
+      "narration": "And rewards do something a little sneaky to your brain. Study after study finds that people tend to spend more when they pay with a card than with plain cash. The points feel like winning, so you swipe a bit more freely. Which, of course, is exactly the idea.",
+      "visual": {
+        "title": "Swipe more freely",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "celebrating",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "feels like winning"
+          },
+          {
+            "kind": "shopping-cart",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "spend more",
+            "sync": {
+              "phrase": "spend more"
+            },
+            "effects": [
+              {
+                "kind": "sparkles",
+                "sync": {
+                  "phrase": "exactly the idea"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-flow",
+      "type": "money_flow",
+      "narration": "Follow the flow and it becomes obvious. The shop pays the swipe fee to your bank. Your bank keeps part of it as profit, and hands another part back to you as rewards.",
+      "visual": {
+        "title": "Who funds the points",
+        "layout": "chain",
+        "nodes": [
+          {
+            "id": "shop",
+            "kind": "character",
+            "ref": "rosa",
+            "label": "the shop"
+          },
+          {
+            "id": "bank",
+            "kind": "character",
+            "ref": "ledger",
+            "label": "your bank"
+          },
+          {
+            "id": "you",
+            "kind": "character",
+            "ref": "penny",
+            "label": "your points",
+            "amount": "$2"
+          }
+        ],
+        "edges": [
+          {
+            "from": "shop",
+            "to": "bank",
+            "amount": "$2.90",
+            "color": "gold",
+            "sync": {
+              "phrase": "swipe fee to your bank"
+            }
+          },
+          {
+            "from": "bank",
+            "to": "you",
+            "amount": "$2",
+            "color": "green",
+            "sync": {
+              "phrase": "back to you as rewards"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-float",
+      "type": "character_scene",
+      "narration": "There is one more piece worth knowing, called the float. If you pay in full, the bank covers your spending for up to a month without charging you a cent of interest. That short, free loan is a real cost to the bank, quietly paid for by the swipe fee and by everyone carrying a balance.",
+      "visual": {
+        "title": "The float",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "thinking",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "curious",
+            "label": "the float"
+          },
+          {
+            "kind": "calendar",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "a free month",
+            "sync": {
+              "phrase": "up to a month"
+            },
+            "effects": [
+              {
+                "kind": "idea_flash",
+                "sync": {
+                  "phrase": "free loan"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-premium",
+      "type": "character_scene",
+      "narration": "Premium cards add a twist. They dangle richer rewards, but charge a yearly fee of around ninety five dollars. So the perks only beat the fee if you spend a great deal every year. The card is quietly nudging you to spend more, which is exactly what it wanted all along.",
+      "visual": {
+        "title": "Spend more to win",
+        "stage": "boardroom",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "cast": "slick",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "richer perks"
+          },
+          {
+            "kind": "balance-scale",
+            "at": {
+              "col": 7,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "perks vs fee",
+            "sync": {
+              "phrase": "spend more"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-cross",
+      "type": "character_scene",
+      "narration": "And there is a second, much quieter source. The people who carry balances and pay all that interest are helping to fund the rewards of the people who pay in full. The careful spenders collect the points. The strugglers quietly foot the bill. One group pays, another collects.",
+      "visual": {
+        "title": "The cross-subsidy",
+        "stage": "boardroom",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "tired",
+            "label": "pays interest"
+          },
+          {
+            "kind": "figure",
+            "id": "bank",
+            "cast": "ledger",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "facing": "left",
+            "poses": [
+              "standing",
+              "presenting",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "routes it around",
+            "effects": [
+              {
+                "kind": "money",
+                "sync": {
+                  "phrase": "another collects"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "s4-prices",
+      "type": "character_scene",
+      "narration": "And in the end, everyone pays a little, even people who never touch a card. Shops bake the swipe fee quietly into their prices, so the cash and debit payers end up covering part of the rewards too. The free points, it turns out, were never actually free.",
+      "visual": {
+        "title": "Baked into prices",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "shop",
+            "cast": "rosa",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "worried",
+            "label": "raises prices"
+          },
+          {
+            "kind": "price-tag",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "everyone pays",
+            "sync": {
+              "phrase": "into their prices"
+            },
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "never actually free"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "winners",
+      "type": "compare",
+      "narration": "So step back and ask who wins, and who loses. The bank wins on interest and on every swipe. The people who pay in full win free rewards and a little float. The losers are the people carrying balances, the shops paying fees, and the cash payers quietly covering the gap.",
+      "visual": {
+        "title": "Who wins, who loses",
+        "left": {
+          "heading": "Wins",
+          "items": [
+            {
+              "label": "The bank",
+              "sync": {
+                "phrase": "the bank wins"
+              }
+            },
+            {
+              "label": "Pay-in-full users",
+              "sync": {
+                "phrase": "pay in full win"
+              }
+            },
+            "The network"
+          ]
+        },
+        "right": {
+          "heading": "Loses",
+          "items": [
+            {
+              "label": "Balance carriers",
+              "sync": {
+                "phrase": "carrying balances"
+              }
+            },
+            {
+              "label": "The shops",
+              "sync": {
+                "phrase": "shops paying fees"
+              }
+            },
+            {
+              "label": "Cash payers",
+              "sync": {
+                "phrase": "covering the gap"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ideal-customer",
+      "type": "list_card",
+      "narration": "If you want to picture the machine's very favorite customer, it is simple. Someone who spends a lot, so the swipe fees stack up nicely. Someone who carries a balance, so the interest keeps flowing in. And someone just busy enough to slip on a fee every now and then.",
+      "visual": {
+        "title": "Its favorite customer",
+        "items": [
+          {
+            "label": "Spends a lot",
+            "icon": "arrow",
+            "sync": {
+              "phrase": "spends a lot"
+            }
+          },
+          {
+            "label": "Carries a balance",
+            "icon": "box",
+            "sync": {
+              "phrase": "carries a balance"
+            }
+          },
+          {
+            "label": "Slips on fees",
+            "icon": "tick",
+            "sync": {
+              "phrase": "slip on a fee"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "beat",
+      "type": "character_scene",
+      "narration": "Which brings us, at last, to the one move. Pay your statement in full, every single month, without fail. Do that, and the interest never even starts, the late fees never land, and you still collect the rewards the shop already paid for. You end up using the machine, instead of quietly feeding it.",
+      "visual": {
+        "title": "Beat the machine",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "celebrating",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "pay in full",
+            "effects": [
+              {
+                "kind": "nod",
+                "sync": {
+                  "phrase": "the one move"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "checkmark",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "label": "interest never starts",
+            "sync": {
+              "phrase": "using the machine"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "beat-float",
+      "type": "character_scene",
+      "narration": "Pay in full, and the float even flips over to your side. You get a short, interest free loan every month, plus the rewards the shop already funded. The bank still earns its swipe fee, so it is not charity. But for you, it quietly becomes the best seat in the house.",
+      "visual": {
+        "title": "The best seat",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "cast": "penny",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "poses": [
+              "standing",
+              "celebrating",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "label": "flips to you",
+            "effects": [
+              {
+                "kind": "sparkles",
+                "sync": {
+                  "phrase": "best seat"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "label": "free loan + rewards",
+            "sync": {
+              "phrase": "flips over to your side"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "recap",
+      "type": "recap_card",
+      "narration": "So remember how the whole machine actually runs. Swipe fees quietly pay your bank. Interest is the real profit engine. Fees pile on the moment you slip. And your rewards are funded by that fee and by the people carrying a balance. Pay in full, and the machine never touches you.",
+      "visual": {
+        "title": "The whole machine",
+        "scope": "final",
+        "items": [
+          {
+            "label": "Swipe fees pay bank",
+            "sync": {
+              "phrase": "swipe fees quietly pay your bank"
+            }
+          },
+          {
+            "label": "Interest is profit",
+            "sync": {
+              "phrase": "the real profit"
+            }
+          },
+          {
+            "label": "Fees punish slips",
+            "sync": {
+              "phrase": "the moment you slip"
+            }
+          },
+          {
+            "label": "Pay in full wins",
+            "sync": {
+              "phrase": "pay in full"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "narration": "That is the machine, laid bare. Education, not financial advice. A fresh money machine here, every single day.",
+      "visual": {
+        "text": "New money machine, drawn daily",
+        "style": "card"
+      }
+    }
+  ]
+}

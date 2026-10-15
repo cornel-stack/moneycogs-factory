@@ -12,8 +12,9 @@ npx tsx pipeline/derive_shorts.ts <source-id> [--max N]
 
 ## What the tool does (mechanical first pass)
 
-For each `section_title role:"point"` (the legacy alias `"principle"` maps to
-`"point"`) and the scenes under it, it emits a short:
+For each `section_title` with a role — `"section"` (one gear of the machine, the
+natural short unit) or `"point"` (a sub-beat; the legacy `"principle"` maps to
+`"point"`) — and the scenes under it, it emits a short:
 
 ```
 HOOK      synthesized MONEY re-hook (names the point) + short_hook overlay

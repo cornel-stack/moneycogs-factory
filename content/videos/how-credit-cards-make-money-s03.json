@@ -1,0 +1,130 @@
+{
+  "id": "how-credit-cards-make-money-s03",
+  "brand": "moneycogs",
+  "format": "short",
+  "title": "The Side Hustle — How Credit Cards Actually Make Money",
+  "short_hook": "Fees are pure profit",
+  "description": "That late fee is not covering some real cost. It is almost pure profit, and it is just one way a card quietly taxes a single slip. The hidden money flow, in sixty seconds.",
+  "tags": [
+    "credit cards",
+    "how credit cards make money",
+    "interchange fee",
+    "credit card interest",
+    "the side hustle"
+  ],
+  "thumbnail": {
+    "headline": "The Side Hustle",
+    "cast": "ledger",
+    "pose": "presenting",
+    "expression": "happy",
+    "props": []
+  },
+  "voice": "en-US-ChristopherNeural",
+  "template": {
+    "framing": "explainer",
+    "hook": "direct"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "character_scene",
+      "narration": "That late fee is not covering some real cost. It is almost pure profit, and it is just one way a card quietly taxes a single slip.",
+      "visual": {
+        "stage": "plain",
+        "elements": [
+          {
+            "kind": "figure",
+            "cast": "ledger",
+            "at": {
+              "col": 3,
+              "row": 1,
+              "w": 6,
+              "h": 5
+            },
+            "poses": [
+              "presenting"
+            ],
+            "expression": "happy",
+            "label": "watch this"
+          }
+        ]
+      }
+    },
+    {
+      "id": "idea",
+      "narration": "Miss a payment by a single day, and a late fee appears, often around thirty five dollars. Notice that it is not tied to how much you owe. It is a flat penalty, charged the instant you slip up, and it flows straight to the bank that issued your card.",
+      "type": "character_scene",
+      "visual": {
+        "title": "The late fee",
+        "stage": "desk-office",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "slick",
+            "at": {
+              "col": 6,
+              "row": 1,
+              "w": 4,
+              "h": 5
+            },
+            "cast": "slick",
+            "poses": [
+              "standing",
+              "pointing",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "happy",
+            "facing": "left",
+            "seat": "chair",
+            "holding": {
+              "prop": "invoice",
+              "hand": "right"
+            },
+            "enter": "draw",
+            "tier": "hero",
+            "color": "ink",
+            "label": "the fine print"
+          },
+          {
+            "kind": "invoice",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "cast": "penny",
+            "facing": "right",
+            "seat": "chair",
+            "enter": "draw",
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "the instant you slip"
+                }
+              }
+            ],
+            "tier": "hero",
+            "color": "ink",
+            "label": "late fee",
+            "sync": {
+              "phrase": "thirty five dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "cta",
+      "narration": "New money machine, every day. Follow so you don't miss the next one.",
+      "visual": {
+        "text": "New money machine, drawn daily",
+        "style": "card"
+      }
+    }
+  ]
+}

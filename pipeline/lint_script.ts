@@ -151,7 +151,7 @@ function main() {
 
   // ── Phase 16 — visual richness nudges (warnings) ───────────────────────────
   const ENUM = /\b(two|three|four|five|six|seven|eight|nine|ten)\b[\s\S]{0,40}?\b(ideas?|steps?|laws?|rules?|reasons?|skills?|ways?|things?|types?|kinds?|lessons?|parts?|traits?|habits?|questions?|principles?|levels?|stages?|pillars?)\b/i;
-  const SHOWN = new Set(["list_card", "compare", "recap_card", "stat_chart", "table"]);
+  const SHOWN = new Set(["list_card", "compare", "recap_card", "stat_chart", "table", "money_flow"]);
   for (const scene of script.scenes) {
     if (scene.type === "character_scene") {
       const heroes = scene.visual.elements.filter(

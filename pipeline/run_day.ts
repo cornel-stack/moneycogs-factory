@@ -55,7 +55,7 @@ function main() {
     .sort()
     .slice(0, 3);
   if (shortIds.length === 0) {
-    console.error("✖ derive_shorts produced no shorts (does the longform have point sections — section_title role:\"point\"?)");
+    console.error("✖ derive_shorts produced no shorts (does the longform have section/point markers — section_title role:\"section\" or \"point\"?)");
     process.exit(1);
   }
   console.log(`  shorts: ${shortIds.join(", ")}`);

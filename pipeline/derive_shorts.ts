@@ -54,14 +54,15 @@ function main() {
   const src = Script.parse(JSON.parse(readFileSync(join(DIR, `${srcId}.json`), "utf8")));
   const scenes = src.scenes;
 
-  // Split into point sections: a section_title role:"point" (legacy alias
-  // "principle" maps to "point" at parse time) + the scenes up to the next
-  // section_title / recap_card.
+  // Split into short-worthy units: a section_title with a role — "section" (one
+  // gear of the machine, the natural short unit) or "point" (a sub-beat; legacy
+  // alias "principle" maps to "point" at parse time) — plus the scenes up to the
+  // next section_title / recap_card.
   type Section = { num: number; title: string; memory?: string; body: typeof scenes };
   const sections: Section[] = [];
   for (let i = 0; i < scenes.length; i++) {
     const sc = scenes[i]!;
-    if (sc.type === "section_title" && sc.visual.role === "point") {
+    if (sc.type === "section_title" && (sc.visual.role === "section" || sc.visual.role === "point")) {
       const body: typeof scenes = [];
       for (let j = i + 1; j < scenes.length; j++) {
         const n = scenes[j]!;

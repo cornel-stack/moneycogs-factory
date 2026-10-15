@@ -1,0 +1,130 @@
+{
+  "id": "how-credit-cards-make-money-s02",
+  "brand": "moneycogs",
+  "format": "short",
+  "title": "The Real Engine — How Credit Cards Actually Make Money",
+  "short_hook": "The minimum trap",
+  "description": "Pay only the minimum on your card, and most of that payment never even touches what you owe. Here is the quiet trap, in sixty seconds. The hidden money flow, in sixty seconds.",
+  "tags": [
+    "credit cards",
+    "how credit cards make money",
+    "interchange fee",
+    "credit card interest",
+    "the real engine"
+  ],
+  "thumbnail": {
+    "headline": "The Real Engine",
+    "cast": "ledger",
+    "pose": "presenting",
+    "expression": "happy",
+    "props": []
+  },
+  "voice": "en-US-ChristopherNeural",
+  "template": {
+    "framing": "explainer",
+    "hook": "direct"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "character_scene",
+      "narration": "Pay only the minimum on your card, and most of that payment never even touches what you owe. Here is the quiet trap, in sixty seconds.",
+      "visual": {
+        "stage": "plain",
+        "elements": [
+          {
+            "kind": "figure",
+            "cast": "ledger",
+            "at": {
+              "col": 3,
+              "row": 1,
+              "w": 6,
+              "h": 5
+            },
+            "poses": [
+              "presenting"
+            ],
+            "expression": "happy",
+            "label": "watch this"
+          }
+        ]
+      }
+    },
+    {
+      "id": "idea",
+      "narration": "The engine starts the very moment you do not pay in full. Say you carry a balance of one thousand dollars from one month into the next. Now the card has quietly changed its job. It is no longer just a way to pay. It is a loan. And loans charge interest.",
+      "type": "character_scene",
+      "visual": {
+        "title": "Carrying a balance",
+        "stage": "kitchen-table",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "you",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "cast": "penny",
+            "poses": [
+              "standing",
+              "shrugging",
+              "standing",
+              "presenting",
+              "pointing"
+            ],
+            "expression": "worried",
+            "facing": "right",
+            "seat": "chair",
+            "holding": {
+              "prop": "credit-card",
+              "hand": "right"
+            },
+            "enter": "draw",
+            "tier": "hero",
+            "color": "ink",
+            "label": "you"
+          },
+          {
+            "kind": "coin-stack",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 3,
+              "h": 4
+            },
+            "cast": "penny",
+            "facing": "right",
+            "seat": "chair",
+            "enter": "draw",
+            "effects": [
+              {
+                "kind": "exclamation",
+                "sync": {
+                  "phrase": "it is a loan"
+                }
+              }
+            ],
+            "tier": "hero",
+            "color": "ink",
+            "label": "a thousand owed",
+            "sync": {
+              "phrase": "one thousand dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "cta",
+      "narration": "New money machine, every day. Follow so you don't miss the next one.",
+      "visual": {
+        "text": "New money machine, drawn daily",
+        "style": "card"
+      }
+    }
+  ]
+}

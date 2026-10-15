@@ -1,6 +1,6 @@
 # Project status — MoneyCogs video factory
 
-_Last updated: **Phase 1 — COMPLETE** (cast + mascot + props + stages + scene types; drawing hand verified; dress rehearsal + CI smoke test passed)._
+_Last updated: **Phase 2 — COMPLETE** (topic engine + writing system + daily `/make-money` skill + the golden credit-cards reference script). Phase 1 (full visual system) is complete._
 
 ## Phase 1 — COMPLETE
 
@@ -144,8 +144,27 @@ being rebuilt.
     `derive_shorts.ts` + `scripts/derive-shorts.md` carry **money hooks + the Coggy
     CTA**, and require a human pass on every auto-hook. `lint_script.ts` warns on a
     longform with < 2 `money_flow` or no `waterfall`/`counter` (mirrors the budget).
-  - **2C (next)** — the daily `/make-money` authoring skill + a golden reference
-    script written to this template.
+  - **2C (✅ DONE)** — the daily `/make-money` skill + the golden reference
+    script. **`.claude/skills/make-money/SKILL.md`** is a self-contained daily
+    runbook (pick → study → design the machine → write → validate+lint → fact
+    pass → derive+hand-rewrite 3 shorts → ship `npm run day`), with the
+    no-news/no-named-company rule, education-not-advice framing, and a failure
+    protocol (never `SKIP_RUNTIME_GUARD` in the daily flow). **The golden
+    reference** `content/videos/how-credit-cards-make-money.json` — the channel's
+    quality bar — is a full **46-scene, ~2,050-word, 12.65-min** longform
+    (interchange hub flow, interest counter + waterfall on a $1,000 balance, the
+    fee menu, the rewards cross-subsidy, who-wins/who-loses) that is **lint-clean
+    with zero warnings**, plus **3 derived shorts with hand-rewritten money
+    hooks**. `run_day --dry` proved the full chain (derive → validate → calendar
+    with category stamped from the bank) without rendering; the calendar was
+    reverted so Phase 3 starts clean. Supporting changes: `derive_shorts` now
+    splits on `section` **or** `point` (a gear is the natural short unit); the
+    lint enum-not-shown check recognizes `money_flow` as a visual; template.md
+    carries the explicit "no digits/$/% in sync phrases" rule.
+
+**Phase 2 is COMPLETE** — topic bank + queue CLI (2A), the mechanism writing
+system + schema generalization (2B), and the daily skill + golden script (2C).
+The topic → script → shorts → calendar → render → done chain is wired end to end.
 - **Phase 3 — hardening & cron.** Re-enable `scheduled-render.yml` (add the
   `schedule:` trigger back), end-to-end CI render on real content, failure alerting.
 - **Phase 4 — inventory & launch.** Topic backlog at scale, channel art, publishing

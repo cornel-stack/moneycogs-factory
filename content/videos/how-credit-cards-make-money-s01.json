@@ -1,0 +1,130 @@
+{
+  "id": "how-credit-cards-make-money-s01",
+  "brand": "moneycogs",
+  "format": "short",
+  "title": "The Swipe Fee — How Credit Cards Actually Make Money",
+  "short_hook": "Where your $100 goes",
+  "description": "You spend a hundred dollars. The shop only keeps about ninety-seven. Here is where the other few dollars quietly go, and why your bank is smiling. The hidden money flow, in sixty seconds.",
+  "tags": [
+    "credit cards",
+    "how credit cards make money",
+    "interchange fee",
+    "credit card interest",
+    "the swipe fee"
+  ],
+  "thumbnail": {
+    "headline": "The Swipe Fee",
+    "cast": "ledger",
+    "pose": "presenting",
+    "expression": "happy",
+    "props": []
+  },
+  "voice": "en-US-ChristopherNeural",
+  "template": {
+    "framing": "explainer",
+    "hook": "direct"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "character_scene",
+      "narration": "You spend a hundred dollars. The shop only keeps about ninety-seven. Here is where the other few dollars quietly go, and why your bank is smiling.",
+      "visual": {
+        "stage": "plain",
+        "elements": [
+          {
+            "kind": "figure",
+            "cast": "ledger",
+            "at": {
+              "col": 3,
+              "row": 1,
+              "w": 6,
+              "h": 5
+            },
+            "poses": [
+              "presenting"
+            ],
+            "expression": "happy",
+            "label": "watch this"
+          }
+        ]
+      }
+    },
+    {
+      "id": "idea",
+      "narration": "When a shop decides to accept cards, it signs up to hand back a slice of every sale. On a hundred dollar purchase, that slice is usually around three dollars. The shop never sends you a bill for it, and you never notice it. It simply comes off the top before the shop sees a cent.",
+      "type": "character_scene",
+      "visual": {
+        "title": "Off the top",
+        "stage": "storefront",
+        "elements": [
+          {
+            "kind": "figure",
+            "id": "shop",
+            "at": {
+              "col": 1,
+              "row": 1,
+              "w": 3,
+              "h": 5
+            },
+            "cast": "rosa",
+            "poses": [
+              "standing",
+              "shrugging",
+              "facepalm",
+              "standing",
+              "presenting"
+            ],
+            "expression": "worried",
+            "facing": "right",
+            "seat": "chair",
+            "holding": {
+              "prop": "receipt",
+              "hand": "right"
+            },
+            "enter": "draw",
+            "tier": "hero",
+            "color": "ink",
+            "label": "the shop"
+          },
+          {
+            "kind": "percent-tag",
+            "at": {
+              "col": 8,
+              "row": 1,
+              "w": 2,
+              "h": 3
+            },
+            "cast": "penny",
+            "facing": "right",
+            "seat": "chair",
+            "enter": "draw",
+            "effects": [
+              {
+                "kind": "sweat_drop",
+                "sync": {
+                  "phrase": "off the top"
+                }
+              }
+            ],
+            "tier": "hero",
+            "color": "ink",
+            "label": "around 3%",
+            "sync": {
+              "phrase": "three dollars"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "cta",
+      "narration": "New money machine, every day. Follow so you don't miss the next one.",
+      "visual": {
+        "text": "New money machine, drawn daily",
+        "style": "card"
+      }
+    }
+  ]
+}

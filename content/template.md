@@ -83,6 +83,10 @@ flags dead windows). Every section boundary is a mini-cliffhanger.
 - **Spell numbers out in narration** exactly as spoken ("ninety-seven dollars and
   ten cents", "around two percent") — `sync` phrases match *spoken words*, so a
   phrase like `"two percent"` must appear verbatim in that scene's narration.
+- **A `sync` phrase is spelled-out words ONLY — never digits, `$`, or `%`.** The
+  matcher tokenizes on words, so `"$100"` or `"2%"` can never resolve. Write
+  `sync: { phrase: "one hundred dollars" }`, not `"$100"`. (The visual's `amount`
+  field is still a display string like `"$1.80"` — that rule is only about `sync`.)
 - **Every narrated $ or % must appear in a visual** — as a `money_flow` edge/node
   `amount`, a `waterfall` step, a `counter`, or a tag. *(This is the Phase-1C lint
   warning promoted to a writing rule: a narrated number with no on-screen home is
