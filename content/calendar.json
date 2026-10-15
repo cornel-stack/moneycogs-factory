@@ -4,31 +4,35 @@
     "brand": "moneycogs",
     "format": "longform",
     "publish_date": "2026-10-15",
-    "status": "scheduled",
-    "category": "How Banks Win"
+    "status": "rendered",
+    "category": "How Banks Win",
+    "rendered_date": "2026-10-15"
   },
   {
     "video_id": "how-credit-cards-make-money-s01",
     "brand": "moneycogs",
     "format": "short",
     "publish_date": "2026-10-15",
-    "status": "scheduled",
-    "category": "How Banks Win"
+    "status": "rendered",
+    "category": "How Banks Win",
+    "rendered_date": "2026-10-15"
   },
   {
     "video_id": "how-credit-cards-make-money-s02",
     "brand": "moneycogs",
     "format": "short",
     "publish_date": "2026-10-15",
-    "status": "scheduled",
-    "category": "How Banks Win"
+    "status": "rendered",
+    "category": "How Banks Win",
+    "rendered_date": "2026-10-15"
   },
   {
     "video_id": "how-credit-cards-make-money-s03",
     "brand": "moneycogs",
     "format": "short",
     "publish_date": "2026-10-15",
-    "status": "scheduled",
-    "category": "How Banks Win"
+    "status": "rendered",
+    "category": "How Banks Win",
+    "rendered_date": "2026-10-15"
   }
 ]
