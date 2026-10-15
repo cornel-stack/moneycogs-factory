@@ -7,8 +7,9 @@
     "payoff": "A card earns from a swipe fee on the merchant, interest when you carry a balance, and late fees — map the $100 flow and the one move (pay in full) that shuts it off.",
     "demand": "high",
     "difficulty": "medium",
-    "status": "queued",
-    "order": 1
+    "status": "done",
+    "order": 1,
+    "completed_date": "2026-10-15"
   },
   {
     "slug": "how-free-apps-make-money",
