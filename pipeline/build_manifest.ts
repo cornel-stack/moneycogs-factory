@@ -189,13 +189,14 @@ function main() {
     } else {
       const target = script.target_minutes ?? brand.default_target_minutes;
       // TTS-provider tolerance (Phase 3). The supported providers voice the SAME
-      // script at very different speeds — edge-tts ≈131 wpm (the CI default) vs
-      // Kokoro ≈153 wpm (the offline dev-lint fallback), a ~17% spread. A ±10%
-      // band can't straddle that: a golden tuned to ~13 min on Kokoro lands ~15.4
-      // min on edge, so good content would be wrongly rejected depending on which
-      // provider happened to voice it. We widen to ±15% so the guard still catches
-      // gross drift (and the min_minutes floor below still blocks thin content)
-      // without fighting provider variance. See PROJECT_STATUS Phase 3.
+      // script at measurably different speeds — on the golden (2048 words), CI
+      // edge-tts realized 14.51 min (~144 wpm) while the offline Kokoro dev-lint
+      // fallback realized 12.65 min (~166 wpm): a ~15% spread. A ±10% band can't
+      // reliably straddle that — a script tuned to mid-band on edge (~14 min)
+      // would land ~12.1 min on Kokoro, under the floor, and be wrongly rejected
+      // by local lint. We widen to ±15% so the guard still catches gross drift
+      // (and the min_minutes floor below still blocks thin content) without
+      // fighting provider variance. See PROJECT_STATUS Phase 3.
       const lo = target * 0.85;
       const hi = target * 1.15;
       if (actualMin < brand.min_minutes) {

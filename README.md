@@ -136,6 +136,44 @@ quality bar every new video is written against.
 
 ---
 
+## Daily operations (Phase 3)
+
+Two ways a day ships, both landing in one dated GitHub Release `content-<date>`:
+
+- **Automatic** — `scheduled-render.yml` runs on cron **weekdays 03:47 UTC
+  (06:47 EAT)** and renders every calendar entry with `publish_date <= today` and
+  `status: "scheduled"` (it self-heals a missed day). On success each entry flips
+  to `rendered` via a bot commit; failures open an issue and the entry retries the
+  next weekday. A day with nothing due simply renders nothing.
+- **Hands-on** — `npm run day -- <slug>` (used for the first production day) runs
+  the whole chain from your machine: keep/derive 3 shorts → **hook-review gate** →
+  validate → schedule the calendar → mark the topic done → commit + push → trigger
+  CI → watch the **exact** dispatched runs → download the bundle into
+  `output/<date>/` → flip the calendar to `rendered`. Add `--skip-hook-review` only
+  in emergencies; never `SKIP_RUNTIME_GUARD` in the daily flow.
+
+**Guardrails baked in:** a short won't ship with an un-rewritten auto hook
+(hook-review gate); a scheduled entry with a missing script is skipped with a
+warning + issue, never fatal (calendar sanity); a rendered day can't be
+re-rendered (double-render guard flips it to `rendered`); `run_day` watches only
+the runs it dispatched (stale-run guard); and CI opens an issue if TTS ever falls
+all the way back to the offline Kokoro voice (add Azure secrets to avoid it). The
+longform runtime guard allows **±15%** of the 14-min target to absorb the ~15%
+duration spread between the edge-tts (CI) and Kokoro (offline) voices.
+
+**Fetch any day's bundle** (if you didn't run `npm run day` locally):
+
+```bash
+npm run fetch -- --today            # today's content-<date> Release → output/<date>/
+```
+
+**A production day in numbers** (the first one, credit cards): ~7.5 min
+wall-clock, ~43 billed CI minutes; one 14:30 longform (1920×1080) + three 31–36s
+shorts (1080×1920), with captions, two thumbnails, description (A/B titles +
+chapters + hashtags), upload notes, a retention map, and per-platform shorts text.
+
+---
+
 ## Brand & configuration
 
 All brand identity lives in **`config/brands.ts`** (brand id `moneycogs`):
@@ -160,7 +198,11 @@ offline Kokoro). Nothing else needs a key.
 
 ## Status
 
-**Phase 0 complete** — rebranded to MoneyCogs, legacy channel content scrubbed, cron
-disabled. See [`PROJECT_STATUS.md`](./PROJECT_STATUS.md) for the phase roadmap and
-Phase 0 decisions. The content system, topic queue, and daily `/make-money` skill
-arrive in Phase 2.
+**Phases 0–3 complete.** MoneyCogs is a working daily factory: brand + visual
+system (0–1), topic bank + writing system + `/make-money` skill (2), and the
+hardened, cron-driven daily pipeline (3). The first production day shipped the
+golden credit-cards longform + 3 shorts, rendered on CI and verified. The
+scheduler runs weekdays at 03:47 UTC. Next is **Phase 4 — inventory & launch**
+(scale the topic backlog, channel art, publishing calendar, launch). See
+[`PROJECT_STATUS.md`](./PROJECT_STATUS.md) for the full roadmap and per-phase
+decisions.

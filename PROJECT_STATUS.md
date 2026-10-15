@@ -1,6 +1,103 @@
 # Project status — MoneyCogs video factory
 
-_Last updated: **Phase 2 — COMPLETE** (topic engine + writing system + daily `/make-money` skill + the golden credit-cards reference script). Phase 1 (full visual system) is complete._
+_Last updated: **Phase 3 — COMPLETE** (pipeline hardening + the cron re-enabled + the first full production day shipped: the golden credit-cards longform + 3 shorts rendered on CI, fetched, and verified). Phases 0–2 are complete._
+
+## Phase 3 — COMPLETE
+
+Pipeline hardening + the first real production day. No content or art changed;
+this phase fixed the inherited factory's failure modes, turned the scheduler back
+on, and proved the whole chain on live content.
+
+### Hardening (commit `fcabd26`, + runtime-guard `d19b202`)
+
+1. **Double-render guard.** After `run_day` renders + fetches successfully, it
+   flips the day's calendar entries from `scheduled` → `rendered` (+`rendered_date`)
+   so a later scheduled run can't re-render the same ids. **This is a SECOND commit**
+   (`calendar: <tag> rendered [skip ci]`) because the render happens *after* the
+   day's content push — the entries are legitimately `scheduled` at push time and
+   only become `rendered` once CI confirms. The alternative (predicting success and
+   marking `rendered` before the render) would lie if CI failed. The `[skip ci]`
+   tag keeps the flip from triggering the scheduler.
+2. **Calendar sanity.** The scheduler no longer dies on a calendar entry whose
+   script file is missing: `scheduled-render.yml`'s plan step filters out any due
+   id with no `content/videos/<id>.json`, logs a `::warning::`, and (on a real run)
+   opens/comments an idempotent "Calendar sanity" issue listing the skipped ids.
+   The rest of the day still renders.
+3. **Stale-run guard.** `run_day` no longer watches "the latest run on the branch".
+   It stamps the dispatch time, then matches the `workflow_dispatch` run created at
+   or after that stamp (`runAfter()`), for each of `render.yml` / `render-shorts.yml`
+   — so it watches the EXACT runs it triggered, never a pre-existing one. If it
+   can't identify a dispatched run it aborts rather than watch a wrong one.
+4. **Failure alerting.** The scheduler's "Render failed" issue now names *which*
+   step failed (longform vs shorts) and the failing ids. A new TTS alert opens an
+   idempotent "CI TTS fell back to Kokoro" issue (in `render.yml` + `render-shorts.yml`,
+   which gained `issues: write`) whenever CI had to use the offline Kokoro fallback
+   — a signal to add Azure secrets.
+5. **Hook-review gate.** `run_day` refuses to ship a short whose hook is
+   byte-identical to `derive_shorts`' auto output. It recomputes the auto hooks
+   with `derive_shorts … --print-hooks` (writes nothing) and compares against each
+   short's first-scene narration; a match aborts the day (overridable with
+   `--skip-hook-review`). To make the gate workable, `derive_shorts` now **keeps
+   existing shorts by default** (never clobbers a hand-rewritten hook; `--force`
+   to overwrite) and gained `--print-hooks`.
+
+**Runtime-guard tolerance (`d19b202`).** The longform runtime guard widened from
+±10% to **±15%** of target. The two supported TTS providers voice the same script
+at a measurably different pace — on the golden (2048 words), CI edge-tts realized
+**14.51 min** (~144 wpm) vs the offline Kokoro dev-lint fallback's **12.65 min**
+(~166 wpm), a **~15% spread**. A ±10% band can't reliably straddle that: a script
+tuned to mid-band on one provider would be wrongly rejected on the other (local
+lint uses Kokoro here because edge-tts 403s from this dev machine; CI uses edge).
+±15% catches gross drift while the `min_minutes` floor (12) still blocks thin
+content. (This golden happened to clear ±10% on both, but only because it sits at
+Kokoro's high end — the margin was 0.05 min; not robust.)
+
+### Scheduler re-enabled
+
+`scheduled-render.yml` cron is back: **weekdays 03:47 UTC (06:47 EAT)**. It renders
+ONLY entries with `publish_date <= today` AND `status "scheduled"` (the Phase-0
+tomorrow-lookahead was removed). `workflow_dispatch` stays (dry_run defaults true).
+**Secrets posture:** `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION` are OPTIONAL (passed
+via `secrets: inherit`); with none set CI uses free edge-tts, then offline Kokoro —
+and the Kokoro alert (above) flags when that happens. The fail-fast drawing-hand
+check runs first in both render workflows.
+
+### First production day — `how-credit-cards-make-money` (2026-10-15)
+
+`npm run day -- how-credit-cards-make-money` ran the hardened flow end to end with
+the hook gate active:
+
+- **Local chain** (all green): kept the 3 hand-written shorts → hook gate passed
+  (all hooks hand-written) → validate → calendar scheduled → topic `done` → commit
+  `31e3baf` + push → dispatched both CI runs (exact-run-matched).
+- **CI:** longform run `38694915254` (14 jobs, ~6 min wall) and shorts run
+  `38694929357` (5 jobs, ~3 min wall) both **succeeded, zero failed jobs**. Audio
+  synthesized on **edge-tts** (no Kokoro fallback). The ±15% runtime guard passed.
+- **Output** fetched to `output/2026-10-15/` and **verified**:
+  - Longform `how-credit-cards-make-money-video.mp4` — **1920×1080, 26117 frames,
+    870.57s = 14:30**, AAC audio. Captions `00:00:00,107` → `00:14:29,189` (315
+    cues, aligned). Description: 3 A/B titles + body + 2 hashtag sets + chapters
+    (`0:00`→`13:54 The whole machine`); upload-notes (playlist, first-video
+    end-screen note, pinned comment); retention-map (scene/type/section).
+  - 3 shorts — all **1080×1920**, 35.5 / 34.3 / 31.0s (in the 20–70s window), AAC
+    stereo; each with YouTube/TikTok/Instagram text + short-notes + captions. The
+    rendered s01 captions open with the **hand-written** hook ("You spend a hundred
+    dollars…"), confirming the gate held through to pixels.
+- **Double-render guard:** calendar flipped to `rendered` (+`rendered_date`) and
+  pushed (`eda65db`). Topic marked `done` (+`completed_date`). Repo clean.
+- **Timings:** **~7.5 min wall-clock** end to end; **~43 billed CI minutes**
+  (longform ~32, shorts ~11; Linux per-job rounding).
+
+### Go / no-go for Phase 4 — **GO**
+
+The topic → script → shorts → calendar → render → fetch → done chain is proven on
+live content, hands-off, with the guards active. Nothing blocks Phase 4 (inventory
+& launch). Watch-items to carry forward: (a) consider adding the Azure secrets so
+CI narration doesn't depend on edge-tts's gray-area terms (Kokoro alert will fire
+if edge ever drops); (b) GitHub flagged Node 20 actions are being force-run on
+Node 24 and `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19 — bump the action
+pins / runner when convenient; (c) the scheduler now runs daily — the queue must
+stay fed (Phase 4) or a day with nothing due simply renders nothing (safe).
 
 ## Phase 1 — COMPLETE
 
@@ -165,8 +262,12 @@ being rebuilt.
 **Phase 2 is COMPLETE** — topic bank + queue CLI (2A), the mechanism writing
 system + schema generalization (2B), and the daily skill + golden script (2C).
 The topic → script → shorts → calendar → render → done chain is wired end to end.
-- **Phase 3 — hardening & cron.** Re-enable `scheduled-render.yml` (add the
-  `schedule:` trigger back), end-to-end CI render on real content, failure alerting.
+- **Phase 3 — hardening & cron (✅ DONE).** Fixed the inherited factory's failure
+  modes (double-render guard, calendar sanity, exact-run watch, failure + Kokoro
+  alerting, hook-review gate), widened the runtime guard to ±15% for the TTS-provider
+  spread, re-enabled the `scheduled-render.yml` cron (weekdays 03:47 UTC), and shipped
+  the first full production day (credit-cards longform + 3 shorts, rendered on CI +
+  verified). See the **Phase 3 — COMPLETE** section at the top.
 - **Phase 4 — inventory & launch.** Topic backlog at scale, channel art, publishing
   calendar, launch.
 
